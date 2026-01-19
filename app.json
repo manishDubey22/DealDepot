@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "jsEngine": "hermes",
+    "android": {
+      "newArchEnabled": false
+    },
+    "ios": {
+      "newArchEnabled": false
+    }
+  }
+}
