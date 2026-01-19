@@ -25,8 +25,11 @@ import { useFonts } from "expo-font"
 // import { KeyboardProvider } from "react-native-keyboard-controller"
 // import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import { NavigationContainer } from "@react-navigation/native"
+import { QueryClientProvider } from "@tanstack/react-query"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { Provider } from "react-redux"
+
+import { queryClient } from "@/lib/react-query/queryClient"
 
 // import { AuthProvider } from "./context/AuthContext" // @demo remove-current-line
 import { initI18n } from "./i18n"
@@ -115,15 +118,17 @@ export function App() {
     //   </SafeAreaProvider>
     // </Provider>
     <Provider store={store}>
-      <NavigationContainer>
-        <KeyboardProvider>
-          {/* <VersionProvider> */}
-          <View style={styles.mainContainer}>
-            <AppNavigator />
-          </View>
-          {/* </VersionProvider> */}
-        </KeyboardProvider>
-      </NavigationContainer>
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer>
+          <KeyboardProvider>
+            {/* <VersionProvider> */}
+            <View style={styles.mainContainer}>
+              <AppNavigator />
+            </View>
+            {/* </VersionProvider> */}
+          </KeyboardProvider>
+        </NavigationContainer>
+      </QueryClientProvider>
     </Provider>
   )
 }
