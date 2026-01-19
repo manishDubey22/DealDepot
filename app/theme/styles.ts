@@ -1,4 +1,4 @@
-import { ViewStyle } from "react-native"
+import { TouchableOpacityProps, ViewStyle } from "react-native"
 
 import { spacing } from "./spacing" // @demo remove-current-line
 
@@ -21,4 +21,7 @@ export const $styles = {
     justifyContent: "center",
     overflow: "hidden",
   } as ViewStyle,
+  touchableOpacity: {
+    activeOpacity: 0.8,
+  } as TouchableOpacityProps,
 }
