@@ -1,9 +1,8 @@
 import Config from "@/config"
 
 export const getApiUrl = () => {
-  const currentURL = window.location.href
-  const isLocalHost = currentURL.includes("localhost")
-  return isLocalHost ? `${Config.BASE}` : `${Config.API_URL}`
+  // Use Config directly - already switches based on __DEV__
+  return Config.API_URL
 }
 
 export const buildQueryParams = (params: Record<string, string | number | undefined>) => {

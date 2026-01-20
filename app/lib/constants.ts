@@ -1,6 +1,5 @@
 // app/api/constants.ts
 export const API_VERSION = "v1"
 
-export const ENDPOINTS = {
-  GET_VERSION: "static/v1/get-version",
-}
+export const API_STATIC_VERSION = "static"
+export const API_RETAILER_VERSION = "retailer"
