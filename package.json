@@ -93,10 +93,15 @@
     "react-native-svg": "^13.13.0",
     "react-native-table-component": "^1.2.2",
     "react-native-toast-message": "^2.1.6",
+    "react-native-vision-camera": "^3.9.0",
+    "react-native-webview": "^13.6.3",
     "react-native-web": "~0.21.0",
     "react-native-worklets": "0.6.1",
+    "react-navigation": "^5.0.0",
+    "react-qr-code": "^2.0.12",
     "react-redux": "^9.2.0",
-    "setimmediate": "^1.0.5"
+    "setimmediate": "^1.0.5",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

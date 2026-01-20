@@ -8,6 +8,8 @@
 
 import { useState } from "react"
 import { ActivityIndicator, StyleSheet, View } from "react-native"
+// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+// import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { MenuProvider } from "react-native-popup-menu"
 import { responsiveHeight } from "react-native-responsive-dimensions"
 // import SplashScreen from "react-native-splash-screen"
@@ -22,59 +24,233 @@ import { ThemeProvider } from "@/theme/context"
 import { role } from "@/utils/role"
 import { useVersionCheck } from "@/utils/VersionContext"
 
-// Documentation: https://reactnavigation.org/docs/stack-navigator/
-// const Stack = createNativeStackNavigator<AppStackParamList>()
+// const Tab = createBottomTabNavigator()
 
-// const AppStack = () => {
-//   const userRole = useAppSelector((state) => state.rootReducer.auth.userRole.data)
-//   const {
-//     theme: { colors },
-//   } = useAppTheme()
+// const Stack = createNativeStackNavigator()
 
-//   // Determine initial route based on role selection and auth state
-//   const getInitialRoute = () => {
-//     if (!userRole) return "Option"
-//   }
-
+// const TabBarIcon = ({ icon, focused }: { icon: ImageSourcePropType; focused: boolean }) => {
 //   return (
-//     <Stack.Navigator
-//       screenOptions={{
-//         headerShown: false,
-//         navigationBarColor: colors.background,
-//         contentStyle: {
-//           backgroundColor: colors.background,
-//         },
-//       }}
-//       initialRouteName={getInitialRoute()}
-//     >
-//       <Stack.Screen name="Option" component={OptionScreen} />
-//     </Stack.Navigator>
+//     <Image
+//       source={icon}
+//       style={[styles.tabBarIcon, { tintColor: focused ? color.GREEN : "gray" }]}
+//     />
 //   )
 // }
+
+// const BottomTabNavigator = () => {
+//   const navigation = useNavigation();
+//   return (
+//     <Tab.Navigator
+//       screenOptions={{
+//         tabBarHideOnKeyboard: true,
+//         tabBarActiveTintColor: color.GREEN,
+//       }}>
+//       <Tab.Screen
+//         name={Constant.ScreenName.HOME}
+//         component={Home}
+//         options={{
+//           headerShown: true,
+//           headerTitleStyle: {
+//             display: 'none',
+//           },
+//           tabBarIcon: ({focused}) => <TabBarIcon icon={Icon.HOME} focused={focused} />,
+//           headerStyle: {
+//             height: 80,
+//             elevation: 5,
+//             shadowColor: 'rgba(0, 0, 0, 0.25)',
+//           },
+//           header: () => <HeaderComponent value="Home" />,
+//         }}
+//       />
+
+//       <Tab.Screen
+//         name={Constant.ScreenName.PROFILE}
+//         component={Profile}
+//         options={{
+//           headerShown: true,
+//           headerStyle: {
+//             backgroundColor: color.WHITE,
+//             height: 100,
+//           },
+//           headerTitleStyle: {
+//             color: color.BLACK,
+//             fontFamily: 'Arial-Rounded-Bold',
+//             fontSize: 20,
+//           },
+//           headerRightContainerStyle: {
+//             paddingRight: 10,
+//           },
+//           headerTitleAlign: 'center',
+//           // -----------Need to be navigate ---- navigation.navigate(Constant.ScreenName.EDIT_PROFILE)
+//           headerRight: () => (
+//             <TouchableOpacity onPress={() => navigation.navigate(Constant.ScreenName.EDIT_PROFILE)}>
+//               <TabBarIcon icon={Icon.EDIT} />
+//             </TouchableOpacity>
+//           ),
+//           headerTintColor: '#FFF',
+//           tabBarIcon: ({focused}) => <TabBarIcon icon={Icon.PROFILE} focused={focused} />,
+//         }}
+//       />
+//     </Tab.Navigator>
+//   );
+// };
+// const WholeSellerStackNavigation = ({
+//   role,
+//   authToken,
+// }: {
+//   role: string | unknown | undefined;
+//   authToken: string | unknown | undefined;
+// }) => {
+//   let initialRouteName =
+//     role && authToken ? Constant.ScreenName.TAB_CONTAINER : Constant.ScreenName.LOGIN;
+//   return (
+//     <Stack.Navigator initialRouteName={initialRouteName}>
+//       <Stack.Screen
+//         name={Constant.ScreenName.OPTION}
+//         component={Option}
+//         options={{
+//           headerShown: false,
+//         }}
+//       />
+//       <Stack.Screen
+//         name={Constant.ScreenName.LOGIN}
+//         component={Login}
+//         options={{
+//           headerShown: true,
+//           headerStyle: {
+//             backgroundColor: color.WHITE,
+//             height: 100,
+//           },
+//           headerTitleStyle: styles.headerTitle,
+//           headerTitleAlign: 'center',
+//           headerTintColor: '#FFF',
+//         }}
+//       />
+//       <Stack.Screen
+//         name={Constant.ScreenName.CREATE_NEW_ACCOUNT}
+//         component={CreateNewAccount}
+//         options={{
+//           headerShown: true,
+//           headerStyle: {
+//             backgroundColor: color.WHITE,
+//             height: 100,
+//           },
+//           headerTitleStyle: styles.headerTitle,
+//           headerTitle: 'Create New Account',
+//           headerTitleAlign: 'center',
+//           headerTintColor: '#FFF',
+//         }}
+//       />
+//       <Stack.Screen
+//         name={Constant.ScreenName.EMAIL_VERIFICATION}
+//         component={EmailVerification}
+//         options={{
+//           headerShown: true,
+//           headerStyle: {
+//             backgroundColor: color.WHITE,
+//             height: 100,
+//           },
+//           headerTitleStyle: styles.headerTitle,
+//           headerTitle: 'Verify',
+//           headerTitleAlign: 'center',
+//           headerTintColor: '#FFF',
+//         }}
+//       />
+//       <Stack.Screen
+//         name={Constant.ScreenName.RESET_PASSWORD}
+//         options={{
+//           headerShown: true,
+//           headerStyle: {
+//             backgroundColor: color.WHITE,
+//             height: 100,
+//           },
+//           headerTitleStyle: styles.headerTitle,
+//           headerTitle: 'Reset Password',
+//           headerTitleAlign: 'center',
+//           headerTintColor: '#FFF',
+//         }}>
+//         {() => <ResetPassword role={role} />}
+//       </Stack.Screen>
+//       <Stack.Screen
+//         name={Constant.ScreenName.UPLOAD_FILE}
+//         component={UploadFile}
+//         options={{
+//           headerShown: true,
+//           headerTitleStyle: {
+//             display: 'none',
+//           },
+//           headerStyle: {
+//             height: 80,
+//             elevation: 5,
+//             shadowColor: 'rgba(0, 0, 0, 0.25)',
+//           },
+//           header: () => <HeaderComponent value="Upload Files" />,
+//         }}
+//       />
+//       <Stack.Screen
+//         name={Constant.ScreenName.Order}
+//         component={Order}
+//         options={{
+//           headerShown: true,
+//           headerTitleStyle: {
+//             display: 'none',
+//           },
+//           headerStyle: {
+//             height: 80,
+//             elevation: 5,
+//             shadowColor: 'rgba(0, 0, 0, 0.25)',
+//           },
+//           header: () => <HeaderComponent value="View Data" />,
+//         }}
+//       />
+//       <Stack.Screen
+//         name={Constant.ScreenName.EDIT_PROFILE}
+//         component={EditProfile}
+//         options={{
+//           headerShown: true,
+//           headerTitleStyle: {
+//             display: 'none',
+//           },
+//           headerStyle: {
+//             backgroundColor: 'white',
+//           },
+//           header: () => WithoutImageHeader('Edit Profile'),
+//         }}
+//       />
+//       <Stack.Screen
+//         name={Constant.ScreenName.TAB_CONTAINER}
+//         component={BottomTabNavigator}
+//         options={{
+//           headerShown: false,
+//         }}
+//       />
+//     </Stack.Navigator>
+//   );
+// };
 
 const MainStack = () => {
   // const userDetails = useAppSelector(state => state?.rootReducer?.auth?.userVerification.data);
   const selectedRole = useAppSelector((state: any) => state?.rootReducer?.auth?.userRole?.data)
   // const dispatch = useAppDispatch();
-  const [loading] = useState(false)
+  const [loading, setLoading] = useState(false)
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
-  //       setLoading(true);
-  //       const userInfo = await AsyncStorage.getItem('userInfo');
+  //       setLoading(true)
+  //       const userInfo = await AsyncStorage.getItem("userInfo")
   //       if (userInfo !== null) {
-  //         const jsonUserInfo = JSON.parse(userInfo);
-  //         dispatch(updateUserRoleAction(jsonUserInfo?.role));
+  //         const jsonUserInfo = JSON.parse(userInfo)
+  //         dispatch(updateUserRoleAction(jsonUserInfo?.role))
   //       }
   //     } catch (error) {
-  //       setLoading(false);
-  //       console.error('Error fetching data:', error);
+  //       setLoading(false)
+  //       console.error("Error fetching data:", error)
   //     } finally {
-  //       setLoading(false);
+  //       setLoading(false)
   //     }
-  //   };
-  //   fetchData();
-  // }, []);
+  //   }
+  //   fetchData()
+  // }, [])
   let componentToRender
   switch (true) {
     case loading:
@@ -94,10 +270,7 @@ const MainStack = () => {
       break
     case selectedRole === role.RETAILER:
       componentToRender = (
-        // <RetailerStackNavigation role={selectedRole} authToken={userDetails?.accessToken} />
-        <View>
-          <Text>Retailer</Text>
-        </View>
+        <RetailerStackNavigation role={selectedRole} authToken={userDetails?.accessToken} />
       )
       break
     default:
@@ -107,8 +280,6 @@ const MainStack = () => {
 }
 
 export const AppNavigator = () => {
-  // const { navigationTheme } = useAppTheme()
-
   const { needsUpdate, details, forceUpdate, setNeedsUpdate } = useVersionCheck()
 
   if (needsUpdate) {
@@ -147,7 +318,7 @@ const styles = StyleSheet.create({
   //   alignItems: "center",
   // },
   // headerTitle: {
-  //   color: "#343434",
+  //   color: colors.palette.charcoal500,
   //   fontFamily: "Arial-Rounded-Bold",
   //   fontSize: 20,
   // },

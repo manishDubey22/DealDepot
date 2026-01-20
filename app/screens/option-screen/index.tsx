@@ -25,7 +25,6 @@ import {
   $container,
   $content,
   $questionText,
-  $safeArea,
 } from "./lib/styles"
 
 interface OptionScreenProps {}
@@ -37,7 +36,7 @@ export const OptionScreen: React.FC<OptionScreenProps> = (): React.JSX.Element =
   return (
     <View style={themed($container)}>
       <StatusBar hidden />
-      <SafeAreaView style={themed($safeArea)}>
+      <SafeAreaView>
         <ImageBackground source={Images.Option} style={themed($backgroundImage)} resizeMode="cover">
           <View style={themed($content)}>
             <Text style={themed($questionText)}>{OPTION_SCREEN_QUESTION}</Text>

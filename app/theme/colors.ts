@@ -111,6 +111,30 @@ const palette = {
   white700: "#212121",
   white800: "#000000",
   white900: "#000000",
+
+  charcoal50: "#F7F7F7",
+  charcoal100: "#EEEEEE",
+  charcoal200: "#D6D6D6",
+  charcoal300: "#BDBDBD",
+  charcoal400: "#9E9E9E",
+  charcoal500: "#343434",
+  charcoal600: "#2E2E2E",
+  charcoal700: "#262626",
+  charcoal800: "#1E1E1E",
+  charcoal900: "#141414",
+} as const
+
+const customColors = {
+  LIGHT_GRAY: "#28332D",
+  BLACK: "#000000",
+  MEDIUM_GRAY: "#575555",
+  WHITE: "#FFFFFF",
+  GREEN: "#1BBC65",
+  PASTEL_RED: "#FF7474",
+  ROYAL_BLUE: "#0904FF",
+  LIGHT_GREEN: "#a6f5dc",
+  LIGHTGREEN: "#9acd66",
+  PURPLE: "#843c9f",
 } as const
 
 export const colors = {
@@ -160,4 +184,8 @@ export const colors = {
    * Error Background.
    */
   errorBackground: palette.angry100,
+  /**
+   * Custom colors.
+   */
+  customColors,
 } as const
