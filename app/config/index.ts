@@ -13,7 +13,7 @@
  *
  * Read more here: https://reactnative.dev/docs/security#storing-sensitive-info
  */
-import BaseConfig from "./config.base"
+import { BASE_URL } from "./config.base"
 import DevConfig from "./config.dev"
 import ProdConfig from "./config.prod"
 
@@ -23,6 +23,6 @@ if (__DEV__) {
   ExtraConfig = DevConfig
 }
 
-const Config = { ...BaseConfig, ...ExtraConfig }
+const Config = { ...BASE_URL, ...ExtraConfig }
 
 export default Config

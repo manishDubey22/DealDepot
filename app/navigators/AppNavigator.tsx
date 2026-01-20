@@ -14,21 +14,12 @@ import { responsiveHeight } from "react-native-responsive-dimensions"
 import Toast from "react-native-toast-message"
 
 import { Text } from "@/components/Text"
-import Config from "@/config"
+import { UpgradeModal } from "@/components/upgradeVersion"
 import { OptionScreen } from "@/screens/option-screen"
 import { useAppSelector } from "@/store"
 import { ThemeProvider } from "@/theme/context"
 import { role } from "@/utils/role"
-// import { useAppTheme } from "@/theme/context"
-
-// import type { AppStackParamList } from "./navigationTypes"
-import { useBackButtonHandler } from "./navigationUtilities"
-
-/**
- * This is a list of all the route names that will exit the app if the back button
- * is pressed while in that screen. Only affects Android.
- */
-const exitRoutes = Config.exitRoutes
+import { useVersionCheck } from "@/utils/VersionContext"
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 // const Stack = createNativeStackNavigator<AppStackParamList>()
@@ -117,20 +108,18 @@ const MainStack = () => {
 export const AppNavigator = () => {
   // const { navigationTheme } = useAppTheme()
 
-  // const {needsUpdate, details, forceUpdate, setNeedsUpdate} = useVersionCheck();
+  const { needsUpdate, details, forceUpdate, setNeedsUpdate } = useVersionCheck()
 
-  // if (needsUpdate) {
-  //   return (
-  //     <UpgradeModal
-  //       isVisible={needsUpdate}
-  //       details={details}
-  //       forceUpdate={forceUpdate}
-  //       setNeedsUpdate={setNeedsUpdate}
-  //     />
-  //   );
-  // }
-
-  useBackButtonHandler((routeName) => exitRoutes.includes(routeName))
+  if (needsUpdate) {
+    return (
+      <UpgradeModal
+        isVisible={needsUpdate}
+        details={details}
+        forceUpdate={forceUpdate}
+        setNeedsUpdate={setNeedsUpdate}
+      />
+    )
+  }
 
   // useEffect(() => {
   //   SplashScreen.hide()
