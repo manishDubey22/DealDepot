@@ -13,6 +13,7 @@ import { responsiveHeight } from "react-native-responsive-dimensions"
 // import SplashScreen from "react-native-splash-screen"
 import Toast from "react-native-toast-message"
 
+import NoInternetConnection from "@/components/no-internet-connection/no-internet-connection"
 import { Text } from "@/components/Text"
 import { UpgradeModal } from "@/components/upgradeVersion"
 import { OptionScreen } from "@/screens/option-screen"
@@ -130,7 +131,7 @@ export const AppNavigator = () => {
       <MenuProvider>
         <MainStack />
         <Toast />
-        {/* <NoInternetConnection /> */}
+        <NoInternetConnection />
       </MenuProvider>
     </ThemeProvider>
   )
