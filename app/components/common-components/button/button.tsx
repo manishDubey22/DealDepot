@@ -1,18 +1,18 @@
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native"
-import React, { FC } from "react"
-import { color } from "../../utils"
-import { useNavigation } from "@react-navigation/native"
-import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions"
+import { FC } from "react"
+import { Text, TouchableOpacity, ActivityIndicator } from "react-native"
+import { responsiveHeight } from "react-native-responsive-dimensions"
 
-type IShowModalType = {
-  resetPassword: boolean
-  otpValidation: boolean
-  resetCredentials: boolean
-  verify?: boolean
-}
-type ShowModalType = {
-  showOTPContainer: boolean
-}
+import { colors } from "@/theme/colors"
+
+// type IShowModalType = {
+//   resetPassword: boolean
+//   otpValidation: boolean
+//   resetCredentials: boolean
+//   verify?: boolean
+// }
+// type ShowModalType = {
+//   showOTPContainer: boolean
+// }
 interface ButtonFieldProps {
   value: string
   screen?: string
@@ -34,7 +34,7 @@ const ButtonField: FC<ButtonFieldProps> = ({
     <TouchableOpacity
       disabled={btnDisable || isDisabled}
       style={{
-        backgroundColor: color.GREEN,
+        backgroundColor: colors.customColors.GREEN,
         paddingHorizontal: 40,
         paddingVertical: responsiveHeight(3),
         borderRadius: 5,

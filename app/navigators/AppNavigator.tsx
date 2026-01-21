@@ -24,6 +24,8 @@ import { ThemeProvider } from "@/theme/context"
 import { role } from "@/utils/role"
 import { useVersionCheck } from "@/utils/VersionContext"
 
+import { RetailerStackNavigation } from "./components/retailer-stack-navigation"
+
 // const Tab = createBottomTabNavigator()
 
 // const Stack = createNativeStackNavigator()

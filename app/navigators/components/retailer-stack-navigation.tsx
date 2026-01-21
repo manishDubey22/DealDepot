@@ -1,6 +1,6 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 // import { StyleSheet } from "react-native"
-import { useNavigation } from "@react-navigation/native"
+// import { useNavigation } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { OptionScreen } from "@/screens/option-screen"
@@ -38,7 +38,7 @@ import { RetailerRoutes } from "../retailer/routes"
 // import Favourites from '../../screens/retailer/favouriteItems';
 // import PriceHistory from '../../screens/retailer/PriceHistory';
 
-const Tab = createBottomTabNavigator()
+// const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
 
 // const TabBarIcon = ({icon, focused}: {icon: ImageSourcePropType; focused: boolean}) => {
@@ -47,16 +47,17 @@ const Stack = createNativeStackNavigator()
 //   );
 // };
 
-const BottomTabNavigator = () => {
-  const navigation = useNavigation()
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        tabBarHideOnKeyboard: true,
-        tabBarActiveTintColor: colors.customColors.GREEN,
-      }}
-    >
-      {/* <Tab.Screen
+// const BottomTabNavigator = () => {
+//   const navigation = useNavigation()
+//   return (
+// <Tab.Navigator
+//   screenOptions={{
+//     tabBarHideOnKeyboard: true,
+//     tabBarActiveTintColor: colors.customColors.GREEN,
+//   }}
+// >
+{
+  /* <Tab.Screen
         name={RetailerRoutes.OPTIONS}
         component={Options}
         options={{
@@ -73,8 +74,10 @@ const BottomTabNavigator = () => {
           },
           header: () => <HeaderComponent value="Home" />,
         }}
-      /> */}
-      {/* <Tab.Screen
+      /> */
+}
+{
+  /* <Tab.Screen
         name="Search"
         component={Home}
         options={{
@@ -90,9 +93,11 @@ const BottomTabNavigator = () => {
           header: () => <HeaderComponent value="Search" />,
           tabBarButton: () => null, // This hides the tab bar button completely
         }}
-      /> */}
+      /> */
+}
 
-      {/* <Tab.Screen
+{
+  /* <Tab.Screen
         name={RetailerRoutes.CART}
         component={Order}
         options={{
@@ -108,8 +113,10 @@ const BottomTabNavigator = () => {
           },
           header: () => <HeaderComponent value="My Cart" />,
         }}
-      /> */}
-      {/* <Tab.Screen
+      /> */
+}
+{
+  /* <Tab.Screen
         name={RetailerRoutes.SCAN}
         component={Scanner}
         options={{
@@ -125,8 +132,10 @@ const BottomTabNavigator = () => {
           },
           header: () => <HeaderComponent value="Scanner" />,
         }}
-      /> */}
-      {/* <Tab.Screen
+      /> */
+}
+{
+  /* <Tab.Screen
         name={RetailerRoutes.SAVE_ORDER}
         component={SaveOrder}
         options={{
@@ -142,8 +151,10 @@ const BottomTabNavigator = () => {
           },
           header: () => <HeaderComponent value="SaveOrder" />,
         }}
-      /> */}
-      {/* <Tab.Screen
+      /> */
+}
+{
+  /* <Tab.Screen
         name={RetailerRoutes.PROFILE}
         component={Profile}
         options={{
@@ -170,10 +181,11 @@ const BottomTabNavigator = () => {
           headerTintColor: '#FFF',
           tabBarIcon: ({focused}) => <TabBarIcon icon={Icon.PROFILE} focused={focused} />,
         }}
-      /> */}
-    </Tab.Navigator>
-  )
+      /> */
 }
+// </Tab.Navigator>
+//   )
+// }
 export const RetailerStackNavigation = ({
   role,
   authToken,
@@ -202,7 +214,7 @@ export const RetailerStackNavigation = ({
           headerShown: true,
           headerStyle: {
             backgroundColor: colors.palette.neutral100,
-            height: 100,
+            // height: 100,
           },
           headerTitleStyle: {
             color: colors.palette.charcoal500,

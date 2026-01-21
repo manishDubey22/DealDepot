@@ -1,0 +1,11 @@
+export const FONT_FAMILY = "Arial-Rounded-Bold"
+
+export const FONT_SIZE = 18
+
+export const PADDING_HORIZONTAL = 40
+
+export const BORDER_RADIUS = 5
+
+export const ACTIVITY_INDICATOR_SIZE = "small" as const
+
+export const ACTIVITY_INDICATOR_COLOR = "#00ff00"
