@@ -80,3 +80,34 @@ export function clear(): void {
     storage.clearAll()
   } catch {}
 }
+
+// Role storage helpers
+const ROLE_STORAGE_KEY = "userRole"
+
+export function getRole(): string | null {
+  try {
+    return loadString(ROLE_STORAGE_KEY)
+  } catch {
+    return null
+  }
+}
+
+export function setRole(role: string | null): void {
+  try {
+    if (role === null) {
+      remove(ROLE_STORAGE_KEY)
+    } else {
+      saveString(ROLE_STORAGE_KEY, role)
+    }
+  } catch (error) {
+    console.error("Error setting role in MMKV:", error)
+  }
+}
+
+export function removeRole(): void {
+  try {
+    remove(ROLE_STORAGE_KEY)
+  } catch (error) {
+    console.error("Error removing role from MMKV:", error)
+  }
+}

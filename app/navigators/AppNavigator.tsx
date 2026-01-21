@@ -18,6 +18,7 @@ import Toast from "react-native-toast-message"
 // import NoInternetConnection from "@/components/no-internet-connection/no-internet-connection"
 import { Text } from "@/components/Text"
 import { UpgradeModal } from "@/components/upgradeVersion"
+import { useRole } from "@/context/RoleContext"
 import { OptionScreen } from "@/screens/option-screen"
 import { useAppSelector } from "@/store"
 import { ThemeProvider } from "@/theme/context"
@@ -234,7 +235,7 @@ const MainStack = () => {
   const userDetails = useAppSelector(
     (state: any) => state?.rootReducer?.auth?.userVerification?.data,
   )
-  const selectedRole = useAppSelector((state: any) => state?.rootReducer?.auth?.userRole?.data)
+  const { userRole: selectedRole, isLoading: isRoleLoading } = useRole()
   // const dispatch = useAppDispatch();
   const [loading] = useState(false)
   // useEffect(() => {
@@ -257,7 +258,7 @@ const MainStack = () => {
   // }, [])
   let componentToRender
   switch (true) {
-    case loading:
+    case loading || isRoleLoading:
       componentToRender = (
         <View style={styles.loaderContainer}>
           <ActivityIndicator size="large" color="#00ff00" />

@@ -33,6 +33,7 @@ import { queryClient } from "@/lib/react-query/queryClient"
 
 // import { AuthProvider } from "./context/AuthContext" // @demo remove-current-line
 import { RetailerAuthProvider } from "./context/RetailerAuthContext"
+import { RoleProvider } from "./context/RoleContext"
 import { initI18n } from "./i18n"
 import { AppNavigator } from "./navigators/AppNavigator"
 import { useNavigationPersistence } from "./navigators/navigationUtilities"
@@ -122,13 +123,15 @@ export function App() {
       <QueryClientProvider client={queryClient}>
         <RetailerAuthProvider>
           <NavigationContainer>
-            <KeyboardProvider>
-              {/* <VersionProvider> */}
-              <View style={styles.mainContainer}>
-                <AppNavigator />
-              </View>
-              {/* </VersionProvider> */}
-            </KeyboardProvider>
+            <RoleProvider>
+              <KeyboardProvider>
+                {/* <VersionProvider> */}
+                <View style={styles.mainContainer}>
+                  <AppNavigator />
+                </View>
+                {/* </VersionProvider> */}
+              </KeyboardProvider>
+            </RoleProvider>
           </NavigationContainer>
         </RetailerAuthProvider>
       </QueryClientProvider>

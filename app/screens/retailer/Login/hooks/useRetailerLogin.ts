@@ -11,6 +11,7 @@ import { Toast } from "react-native-toast-message/lib/src/Toast"
 
 import { authApiMutationOptions } from "@/api/retailer/auth"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
+import { useRole } from "@/context/RoleContext"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { loginSchema } from "@/utils/schema/login-schema"
 import { save } from "@/utils/storage"
@@ -56,7 +57,8 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
 
   const { mutateAsync: handleLoginPress, isPending: isLoading } =
     authApiMutationOptions.useLoginMutation()
-  const { setUserAuth, setUserRole } = useRetailerAuth()
+  const { setUserAuth } = useRetailerAuth()
+  const { clearRole } = useRole()
 
   const {
     control,
@@ -150,9 +152,9 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
   }, [navigation])
 
   const handleBackToOption = useCallback(() => {
-    setUserRole(null)
+    clearRole()
     navigation.navigate(RetailerRoutes.OPTION)
-  }, [setUserRole, navigation])
+  }, [clearRole, navigation])
 
   return {
     control,
