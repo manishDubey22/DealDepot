@@ -7,7 +7,7 @@ import { useRetailerLogin } from "./hooks/useRetailerLogin"
 import { FORM_FIELDS, UI_TEXT } from "./lib/constants"
 import { styles } from "./lib/styles"
 import ButtonField from "../../../components/CommonComponents/button/button"
-import { InputFieldContianer } from "../../../components/CommonComponents/InputFieldContianer"
+import { InputFieldContianer } from "../../../components/CommonComponents/InputFieldContianer/InputFieldContianer"
 
 export default function Login({ navigation }: any) {
   const {

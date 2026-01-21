@@ -109,8 +109,8 @@ const palette = {
   white500: "#616161",
   white600: "#424242",
   white700: "#212121",
-  white800: "#000000",
-  white900: "#000000",
+  // white800: "#000000",
+  // white900: "#000000",
 
   charcoal50: "#F7F7F7",
   charcoal100: "#EEEEEE",

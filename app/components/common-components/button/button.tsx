@@ -1,27 +1,10 @@
 import { FC } from "react"
-import { Text, TouchableOpacity, ActivityIndicator } from "react-native"
+import { ActivityIndicator, Text, TouchableOpacity } from "react-native"
 import { responsiveHeight } from "react-native-responsive-dimensions"
 
-import { colors } from "@/theme/colors"
-
-// type IShowModalType = {
-//   resetPassword: boolean
-//   otpValidation: boolean
-//   resetCredentials: boolean
-//   verify?: boolean
-// }
-// type ShowModalType = {
-//   showOTPContainer: boolean
-// }
-interface ButtonFieldProps {
-  value: string
-  screen?: string
-  onPress?: () => void
-  isDisabled?: boolean
-  btnDisable?: boolean
-  handleNewPasswordScreen?: () => void
-  isLoading?: boolean
-}
+import { ACTIVITY_INDICATOR_COLOR, ACTIVITY_INDICATOR_SIZE } from "./lib/constants"
+import { styles } from "./lib/styles"
+import type { ButtonFieldProps } from "./lib/types"
 
 const ButtonField: FC<ButtonFieldProps> = ({
   value,
@@ -33,27 +16,13 @@ const ButtonField: FC<ButtonFieldProps> = ({
   return (
     <TouchableOpacity
       disabled={btnDisable || isDisabled}
-      style={{
-        backgroundColor: colors.customColors.GREEN,
-        paddingHorizontal: 40,
-        paddingVertical: responsiveHeight(3),
-        borderRadius: 5,
-      }}
+      style={[styles.buttonContainer, { paddingVertical: responsiveHeight(3) }]}
       onPress={onPress}
     >
       {isLoading ? (
-        <ActivityIndicator size="small" color="#00ff00" />
+        <ActivityIndicator color={ACTIVITY_INDICATOR_COLOR} size={ACTIVITY_INDICATOR_SIZE} />
       ) : (
-        <Text
-          style={{
-            color: "#FFF",
-            fontFamily: "Arial-Rounded-Bold",
-            fontSize: 18,
-            alignSelf: "center",
-          }}
-        >
-          {value}
-        </Text>
+        <Text style={styles.buttonText}>{value}</Text>
       )}
     </TouchableOpacity>
   )

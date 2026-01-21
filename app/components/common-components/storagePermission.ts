@@ -1,6 +1,5 @@
 import { PermissionsAndroid } from "react-native"
 import DeviceInfo from "react-native-device-info"
-import { request, RESULTS } from "react-native-permissions"
 
 export const useStoragePermission = async ({
   onPermissionGranted,
