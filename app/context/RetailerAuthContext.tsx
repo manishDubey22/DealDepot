@@ -1,4 +1,4 @@
-import React, {
+import {
   createContext,
   FC,
   PropsWithChildren,
@@ -7,7 +7,8 @@ import React, {
   useEffect,
   useState,
 } from "react"
-import AsyncStorage from "@react-native-async-storage/async-storage"
+
+import { load, save, remove } from "@/utils/storage"
 
 export interface UserAuth {
   accessToken: string
@@ -25,68 +26,44 @@ export interface RetailerAuthContextType {
 
 export const RetailerAuthContext = createContext<RetailerAuthContextType | null>(null)
 
+const USER_INFO_KEY = "userInfo"
+
 export interface RetailerAuthProviderProps {}
 
 export const RetailerAuthProvider: FC<PropsWithChildren<RetailerAuthProviderProps>> = ({
   children,
 }) => {
-  const [userAuth, setUserAuthState] = useState<UserAuth | null>(null)
-  const [userRole, setUserRoleState] = useState<string | null>(null)
-  const [isInitialized, setIsInitialized] = useState(false)
+  const storedUserInfo = load<{
+    role?: string
+    authToken?: string
+    userId?: string
+    refreshToken?: string
+  }>(USER_INFO_KEY)
 
-  // Initialize from AsyncStorage on mount
-  useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        const userInfoString = await AsyncStorage.getItem("userInfo")
-        if (userInfoString) {
-          const userInfo = JSON.parse(userInfoString)
-          if (userInfo.role) {
-            setUserRoleState(userInfo.role)
-          }
-          if (userInfo.authToken && userInfo.userId && userInfo.refreshToken) {
-            setUserAuthState({
-              accessToken: userInfo.authToken,
-              userId: userInfo.userId,
-              refreshToken: userInfo.refreshToken,
-            })
-          }
+  const [userAuth, setUserAuthState] = useState<UserAuth | null>(
+    storedUserInfo?.authToken && storedUserInfo?.userId && storedUserInfo?.refreshToken
+      ? {
+          accessToken: storedUserInfo.authToken,
+          userId: storedUserInfo.userId,
+          refreshToken: storedUserInfo.refreshToken,
         }
-      } catch (error) {
-        console.error("Error initializing auth from AsyncStorage:", error)
-      } finally {
-        setIsInitialized(true)
-      }
-    }
+      : null,
+  )
 
-    initializeAuth()
-  }, [])
+  const [userRole, setUserRoleState] = useState<string | null>(storedUserInfo?.role ?? null)
 
-  // Persist userAuth to AsyncStorage when it changes
   useEffect(() => {
-    if (!isInitialized) return
-
-    const updateAsyncStorage = async () => {
-      try {
-        if (userAuth) {
-          const userInfo = {
-            role: userRole || "retailer",
-            authToken: userAuth.accessToken,
-            userId: userAuth.userId,
-            refreshToken: userAuth.refreshToken,
-          }
-          await AsyncStorage.setItem("userInfo", JSON.stringify(userInfo))
-        } else if (userAuth === null && userRole === null) {
-          // Only clear if both are null (full logout)
-          await AsyncStorage.removeItem("userInfo")
-        }
-      } catch (error) {
-        console.error("Error updating AsyncStorage:", error)
-      }
+    if (userAuth && userRole) {
+      save(USER_INFO_KEY, {
+        role: userRole,
+        authToken: userAuth.accessToken,
+        userId: userAuth.userId,
+        refreshToken: userAuth.refreshToken,
+      })
+    } else if (!userAuth && !userRole) {
+      remove(USER_INFO_KEY)
     }
-
-    updateAsyncStorage()
-  }, [userAuth, userRole, isInitialized])
+  }, [userAuth, userRole])
 
   const setUserAuth = useCallback((auth: UserAuth | null) => {
     setUserAuthState(auth)
@@ -96,14 +73,10 @@ export const RetailerAuthProvider: FC<PropsWithChildren<RetailerAuthProviderProp
     setUserRoleState(role)
   }, [])
 
-  const clearAuth = useCallback(async () => {
+  const clearAuth = useCallback(() => {
     setUserAuthState(null)
     setUserRoleState(null)
-    try {
-      await AsyncStorage.removeItem("userInfo")
-    } catch (error) {
-      console.error("Error clearing AsyncStorage:", error)
-    }
+    remove(USER_INFO_KEY)
   }, [])
 
   const value: RetailerAuthContextType = {

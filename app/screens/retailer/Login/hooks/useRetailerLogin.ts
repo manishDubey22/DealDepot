@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react"
 import { yupResolver } from "@hookform/resolvers/yup"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
   useForm,
   type Control,
@@ -14,13 +13,13 @@ import { authApiMutationOptions } from "@/api/retailer/auth"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { loginSchema } from "@/utils/schema/login-schema"
+import { save } from "@/utils/storage"
 
 import {
   CONSOLE_MESSAGES,
   ERROR_MESSAGES,
   MODAL_INITIAL_STATE,
   STORAGE_KEYS,
-  USER_ROLE,
 } from "../lib/constants"
 import type { IFormInput, IShowModalType } from "../lib/types"
 
@@ -77,9 +76,9 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
         if (response?.data?.status) {
           const isSubscribed = response?.data?.data?.isSubscribed.toString()
           const peerGroup = response?.data?.data?.peerGroup.toString()
-          await AsyncStorage.setItem(STORAGE_KEYS.PREMIUM_USER, isSubscribed)
-          await AsyncStorage.setItem(STORAGE_KEYS.PEER_GROUP, peerGroup)
-          await AsyncStorage.setItem(STORAGE_KEYS.LOGIN_TIME, new Date().getTime().toString())
+          save(STORAGE_KEYS.PREMIUM_USER, isSubscribed)
+          save(STORAGE_KEYS.PEER_GROUP, peerGroup)
+          save(STORAGE_KEYS.LOGIN_TIME, new Date().getTime())
 
           Toast.show({
             type: "success",
@@ -94,19 +93,19 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
           console.log(payload)
 
           // Store user info in AsyncStorage immediately after login
-          try {
-            const userInfo = {
-              role: USER_ROLE.RETAILER,
-              authToken: result?.accessToken,
-              userId: result?.retailer_id,
-              refreshToken: result?.refreshToken,
-            }
-            const jsonValue = JSON.stringify(userInfo)
-            await AsyncStorage.setItem(STORAGE_KEYS.USER_INFO, jsonValue)
-            console.log(CONSOLE_MESSAGES.STORAGE_SUCCESS)
-          } catch (error) {
-            console.error(CONSOLE_MESSAGES.STORAGE_ERROR, error)
-          }
+          // try {
+          //   const userInfo = {
+          //     role: USER_ROLE.RETAILER,
+          //     authToken: result?.accessToken,
+          //     userId: result?.retailer_id,
+          //     refreshToken: result?.refreshToken,
+          //   }
+          //   const jsonValue = JSON.stringify(userInfo)
+          //   await AsyncStorage.setItem(STORAGE_KEYS.USER_INFO, jsonValue)
+          //   console.log(CONSOLE_MESSAGES.STORAGE_SUCCESS)
+          // } catch (error) {
+          //   console.error(CONSOLE_MESSAGES.STORAGE_ERROR, error)
+          // }
 
           setUserAuth(payload)
           navigation.navigate(RetailerRoutes.TAB_CONTAINER)

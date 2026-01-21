@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
   helpertext1: { color: colors.customColors.LIGHT_GRAY, fontSize: 16, textAlign: "center" },
 
   loginText: {
-    color: colors.palette.white900,
+    color: colors.palette.neutral100,
     fontSize: 19,
     fontWeight: "500",
     textAlign: "center",

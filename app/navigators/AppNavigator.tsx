@@ -15,7 +15,7 @@ import { responsiveHeight } from "react-native-responsive-dimensions"
 // import SplashScreen from "react-native-splash-screen"
 import Toast from "react-native-toast-message"
 
-import NoInternetConnection from "@/components/no-internet-connection/no-internet-connection"
+// import NoInternetConnection from "@/components/no-internet-connection/no-internet-connection"
 import { Text } from "@/components/Text"
 import { UpgradeModal } from "@/components/upgradeVersion"
 import { OptionScreen } from "@/screens/option-screen"
@@ -231,10 +231,12 @@ import { RetailerStackNavigation } from "./components/retailer-stack-navigation"
 // };
 
 const MainStack = () => {
-  // const userDetails = useAppSelector(state => state?.rootReducer?.auth?.userVerification.data);
+  const userDetails = useAppSelector(
+    (state: any) => state?.rootReducer?.auth?.userVerification?.data,
+  )
   const selectedRole = useAppSelector((state: any) => state?.rootReducer?.auth?.userRole?.data)
   // const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false)
+  const [loading] = useState(false)
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -304,7 +306,7 @@ export const AppNavigator = () => {
       <MenuProvider>
         <MainStack />
         <Toast />
-        <NoInternetConnection />
+        {/* <NoInternetConnection /> */}
       </MenuProvider>
     </ThemeProvider>
   )
