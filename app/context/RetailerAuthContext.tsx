@@ -8,6 +8,7 @@ import {
   useState,
 } from "react"
 
+import { STORAGE_KEY } from "@/lib/constants"
 import { load, save, remove } from "@/utils/storage"
 
 export interface UserAuth {
@@ -26,8 +27,6 @@ export interface RetailerAuthContextType {
 
 export const RetailerAuthContext = createContext<RetailerAuthContextType | null>(null)
 
-const USER_INFO_KEY = "userInfo"
-
 export interface RetailerAuthProviderProps {}
 
 export const RetailerAuthProvider: FC<PropsWithChildren<RetailerAuthProviderProps>> = ({
@@ -38,7 +37,7 @@ export const RetailerAuthProvider: FC<PropsWithChildren<RetailerAuthProviderProp
     authToken?: string
     userId?: string
     refreshToken?: string
-  }>(USER_INFO_KEY)
+  }>(STORAGE_KEY.USER_INFO)
 
   const [userAuth, setUserAuthState] = useState<UserAuth | null>(
     storedUserInfo?.authToken && storedUserInfo?.userId && storedUserInfo?.refreshToken
@@ -54,14 +53,14 @@ export const RetailerAuthProvider: FC<PropsWithChildren<RetailerAuthProviderProp
 
   useEffect(() => {
     if (userAuth && userRole) {
-      save(USER_INFO_KEY, {
+      save(STORAGE_KEY.USER_INFO, {
         role: userRole,
         authToken: userAuth.accessToken,
         userId: userAuth.userId,
         refreshToken: userAuth.refreshToken,
       })
     } else if (!userAuth && !userRole) {
-      remove(USER_INFO_KEY)
+      remove(STORAGE_KEY.USER_INFO)
     }
   }, [userAuth, userRole])
 
@@ -76,7 +75,7 @@ export const RetailerAuthProvider: FC<PropsWithChildren<RetailerAuthProviderProp
   const clearAuth = useCallback(() => {
     setUserAuthState(null)
     setUserRoleState(null)
-    remove(USER_INFO_KEY)
+    remove(STORAGE_KEY.USER_INFO)
   }, [])
 
   const value: RetailerAuthContextType = {

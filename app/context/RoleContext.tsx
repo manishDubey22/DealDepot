@@ -8,7 +8,9 @@ import {
   useState,
 } from "react"
 
-import { getRole, load, remove, removeRole, save, setRole } from "@/utils/storage"
+import { STORAGE_KEY } from "@/lib/constants"
+import { load, remove, save } from "@/utils/storage"
+import { getRole, removeRole, setRole } from "@/utils/storage/role-storage"
 
 export interface RoleContextType {
   userRole: string | null
@@ -18,8 +20,6 @@ export interface RoleContextType {
 }
 
 export const RoleContext = createContext<RoleContextType | null>(null)
-
-const USER_INFO_KEY = "userInfo"
 
 export interface RoleProviderProps {}
 
@@ -44,7 +44,7 @@ export const RoleProvider: FC<PropsWithChildren<RoleProviderProps>> = ({ childre
               authToken?: string
               userId?: string
               refreshToken?: string
-            }>(USER_INFO_KEY)
+            }>(STORAGE_KEY.USER_INFO)
             if (userInfo?.role) {
               role = userInfo.role
               // Migrate to dedicated role storage in MMKV
@@ -54,9 +54,9 @@ export const RoleProvider: FC<PropsWithChildren<RoleProviderProps>> = ({ childre
               delete updatedUserInfo.role
               if (Object.keys(updatedUserInfo).length > 0) {
                 // Save updated userInfo back to MMKV
-                save(USER_INFO_KEY, updatedUserInfo)
+                save(STORAGE_KEY.USER_INFO, updatedUserInfo)
               } else {
-                remove(USER_INFO_KEY)
+                remove(STORAGE_KEY.USER_INFO)
               }
             }
           } catch (error) {
@@ -86,18 +86,18 @@ export const RoleProvider: FC<PropsWithChildren<RoleProviderProps>> = ({ childre
         authToken?: string
         userId?: string
         refreshToken?: string
-      }>(USER_INFO_KEY)
+      }>(STORAGE_KEY.USER_INFO)
       if (userInfo) {
         if (role) {
           const updatedUserInfo = { ...userInfo, role }
-          save(USER_INFO_KEY, updatedUserInfo)
+          save(STORAGE_KEY.USER_INFO, updatedUserInfo)
         } else {
           const updatedUserInfo = { ...userInfo }
           delete updatedUserInfo.role
           if (Object.keys(updatedUserInfo).length > 0) {
-            save(USER_INFO_KEY, updatedUserInfo)
+            save(STORAGE_KEY.USER_INFO, updatedUserInfo)
           } else {
-            remove(USER_INFO_KEY)
+            remove(STORAGE_KEY.USER_INFO)
           }
         }
       }
@@ -117,14 +117,14 @@ export const RoleProvider: FC<PropsWithChildren<RoleProviderProps>> = ({ childre
         authToken?: string
         userId?: string
         refreshToken?: string
-      }>(USER_INFO_KEY)
+      }>(STORAGE_KEY.USER_INFO)
       if (userInfo) {
         const updatedUserInfo = { ...userInfo }
         delete updatedUserInfo.role
         if (Object.keys(updatedUserInfo).length > 0) {
-          save(USER_INFO_KEY, updatedUserInfo)
+          save(STORAGE_KEY.USER_INFO, updatedUserInfo)
         } else {
-          remove(USER_INFO_KEY)
+          remove(STORAGE_KEY.USER_INFO)
         }
       }
     } catch (error) {
