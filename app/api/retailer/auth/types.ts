@@ -59,3 +59,35 @@ export interface RegisterErrorResponse {
     }
   }
 }
+
+export interface OTPVerifyRequest {
+  email: string
+  otp: string // 4-digit string
+}
+
+export interface OTPVerifyResponseData {
+  accessToken: string
+  retailer_id: string
+  refreshToken: string
+  isSubscribed: boolean
+  peerGroup: string
+}
+
+export interface OTPVerifyResponse {
+  message: string
+  data: OTPVerifyResponseData
+}
+
+export interface OTPVerifyErrorResponse {
+  error?: {
+    data?: {
+      message?: string
+    }
+  }
+  message?: string
+  response?: {
+    data?: {
+      message?: string
+    }
+  }
+}
