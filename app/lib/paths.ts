@@ -29,6 +29,6 @@ export const staticPaths = {
 }
 
 export const userPaths = {
-  login: () => `/${API_USER_VERSION}/${API_VERSION}/${API_RETAILER_VERSION}/login`,
-  register: () => `/${API_USER_VERSION}/${API_VERSION}/${API_RETAILER_VERSION}/register`,
+  login: () => `${API_USER_VERSION}/${API_VERSION}/${API_RETAILER_VERSION}/login`,
+  register: () => `${API_USER_VERSION}/${API_VERSION}/${API_RETAILER_VERSION}/register`,
 }

@@ -2,8 +2,7 @@
   "expo": {
     "jsEngine": "hermes",
     "android": {
-      "newArchEnabled": false,
-      "package": "com.manish.mern.dealdepot"
+      "newArchEnabled": false
     },
     "ios": {
       "newArchEnabled": false
