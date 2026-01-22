@@ -1,3 +1,5 @@
+import { CommonStyles } from "@/theme/common-styles"
+
 export const SHOW_NO_BACK_BUTTON = ["Options", "Home"]
 
 export const NAVIGATE_TO_OPTIONS_SCREENS = ["Scanner", "Search", "SaveOrder", "My Cart"]
@@ -14,7 +16,7 @@ export const HEADER_PADDING_HORIZONTAL = 10
 
 export const HEADER_TEXT_FONT_SIZE = 24
 
-export const FONT_FAMILY = "Arial-Rounded-Bold"
+export const FONT_FAMILY = CommonStyles.fontFamily.fontFamily
 
 export const ICON_WIDTH = 40
 

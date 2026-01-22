@@ -16,6 +16,7 @@ import { responsiveHeight } from "react-native-responsive-dimensions"
 import Toast from "react-native-toast-message"
 
 // import NoInternetConnection from "@/components/no-internet-connection/no-internet-connection"
+import { toastConfig } from "@/components/common-components/custom-toast/custom-toast"
 import { Text } from "@/components/Text"
 import { UpgradeModal } from "@/components/upgradeVersion"
 import { useRole } from "@/context/RoleContext"
@@ -77,7 +78,7 @@ import { RetailerStackNavigation } from "./components/retailer-stack-navigation"
 //           },
 //           headerTitleStyle: {
 //             color: color.BLACK,
-//             fontFamily: 'Arial-Rounded-Bold',
+//             fontFamily: CommonStyles.fontFamily.fontFamily,
 //             fontSize: 20,
 //           },
 //           headerRightContainerStyle: {
@@ -90,7 +91,7 @@ import { RetailerStackNavigation } from "./components/retailer-stack-navigation"
 //               <TabBarIcon icon={Icon.EDIT} />
 //             </TouchableOpacity>
 //           ),
-//           headerTintColor: '#FFF',
+//           headerTintColor: colors.palette.neutral100,
 //           tabBarIcon: ({focused}) => <TabBarIcon icon={Icon.PROFILE} focused={focused} />,
 //         }}
 //       />
@@ -126,7 +127,7 @@ import { RetailerStackNavigation } from "./components/retailer-stack-navigation"
 //           },
 //           headerTitleStyle: styles.headerTitle,
 //           headerTitleAlign: 'center',
-//           headerTintColor: '#FFF',
+//           headerTintColor: colors.palette.neutral100,
 //         }}
 //       />
 //       <Stack.Screen
@@ -141,7 +142,7 @@ import { RetailerStackNavigation } from "./components/retailer-stack-navigation"
 //           headerTitleStyle: styles.headerTitle,
 //           headerTitle: 'Create New Account',
 //           headerTitleAlign: 'center',
-//           headerTintColor: '#FFF',
+//           headerTintColor: colors.palette.neutral100,
 //         }}
 //       />
 //       <Stack.Screen
@@ -156,7 +157,7 @@ import { RetailerStackNavigation } from "./components/retailer-stack-navigation"
 //           headerTitleStyle: styles.headerTitle,
 //           headerTitle: 'Verify',
 //           headerTitleAlign: 'center',
-//           headerTintColor: '#FFF',
+//           headerTintColor: colors.palette.neutral100,
 //         }}
 //       />
 //       <Stack.Screen
@@ -170,7 +171,7 @@ import { RetailerStackNavigation } from "./components/retailer-stack-navigation"
 //           headerTitleStyle: styles.headerTitle,
 //           headerTitle: 'Reset Password',
 //           headerTitleAlign: 'center',
-//           headerTintColor: '#FFF',
+//           headerTintColor: colors.palette.neutral100,
 //         }}>
 //         {() => <ResetPassword role={role} />}
 //       </Stack.Screen>
@@ -306,7 +307,7 @@ export const AppNavigator = () => {
     <ThemeProvider>
       <MenuProvider>
         <MainStack />
-        <Toast />
+        <Toast config={toastConfig} />
         {/* <NoInternetConnection /> */}
       </MenuProvider>
     </ThemeProvider>
@@ -324,7 +325,7 @@ const styles = StyleSheet.create({
   // },
   // headerTitle: {
   //   color: colors.palette.charcoal500,
-  //   fontFamily: "Arial-Rounded-Bold",
+  //   fontFamily: CommonStyles.fontFamily.fontFamily,
   //   fontSize: 20,
   // },
   loaderContainer: {

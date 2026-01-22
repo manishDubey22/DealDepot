@@ -8,7 +8,7 @@ import { OptionBotton } from "@/components/option-button/option-botton"
 import { Text } from "@/components/Text"
 import { role } from "@/utils/role"
 
-import { useOptionScreen } from "./hooks/useOptionScreen"
+import { useOptionScreen } from "./hooks/use-option-screen"
 import { OPTION_SCREEN_BUTTON_VALUE_RETAILER, OPTION_SCREEN_QUESTION } from "./lib/constants"
 import { styles } from "./lib/styles"
 

@@ -3,6 +3,8 @@ import { ImageBackground, StyleSheet } from "react-native"
 import { Images } from "@assets/Images/wholeSeller"
 
 import { Text } from "@/components/Text"
+import { colors } from "@/theme/colors"
+import { CommonStyles } from "@/theme/common-styles"
 
 interface OptionBtnProps {
   value: string
@@ -33,8 +35,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   text: {
-    color: "#FFF",
-    fontFamily: "Arial-Rounded-Bold",
+    color: colors.palette.neutral100,
+    fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: 24,
     fontWeight: "700",
     textAlign: "center",

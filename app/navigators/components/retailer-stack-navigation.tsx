@@ -4,7 +4,9 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { OptionScreen } from "@/screens/option-screen"
+import CreateNewAccount from "@/screens/retailer/create-new-account"
 import { colors } from "@/theme/colors"
+import { CommonStyles } from "@/theme/common-styles"
 
 import Login from "../../screens/retailer/Login"
 import { RetailerRoutes } from "../retailer/routes"
@@ -165,7 +167,7 @@ const Stack = createNativeStackNavigator()
           },
           headerTitleStyle: {
             color: colors.palette.charcoal500,
-            fontFamily: 'Arial-Rounded-Bold',
+            fontFamily: CommonStyles.fontFamily.fontFamily,
             fontSize: 20,
           },
           headerRightContainerStyle: {
@@ -178,7 +180,7 @@ const Stack = createNativeStackNavigator()
               <TabBarIcon icon={Icon.EDIT} focused={false} />
             </TouchableOpacity>
           ),
-          headerTintColor: '#FFF',
+          headerTintColor: colors.palette.neutral100,
           tabBarIcon: ({focused}) => <TabBarIcon icon={Icon.PROFILE} focused={focused} />,
         }}
       /> */
@@ -218,32 +220,32 @@ export const RetailerStackNavigation = ({
           },
           headerTitleStyle: {
             color: colors.palette.charcoal500,
-            fontFamily: "Arial-Rounded-Bold",
+            fontFamily: CommonStyles.fontFamily.fontFamily,
             fontSize: 20,
           },
           headerTitleAlign: "center",
-          headerTintColor: "#FFF",
+          headerTintColor: colors.palette.neutral100,
         }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.CREATE_NEW_ACCOUNT}
         component={CreateNewAccount}
         options={{
           headerShown: true,
           headerStyle: {
             backgroundColor: colors.customColors.WHITE,
-            height: 100,
+            // height: 100,
           },
           headerTitleStyle: {
             color: colors.palette.charcoal500,
-            fontFamily: 'Arial-Rounded-Bold',
+            fontFamily: CommonStyles.fontFamily.fontFamily,
             fontSize: 20,
           },
-          headerTitle: 'Create New Account',
-          headerTitleAlign: 'center',
-          headerTintColor: '#FFF',
+          headerTitle: "Create New Account",
+          headerTitleAlign: "center",
+          headerTintColor: colors.palette.neutral100,
         }}
-      /> */}
+      />
       {/* <Stack.Screen
         name={RetailerRoutes.EMAIL_VERIFICATION}
         component={EmailVerification}
@@ -255,12 +257,12 @@ export const RetailerStackNavigation = ({
           },
           headerTitleStyle: {
             color: colors.palette.charcoal500,
-            fontFamily: 'Arial-Rounded-Bold',
+            fontFamily: CommonStyles.fontFamily.fontFamily,
             fontSize: 20,
           },
           headerTitle: 'Verify',
           headerTitleAlign: 'center',
-          headerTintColor: '#FFF',
+          headerTintColor: colors.palette.neutral100,
         }}
       /> */}
       {/* <Stack.Screen
@@ -273,12 +275,12 @@ export const RetailerStackNavigation = ({
           },
           headerTitleStyle: {
             color: colors.palette.charcoal500,
-            fontFamily: 'Arial-Rounded-Bold',
+            fontFamily: CommonStyles.fontFamily.fontFamily,
             fontSize: 20,
           },
           headerTitle: 'Reset Password',
           headerTitleAlign: 'center',
-          headerTintColor: '#FFF',
+          headerTintColor: colors.palette.neutral100,
         }}>
         {() => <ResetPassword role={role} />}
       </Stack.Screen> */}

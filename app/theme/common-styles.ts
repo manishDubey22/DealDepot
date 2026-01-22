@@ -22,6 +22,9 @@ const CommonStyles = {
     fontSize: 15,
     color: colors.customColors.LIGHT_GRAY,
   },
+  fontFamily: {
+    fontFamily: "Arial-Rounded-Bold",
+  },
 }
 
 const wholeSellerStyles = StyleSheet.create({

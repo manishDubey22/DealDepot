@@ -1,3 +1,5 @@
+import { CommonStyles } from "@/theme/common-styles"
+
 export const ELEVATION = 4
 
 export const CONTAINER_PADDING_VERTICAL = 20
@@ -16,6 +18,6 @@ export const FILE_TEXT_PADDING_LEFT = 5
 
 export const DATE_CONTAINER_TEXT_PADDING_LEFT = 5
 
-export const FONT_FAMILY = "Arial-Rounded-Bold"
+export const FONT_FAMILY = CommonStyles.fontFamily.fontFamily
 
 export const DATE_LABEL_TEXT = "Date"

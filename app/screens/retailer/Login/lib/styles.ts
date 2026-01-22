@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native"
 
 import { colors } from "@/theme/colors"
+import { CommonStyles } from "@/theme/common-styles"
 
 export const styles = StyleSheet.create({
   backToOptionScreen: { marginTop: 10, textAlign: "center" },
@@ -48,7 +49,7 @@ export const styles = StyleSheet.create({
   },
   validationError: {
     color: colors.customColors.PASTEL_RED,
-    fontFamily: "Arial-Rounded-Bold",
+    fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: 16,
     marginTop: 10,
   },

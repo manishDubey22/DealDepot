@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native"
 
 import { colors } from "@/theme/colors"
+import { CommonStyles } from "@/theme/common-styles"
 
 export const styles = StyleSheet.create({
   container: { backgroundColor: colors.customColors.WHITE },
@@ -20,7 +21,7 @@ export const styles = StyleSheet.create({
   },
   questionText: {
     color: colors.customColors.MEDIUM_GRAY,
-    fontFamily: "Arial-Rounded-Bold",
+    fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: 24,
     fontWeight: "700",
     textAlign: "center",

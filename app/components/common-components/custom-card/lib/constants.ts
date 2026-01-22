@@ -1,3 +1,5 @@
+import { CommonStyles } from "@/theme/common-styles"
+
 export const IOS_PADDING = 10
 
 export const CONTAINER_PADDING_HORIZONTAL = 26
@@ -30,6 +32,6 @@ export const HELPER_TEXT2_FONT_SIZE = 17
 
 export const HELPER_TEXT3_FONT_SIZE = 17
 
-export const FONT_FAMILY = "Arial-Rounded-Bold"
+export const FONT_FAMILY = CommonStyles.fontFamily.fontFamily
 
 export const AUTHORISED_ID_PREFIX = "Authorised ID - "

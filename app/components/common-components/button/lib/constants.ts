@@ -1,4 +1,6 @@
-export const FONT_FAMILY = "Arial-Rounded-Bold"
+import { CommonStyles } from "@/theme/common-styles"
+
+export const FONT_FAMILY = CommonStyles.fontFamily.fontFamily
 
 export const FONT_SIZE = 18
 

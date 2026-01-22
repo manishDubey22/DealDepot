@@ -9,7 +9,7 @@ import {
 } from "react-hook-form"
 import { Toast } from "react-native-toast-message/lib/src/Toast"
 
-import { authApiMutationOptions } from "@/api/retailer/auth"
+import { authMutationOptions } from "@/api/retailer/auth"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { useRole } from "@/context/RoleContext"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
@@ -56,7 +56,7 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
   const [isShowPassword, setIsShowPassword] = useState(true)
 
   const { mutateAsync: handleLoginPress, isPending: isLoading } =
-    authApiMutationOptions.useLoginMutation()
+    authMutationOptions.useLoginMutation()
   const { setUserAuth } = useRetailerAuth()
   const { clearRole } = useRole()
 

@@ -36,6 +36,7 @@ import { queryClient } from "@/lib/react-query/queryClient"
 import { RetailerAuthProvider } from "./context/RetailerAuthContext"
 import { RoleProvider } from "./context/RoleContext"
 import { initI18n } from "./i18n"
+import { STORAGE_KEY } from "./lib/constants"
 import { AppNavigator } from "./navigators/AppNavigator"
 import { useNavigationPersistence } from "./navigators/navigationUtilities"
 import { store } from "./store"
@@ -43,8 +44,6 @@ import { store } from "./store"
 import { customFontsToLoad } from "./theme/typography"
 import { loadDateFnsLocale } from "./utils/formatDate"
 import * as storage from "./utils/storage"
-
-export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
 // Web linking configuration
 // const prefix = Linking.createURL("/")
@@ -77,7 +76,7 @@ export function App() {
     // initialNavigationState,
     // onNavigationStateChange,
     isRestored: isNavigationStateRestored,
-  } = useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
+  } = useNavigationPersistence(storage, STORAGE_KEY.NAVIGATION_STATE)
 
   const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad)
   const [isI18nInitialized, setIsI18nInitialized] = useState(false)
