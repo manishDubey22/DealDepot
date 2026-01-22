@@ -4,11 +4,10 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { OptionScreen } from "@/screens/option-screen"
-import CreateNewAccount from "@/screens/retailer/create-new-account"
+import { CreateNewAccount, Login } from "@/screens/retailer"
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
 
-import Login from "../../screens/retailer/Login"
 import { RetailerRoutes } from "../retailer/routes"
 // import {Icon} from '../../assets/icons/wholeSeller';
 

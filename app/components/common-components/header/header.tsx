@@ -1,8 +1,8 @@
-import { Image, SafeAreaView, Text, View } from "react-native"
+import { Image, Text, View } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import LinearGradient from "react-native-linear-gradient"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { RetailerRoutes } from "@/navigators/retailer/routes"
 import Headerimg from "@/screens/retailer/optionList/Header"
@@ -28,6 +28,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ value }) => {
   const handlePress = () => {
     console.log("value", value)
     if (NAVIGATE_TO_OPTIONS_SCREENS.includes(value)) {
+      // @ts-expect-error - navigation type doesn't include all RetailerRoutes
       navigation.navigate(RetailerRoutes.OPTIONS)
     } else {
       navigation.goBack()

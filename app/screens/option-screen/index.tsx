@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import React from "react"
-import { ImageBackground, SafeAreaView, StatusBar, TouchableOpacity, View } from "react-native"
+import { ImageBackground, StatusBar, TouchableOpacity, View } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 import { Images } from "@assets/Images/wholeSeller"
 

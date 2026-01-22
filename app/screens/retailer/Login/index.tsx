@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import ButtonField from "@/components/common-components/button/button"
 import { InputFieldContianer } from "@/components/common-components/input-field-contianer/input-field-contianer"
 
-import { useRetailerLogin } from "./hooks/useRetailerLogin"
+import { useRetailerLogin } from "./hooks/use-retailer-login"
 import { FORM_FIELDS, UI_TEXT } from "./lib/constants"
 import { styles } from "./lib/styles"
 
