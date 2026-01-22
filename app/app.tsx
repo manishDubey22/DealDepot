@@ -26,12 +26,15 @@ import { useFonts } from "expo-font"
 // import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import { NavigationContainer } from "@react-navigation/native"
 import { QueryClientProvider } from "@tanstack/react-query"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { Provider } from "react-redux"
 
 import { queryClient } from "@/lib/react-query/queryClient"
 
 // import { AuthProvider } from "./context/AuthContext" // @demo remove-current-line
+import { RetailerAuthProvider } from "./context/RetailerAuthContext"
+import { RoleProvider } from "./context/RoleContext"
 import { initI18n } from "./i18n"
 import { AppNavigator } from "./navigators/AppNavigator"
 import { useNavigationPersistence } from "./navigators/navigationUtilities"
@@ -102,38 +105,32 @@ export function App() {
 
   // otherwise, we're ready to render the app
   return (
-    // <Provider store={store}>
-    //   <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-    //     <KeyboardProvider>
-    //       <AuthProvider>
-    //         <ThemeProvider>
-    //           <AppNavigator
-    //             linking={linking}
-    //             initialState={initialNavigationState}
-    //             onStateChange={onNavigationStateChange}
-    //           />
-    //         </ThemeProvider>
-    //       </AuthProvider>
-    //     </KeyboardProvider>
-    //   </SafeAreaProvider>
-    // </Provider>
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          <KeyboardProvider>
-            {/* <VersionProvider> */}
-            <View style={styles.mainContainer}>
-              <AppNavigator />
-            </View>
-            {/* </VersionProvider> */}
-          </KeyboardProvider>
-        </NavigationContainer>
-      </QueryClientProvider>
-    </Provider>
+    <GestureHandlerRootView style={styles.gestureHandlerRoot}>
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <RetailerAuthProvider>
+            <NavigationContainer>
+              <RoleProvider>
+                <KeyboardProvider>
+                  {/* <VersionProvider> */}
+                  <View style={styles.mainContainer}>
+                    <AppNavigator />
+                  </View>
+                  {/* </VersionProvider> */}
+                </KeyboardProvider>
+              </RoleProvider>
+            </NavigationContainer>
+          </RetailerAuthProvider>
+        </QueryClientProvider>
+      </Provider>
+    </GestureHandlerRootView>
   )
 }
 
 const styles = StyleSheet.create({
+  gestureHandlerRoot: {
+    flex: 1,
+  },
   mainContainer: {
     display: "flex",
     flex: 1,
