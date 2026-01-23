@@ -93,3 +93,40 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
 })
+
+export const headingStyles = StyleSheet.create({
+  bottomBar: {
+    backgroundColor: colors.customColors.LIGHTGREEN,
+    height: 5,
+    width: "70%",
+  },
+  container: {
+    alignItems: "center",
+    bottom: "-60%",
+    display: "flex",
+    flexDirection: "row",
+    position: "absolute",
+    width: "100%",
+    zIndex: 1,
+  },
+  image: {
+    height: 65,
+    width: 65,
+  },
+  imageContainer: {
+    alignItems: "center",
+    backgroundColor: colors.palette.neutral100,
+    borderColor: colors.customColors.LIGHTGREEN,
+    borderRadius: 50,
+    borderWidth: 5,
+    display: "flex",
+    height: 100,
+    justifyContent: "center",
+    width: 100,
+  },
+  topBar: {
+    backgroundColor: colors.customColors.LIGHTGREEN,
+    height: 5,
+    width: "10%",
+  },
+})

@@ -38,19 +38,23 @@ export function useHomeOptionList(): UseHomeOptionListReturn {
     (pathToNavigate: string) => {
       switch (pathToNavigate) {
         case "Scan Item":
+          // @ts-expect-error - navigation type doesn't include all RetailerRoutes
           navigation.navigate(RetailerRoutes.TAB_CONTAINER, {
             screen: RetailerRoutes.SCAN,
           })
           break
         case "Search Item":
+          // @ts-expect-error - navigation type doesn't include all RetailerRoutes
           navigation.navigate(RetailerRoutes.SEARCH)
           break
         case "Favorites":
+          // @ts-expect-error - navigation type doesn't include all RetailerRoutes
           navigation.navigate(RetailerRoutes.FAVOURITES, {
             peerGroup: peerGroup,
           })
           break
         case "Upload MADR Peer Group File":
+          // @ts-expect-error - navigation type doesn't include all RetailerRoutes
           navigation.navigate(RetailerRoutes.UPLOAD_FILE)
           break
       }

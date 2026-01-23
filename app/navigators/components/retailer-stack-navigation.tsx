@@ -472,12 +472,12 @@ export const RetailerStackNavigation = ({
   )
 }
 const styles = StyleSheet.create({
-  gradient: {
-    alignItems: "center",
-    flex: 1,
-    height: "100%",
-    justifyContent: "center",
-    width: "100%",
-  },
+  // gradient: {
+  //   alignItems: "center",
+  //   flex: 1,
+  //   height: "100%",
+  //   justifyContent: "center",
+  //   width: "100%",
+  // },
   tabBarIcon: { height: 25, margin: 20, padding: 10, width: 25 },
 })
