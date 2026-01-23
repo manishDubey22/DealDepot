@@ -5,7 +5,7 @@ import { CONTENT_CONTAINER_PADDING_HORIZONTAL } from "./lib/constants"
 import { styles } from "./lib/styles"
 import type { ToastProps } from "./lib/types"
 
-export const toastConfig = {
+const ToastConfig = {
   success: (props: any) => (
     <BaseToast
       {...props}
@@ -31,3 +31,5 @@ export const toastConfig = {
     </View>
   ),
 }
+
+export default ToastConfig

@@ -5,7 +5,7 @@ import LinearGradient from "react-native-linear-gradient"
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { RetailerRoutes } from "@/navigators/retailer/routes"
-import Headerimg from "@/screens/retailer/optionList/Header"
+import { Heading } from "@/screens/retailer"
 
 import {
   GRADIENT_COLOR,
@@ -58,7 +58,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ value }) => {
           <Text style={styles.headerText}>{value}</Text>
         </View>
       </LinearGradient>
-      {value === HOME_SCREEN_VALUE && <Headerimg />}
+      {value === HOME_SCREEN_VALUE && <Heading />}
     </SafeAreaView>
   )
 }
@@ -67,7 +67,7 @@ const Header = (value: string) => {
   return <HeaderComponent value={value} />
 }
 
-const WithoutImageHeader = (value: string) => {
+const WithoutImageHeader = () => {
   const insets = useSafeAreaInsets()
   const navigation = useNavigation()
   return (

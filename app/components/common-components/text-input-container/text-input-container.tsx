@@ -4,12 +4,7 @@ import { styles } from "./lib/styles"
 import type { IProps } from "./lib/types"
 import { Icon } from "../../../../assets/icons/wholeSeller"
 
-export const TextInputContainer = ({
-  title,
-  textContainerStyle,
-  showIcon = false,
-  ...rest
-}: IProps) => {
+const TextInputContainer = ({ title, textContainerStyle, showIcon = false, ...rest }: IProps) => {
   return (
     <View style={textContainerStyle}>
       <Text style={styles.titleText}>{title}</Text>
@@ -24,3 +19,5 @@ export const TextInputContainer = ({
     </View>
   )
 }
+
+export default TextInputContainer
