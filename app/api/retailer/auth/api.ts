@@ -9,6 +9,7 @@ import type {
   RegisterRequest,
   OTPVerifyRequest,
   OTPVerifyResponse,
+  WhoAmIResponse,
 } from "./types"
 
 export const postLoginData = (request: LoginRequest) => {
@@ -23,4 +24,9 @@ export function postRegisterData(request: RegisterRequest) {
 export function postOtpVerify(request: OTPVerifyRequest) {
   const url = `${getApiUrl()}/${userPaths.verify()}`
   return api.post<OTPVerifyResponse>(url, request)
+}
+
+export const getWhoAmI = () => {
+  const url = `${getApiUrl()}/${userPaths.whoami()}`
+  return api.get<WhoAmIResponse>(url)
 }

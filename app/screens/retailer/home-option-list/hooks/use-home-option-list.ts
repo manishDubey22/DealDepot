@@ -3,7 +3,7 @@ import { Linking } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import Toast from "react-native-toast-message"
 
-import { useWhoAmIQuery } from "@/api/retailer/auth/whoami"
+import { authQueryOptions } from "@/api/retailer/auth"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { loadString } from "@/utils/storage"
 
@@ -14,7 +14,7 @@ export function useHomeOptionList(): UseHomeOptionListReturn {
   const [peerGroup, setPeerGroup] = useState<string | null>(null)
   const [showPopup, setShowPopup] = useState(false)
 
-  const { data, isSuccess } = useWhoAmIQuery()
+  const { data, isSuccess } = authQueryOptions.useWhoAmIQuery()
   const navigation = useNavigation()
 
   useEffect(() => {

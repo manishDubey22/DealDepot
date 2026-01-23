@@ -1,6 +1,6 @@
 import { Image, ImageSourcePropType, StyleSheet } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { useNavigation } from "@react-navigation/native"
+// import { useNavigation } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { HeaderComponent } from "@/components/common-components"
@@ -56,7 +56,7 @@ const TabBarIcon = ({ icon, focused }: { icon: ImageSourcePropType; focused: boo
 }
 
 const BottomTabNavigator = () => {
-  const navigation = useNavigation()
+  // const navigation = useNavigation()
   return (
     <Tab.Navigator
       screenOptions={{
