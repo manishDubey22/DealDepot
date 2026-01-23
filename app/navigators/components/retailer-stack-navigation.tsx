@@ -4,11 +4,10 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { OptionScreen } from "@/screens/option-screen"
-import CreateNewAccount from "@/screens/retailer/create-new-account"
+import { CreateNewAccount, EmailVerification, Login } from "@/screens/retailer"
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
 
-import Login from "../../screens/retailer/Login"
 import { RetailerRoutes } from "../retailer/routes"
 // import {Icon} from '../../assets/icons/wholeSeller';
 
@@ -246,25 +245,25 @@ export const RetailerStackNavigation = ({
           headerTintColor: colors.palette.neutral100,
         }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.EMAIL_VERIFICATION}
         component={EmailVerification}
         options={{
           headerShown: true,
           headerStyle: {
             backgroundColor: colors.customColors.WHITE,
-            height: 100,
+            // height: 100,
           },
           headerTitleStyle: {
             color: colors.palette.charcoal500,
             fontFamily: CommonStyles.fontFamily.fontFamily,
             fontSize: 20,
           },
-          headerTitle: 'Verify',
-          headerTitleAlign: 'center',
+          headerTitle: "Verify",
+          headerTitleAlign: "center",
           headerTintColor: colors.palette.neutral100,
         }}
-      /> */}
+      />
       {/* <Stack.Screen
         name={RetailerRoutes.RESET_PASSWORD}
         options={{
