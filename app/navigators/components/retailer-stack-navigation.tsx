@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { HeaderComponent } from "@/components/common-components"
 import { OptionScreen } from "@/screens/common-screens/option-screen"
-import { CreateNewAccount, EmailVerification, Login } from "@/screens/retailer"
+import { CreateNewAccount, EmailVerification, HomeOptionList, Login } from "@/screens/retailer"
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
 
@@ -66,7 +66,7 @@ const BottomTabNavigator = () => {
     >
       <Tab.Screen
         name={RetailerRoutes.OPTIONS}
-        component={OptionScreen}
+        component={HomeOptionList}
         options={{
           headerShown: true,
           headerTitleStyle: {
