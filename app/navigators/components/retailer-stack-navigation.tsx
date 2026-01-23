@@ -1,15 +1,16 @@
-// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-// import { StyleSheet } from "react-native"
-// import { useNavigation } from "@react-navigation/native"
+import { Image, ImageSourcePropType, StyleSheet } from "react-native"
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { useNavigation } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
-import { OptionScreen } from "@/screens/option-screen"
+import { HeaderComponent } from "@/components/common-components"
+import { OptionScreen } from "@/screens/common-screens/option-screen"
 import { CreateNewAccount, EmailVerification, Login } from "@/screens/retailer"
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
 
+import { Icon } from "../../../assets/icons/wholeSeller"
 import { RetailerRoutes } from "../retailer/routes"
-// import {Icon} from '../../assets/icons/wholeSeller';
 
 // ----------Components-----------------
 
@@ -39,46 +40,49 @@ import { RetailerRoutes } from "../retailer/routes"
 // import Favourites from '../../screens/retailer/favouriteItems';
 // import PriceHistory from '../../screens/retailer/PriceHistory';
 
-// const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
 
-// const TabBarIcon = ({icon, focused}: {icon: ImageSourcePropType; focused: boolean}) => {
-//   return (
-//     <Image source={icon} style={[styles.tabBarIcon, {tintColor: focused ? colors.customColors.GREEN : 'gray'}]} />
-//   );
-// };
+const TabBarIcon = ({ icon, focused }: { icon: ImageSourcePropType; focused: boolean }) => {
+  return (
+    <Image
+      source={icon}
+      style={[
+        styles.tabBarIcon,
+        { tintColor: focused ? colors.customColors.GREEN : colors.palette.grey500 },
+      ]}
+    />
+  )
+}
 
-// const BottomTabNavigator = () => {
-//   const navigation = useNavigation()
-//   return (
-// <Tab.Navigator
-//   screenOptions={{
-//     tabBarHideOnKeyboard: true,
-//     tabBarActiveTintColor: colors.customColors.GREEN,
-//   }}
-// >
-{
-  /* <Tab.Screen
+const BottomTabNavigator = () => {
+  const navigation = useNavigation()
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        tabBarHideOnKeyboard: true,
+        tabBarActiveTintColor: colors.customColors.GREEN,
+      }}
+    >
+      <Tab.Screen
         name={RetailerRoutes.OPTIONS}
-        component={Options}
+        component={OptionScreen}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            display: "none",
           },
-          tabBarIcon: ({focused}) => <TabBarIcon icon={Icon.HOME} focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.HOME} focused={focused} />,
 
           headerStyle: {
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: "rgba(0, 0, 0, 0.25)",
           },
           header: () => <HeaderComponent value="Home" />,
         }}
-      /> */
-}
-{
-  /* <Tab.Screen
+      />
+      {/* <Tab.Screen
         name="Search"
         component={Home}
         options={{
@@ -94,12 +98,10 @@ const Stack = createNativeStackNavigator()
           header: () => <HeaderComponent value="Search" />,
           tabBarButton: () => null, // This hides the tab bar button completely
         }}
-      /> */
-}
+      /> */}
 
-{
-  /* <Tab.Screen
-        name={RetailerRoutes.CART}
+      {/* <Tab.Screen
+        name={Constant.ScreenName.CART}
         component={Order}
         options={{
           headerShown: true,
@@ -114,11 +116,9 @@ const Stack = createNativeStackNavigator()
           },
           header: () => <HeaderComponent value="My Cart" />,
         }}
-      /> */
-}
-{
-  /* <Tab.Screen
-        name={RetailerRoutes.SCAN}
+      /> */}
+      {/* <Tab.Screen
+        name={Constant.ScreenName.SCAN}
         component={Scanner}
         options={{
           headerShown: true,
@@ -133,11 +133,9 @@ const Stack = createNativeStackNavigator()
           },
           header: () => <HeaderComponent value="Scanner" />,
         }}
-      /> */
-}
-{
-  /* <Tab.Screen
-        name={RetailerRoutes.SAVE_ORDER}
+      /> */}
+      {/* <Tab.Screen
+        name={Constant.ScreenName.SAVE_ORDER}
         component={SaveOrder}
         options={{
           headerShown: true,
@@ -152,41 +150,38 @@ const Stack = createNativeStackNavigator()
           },
           header: () => <HeaderComponent value="SaveOrder" />,
         }}
-      /> */
-}
-{
-  /* <Tab.Screen
-        name={RetailerRoutes.PROFILE}
+      /> */}
+      {/* <Tab.Screen
+        name={Constant.ScreenName.PROFILE}
         component={Profile}
         options={{
           headerShown: true,
           headerStyle: {
-            backgroundColor: colors.customColors.WHITE,
+            backgroundColor: color.WHITE,
             height: 100,
           },
           headerTitleStyle: {
-            color: colors.palette.charcoal500,
-            fontFamily: CommonStyles.fontFamily.fontFamily,
+            color: '#343434',
+            fontFamily: 'Arial-Rounded-Bold',
             fontSize: 20,
           },
           headerRightContainerStyle: {
             paddingRight: 10,
           },
           headerTitleAlign: 'center',
-          // -----------Need to be navigate ---- navigation.navigate(RetailerRoutes.EDIT_PROFILE)
+          // -----------Need to be navigate ---- navigation.navigate(Constant.ScreenName.EDIT_PROFILE)
           headerRight: () => (
-            <TouchableOpacity onPress={() => navigation.navigate(RetailerRoutes.EDIT_PROFILE)}>
+            <TouchableOpacity onPress={() => navigation.navigate(Constant.ScreenName.EDIT_PROFILE)}>
               <TabBarIcon icon={Icon.EDIT} focused={false} />
             </TouchableOpacity>
           ),
-          headerTintColor: colors.palette.neutral100,
+          headerTintColor: '#FFF',
           tabBarIcon: ({focused}) => <TabBarIcon icon={Icon.PROFILE} focused={focused} />,
         }}
-      /> */
+      /> */}
+    </Tab.Navigator>
+  )
 }
-// </Tab.Navigator>
-//   )
-// }
 export const RetailerStackNavigation = ({
   role,
   authToken,
@@ -262,6 +257,13 @@ export const RetailerStackNavigation = ({
           headerTitle: "Verify",
           headerTitleAlign: "center",
           headerTintColor: colors.palette.neutral100,
+        }}
+      />
+      <Stack.Screen
+        name={RetailerRoutes.TAB_CONTAINER}
+        component={BottomTabNavigator}
+        options={{
+          headerShown: false,
         }}
       />
       {/* <Stack.Screen
@@ -397,13 +399,6 @@ export const RetailerStackNavigation = ({
         }}
       /> */}
       {/* <Stack.Screen
-        name={RetailerRoutes.TAB_CONTAINER}
-        component={BottomTabNavigator}
-        options={{
-          headerShown: false,
-        }}
-      /> */}
-      {/* <Stack.Screen
         name={RetailerRoutes.FAILURE}
         component={FailureScreen}
         options={{
@@ -476,13 +471,13 @@ export const RetailerStackNavigation = ({
     </Stack.Navigator>
   )
 }
-// const styles = StyleSheet.create({
-//   tabBarIcon: { height: 25, margin: 20, padding: 10, width: 25 },
-//   gradient: {
-//     alignItems: "center",
-//     flex: 1,
-//     height: "100%",
-//     justifyContent: "center",
-//     width: "100%",
-//   },
-// })
+const styles = StyleSheet.create({
+  gradient: {
+    alignItems: "center",
+    flex: 1,
+    height: "100%",
+    justifyContent: "center",
+    width: "100%",
+  },
+  tabBarIcon: { height: 25, margin: 20, padding: 10, width: 25 },
+})

@@ -7,9 +7,8 @@ import ButtonField from "@/components/common-components/button/button"
 import { useEmailVerification } from "./hooks/use-email-verification"
 import { UI_TEXT } from "./lib/constants"
 import { styles } from "./lib/styles"
-import type { EmailVerificationProps } from "./lib/types"
 
-export default function EmailVerification({ navigation }: EmailVerificationProps) {
+export default function EmailVerification({ navigation }: any) {
   const { otp, inputRefs, email, isLoading, handleOtpChange, handleOtpSubmit } =
     useEmailVerification(navigation)
 
@@ -20,7 +19,7 @@ export default function EmailVerification({ navigation }: EmailVerificationProps
           <View>
             <Text style={styles.helpertext1}>{UI_TEXT.HELPER_TEXT} </Text>
             <Text style={styles.helperText2}>
-              {email ? email : UI_TEXT.DEFAULT_EMAIL_PLACEHOLDER}.
+              {email ? email : UI_TEXT.DEFAULT_EMAIL_PLACEHOLDER}
             </Text>
           </View>
           <View style={styles.otpContainer}>

@@ -67,7 +67,7 @@ const Header = (value: string) => {
   return <HeaderComponent value={value} />
 }
 
-const WithoutImageHeader = (value: string) => {
+const WithoutImageHeader = () => {
   const insets = useSafeAreaInsets()
   const navigation = useNavigation()
   return (
