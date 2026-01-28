@@ -20,7 +20,7 @@ import { toastConfig } from "@/components/common-components/custom-toast/custom-
 import { Text } from "@/components/Text"
 import { UpgradeModal } from "@/components/upgradeVersion"
 import { useRole } from "@/context/RoleContext"
-import { OptionScreen } from "@/screens/option-screen"
+import { OptionScreen } from "@/screens/common-screens/option-screen"
 import { useAppSelector } from "@/store"
 import { ThemeProvider } from "@/theme/context"
 import { role } from "@/utils/role"

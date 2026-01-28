@@ -130,6 +130,7 @@ const customColors = {
   MEDIUM_GRAY: "#575555",
   WHITE: "#FFFFFF",
   GREEN: "#1BBC65",
+  ACTIVE_GREEN: "#00ff00",
   PASTEL_RED: "#FF7474",
   ROYAL_BLUE: "#0904FF",
   LIGHT_GREEN: "#a6f5dc",
