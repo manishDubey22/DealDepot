@@ -1,6 +1,8 @@
 import { View, TouchableOpacity, Text, Image, Modal } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
-import { SafeAreaView } from "react-native-safe-area-context"
+// import { SafeAreaView } from "react-native-safe-area-context"
+
+import { Screen } from "@/components/Screen"
 
 import { useHomeOptionList } from "./hooks/use-home-option-list"
 import { UI_TEXT } from "./lib/constants"
@@ -11,7 +13,7 @@ const HomeOptionList = () => {
   const { showPopup, setShowPopup, navigateHome, madrCheckerLink, buttons } = useHomeOptionList()
 
   return (
-    <SafeAreaView style={styles.safeAreaView}>
+    <Screen preset="auto">
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={styles.guide}>{UI_TEXT.GUIDE_TITLE}</Text>
@@ -46,7 +48,7 @@ const HomeOptionList = () => {
           </View>
         </View>
       </Modal>
-    </SafeAreaView>
+    </Screen>
   )
 }
 
