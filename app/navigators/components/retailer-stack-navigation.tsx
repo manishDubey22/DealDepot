@@ -11,6 +11,7 @@ import {
   HomeOptionList,
   Login,
   Order,
+  Scanner,
   Search,
 } from "@/screens/retailer"
 import { colors } from "@/theme/colors"
@@ -84,7 +85,7 @@ const BottomTabNavigator = () => {
           headerStyle: {
             height: 80,
             elevation: 5,
-            shadowColor: "rgba(0, 0, 0, 0.25)",
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Home" />,
         }}
@@ -100,7 +101,7 @@ const BottomTabNavigator = () => {
           headerStyle: {
             height: 80,
             elevation: 5,
-            shadowColor: "rgba(0, 0, 0, 0.25)",
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Search" />,
           tabBarButton: () => null, // This hides the tab bar button completely
@@ -119,28 +120,28 @@ const BottomTabNavigator = () => {
           headerStyle: {
             height: 80,
             elevation: 5,
-            shadowColor: "rgba(0, 0, 0, 0.25)",
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="My Cart" />,
         }}
       />
-      {/* <Tab.Screen
-        name={Constant.ScreenName.SCAN}
+      <Tab.Screen
+        name={RetailerRoutes.SCAN}
         component={Scanner}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            display: "none",
           },
-          tabBarIcon: ({focused}) => <TabBarIcon icon={Icon.SCAN} focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.SCAN} focused={focused} />,
           headerStyle: {
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Scanner" />,
         }}
-      /> */}
+      />
       {/* <Tab.Screen
         name={Constant.ScreenName.SAVE_ORDER}
         component={SaveOrder}

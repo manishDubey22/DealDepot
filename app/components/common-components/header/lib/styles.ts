@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: HEADER_PADDING_HORIZONTAL,
   },
   headerText: {
-    color: colors.customColors.WHITE,
+    color: colors.customColors.BLACK,
     fontFamily: FONT_FAMILY,
     fontSize: HEADER_TEXT_FONT_SIZE,
     textAlign: "center",
