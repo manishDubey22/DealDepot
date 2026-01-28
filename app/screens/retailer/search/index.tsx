@@ -66,7 +66,7 @@ export default function Search({ navigation }: any) {
   const {
     data: filteredData,
     isSuccess: isSucces,
-    isError: isErrorproduct,
+    // isError: isErrorproduct,
     refetch: refetchCategoryList,
   } = productQueryOptions.useProductsByNameAndCategoryQuery(
     {
@@ -87,7 +87,7 @@ export default function Search({ navigation }: any) {
 
   const {
     data: categoryListData,
-    isLoading: isLoadingCategoryList,
+    // isLoading: isLoadingCategoryList,
     error: categoryListError,
   } = productQueryOptions.useCategoryListQuery({
     retailerId: userDetails?.userId || "",
@@ -110,8 +110,8 @@ export default function Search({ navigation }: any) {
 
   const {
     data: subCategoryListData,
-    isLoading: isLoadingSubCategoryList,
-    error: subCategoryListError,
+    // isLoading: isLoadingSubCategoryList,
+    // error: subCategoryListError,
   } = productQueryOptions.useSubCategoryListQuery(
     {
       retailerId: userDetails?.userId || "",
@@ -245,18 +245,18 @@ export default function Search({ navigation }: any) {
         style={styles.cardBox}
       >
         <View style={styles.cardBoxLeft}>
-          <View style={{ width: "20%" }}>
+          <View style={styles.imageContainer}>
             <Image
               source={modifyValue?.image_url ? { uri: modifyValue?.image_url } : Images.SoyaMilk}
-              style={{ width: 30, height: 60 }}
+              style={styles.image}
             />
           </View>
-          <View style={{ display: "flex", gap: 8, width: "60%" }}>
+          <View style={styles.productInfo}>
             <Text style={styles.helperText1}>{modifyValue?.product_desc}</Text>
             <Text style={styles.helperText2}>{modifyValue?.category_desc}</Text>
             <Text style={styles.helperText2}>00{modifyValue?.product_id}</Text>
           </View>
-          <View style={{ width: "20%", alignItems: "flex-end" }}>
+          <View style={styles.priceContainer}>
             <Text style={styles.helperText3}>
               ${sortedPriceInfo ? sortedPriceInfo[0].price : 20}
             </Text>
@@ -347,7 +347,7 @@ export default function Search({ navigation }: any) {
     if (query && filteredData?.data.length === 0) {
       return (
         <View style={styles.loaderContainer}>
-          <Text style={{ fontSize: 16, fontWeight: "600" }}>No Products found</Text>
+          <Text style={styles.emptyText}>No Products found</Text>
         </View>
       )
     }
@@ -365,7 +365,7 @@ export default function Search({ navigation }: any) {
 
     return (
       <View style={styles.loaderContainer}>
-        <Text style={{ fontSize: 16, fontWeight: "600" }}>No Products found</Text>
+        <Text style={styles.emptyText}>No Products found</Text>
       </View>
     )
   }
@@ -408,7 +408,7 @@ export default function Search({ navigation }: any) {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         {!(!isLoading && ItemsArray?.length > 0 && query) && (
-          <View style={{ marginTop: 5 }}>
+          <View style={styles.categoryContainer}>
             <TouchableOpacity
               style={styles.peerGroupButton}
               onPress={() => {

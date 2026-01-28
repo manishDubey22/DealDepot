@@ -32,8 +32,15 @@ export const styles = StyleSheet.create({
     gap: 12,
     justifyContent: "space-evenly",
   },
+  categoryContainer: {
+    marginTop: 5,
+  },
   container: {
     paddingTop: 10,
+  },
+  emptyText: {
+    fontSize: 16,
+    fontWeight: "600",
   },
   fileImage: {
     borderRadius: 5,
@@ -65,6 +72,13 @@ export const styles = StyleSheet.create({
     color: colors.customColors.PASTEL_RED,
     fontSize: 17,
     fontWeight: "700",
+  },
+  image: {
+    height: 60,
+    width: 30,
+  },
+  imageContainer: {
+    width: "20%",
   },
   latestTrendsHeading: {
     color: colors.customColors.GREEN,
@@ -106,6 +120,15 @@ export const styles = StyleSheet.create({
     fontWeight: "800",
     letterSpacing: 2,
     textAlign: "center",
+  },
+  priceContainer: {
+    alignItems: "flex-end",
+    width: "20%",
+  },
+  productInfo: {
+    display: "flex",
+    gap: 8,
+    width: "60%",
   },
   searchCard: {
     backgroundColor: colors.palette.neutral100,

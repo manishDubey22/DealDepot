@@ -5,7 +5,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { HeaderComponent } from "@/components/common-components"
 import { OptionScreen } from "@/screens/common-screens/option-screen"
-import { CreateNewAccount, EmailVerification, HomeOptionList, Login } from "@/screens/retailer"
+import {
+  CreateNewAccount,
+  EmailVerification,
+  HomeOptionList,
+  Login,
+  Order,
+  Search,
+} from "@/screens/retailer"
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
 
@@ -82,41 +89,41 @@ const BottomTabNavigator = () => {
           header: () => <HeaderComponent value="Home" />,
         }}
       />
-      {/* <Tab.Screen
-        name="Search"
-        component={Home}
+      <Tab.Screen
+        name={RetailerRoutes.SEARCH}
+        component={Search}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            display: "none",
           },
           headerStyle: {
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: "rgba(0, 0, 0, 0.25)",
           },
           header: () => <HeaderComponent value="Search" />,
           tabBarButton: () => null, // This hides the tab bar button completely
         }}
-      /> */}
+      />
 
-      {/* <Tab.Screen
-        name={Constant.ScreenName.CART}
+      <Tab.Screen
+        name={RetailerRoutes.CART}
         component={Order}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            display: "none",
           },
-          tabBarIcon: ({focused}) => <TabBarIcon icon={Icon.SHOPINGCART} focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.SHOPINGCART} focused={focused} />,
           headerStyle: {
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: "rgba(0, 0, 0, 0.25)",
           },
           header: () => <HeaderComponent value="My Cart" />,
         }}
-      /> */}
+      />
       {/* <Tab.Screen
         name={Constant.ScreenName.SCAN}
         component={Scanner}

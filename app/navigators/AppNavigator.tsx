@@ -16,7 +16,7 @@ import { responsiveHeight } from "react-native-responsive-dimensions"
 import Toast from "react-native-toast-message"
 
 // import NoInternetConnection from "@/components/no-internet-connection/no-internet-connection"
-import { toastConfig } from "@/components/common-components/custom-toast/custom-toast"
+import toastConfig from "@/components/common-components/custom-toast/custom-toast"
 import { Text } from "@/components/Text"
 import { UpgradeModal } from "@/components/upgradeVersion"
 import { useRole } from "@/context/RoleContext"
