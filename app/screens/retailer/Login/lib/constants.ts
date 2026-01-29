@@ -23,6 +23,9 @@ export const STORAGE_KEYS = {
   PEER_GROUP: "peergroup",
   LOGIN_TIME: "loginTime",
   USER_INFO: "userInfo",
+  USER_ID: "userId",
+  ACCESS_TOKEN: "accessToken",
+  REFRESH_TOKEN: "refreshToken",
 } as const
 
 export const USER_ROLE = {

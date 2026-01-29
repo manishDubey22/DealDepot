@@ -87,6 +87,10 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
             text1: response?.data?.message?.toUpperCase(),
           })
           const result = response?.data?.data
+          save(STORAGE_KEYS.USER_INFO, result)
+          save(STORAGE_KEYS.USER_ID, result?.retailer_id)
+          save(STORAGE_KEYS.ACCESS_TOKEN, result?.accessToken)
+          save(STORAGE_KEYS.REFRESH_TOKEN, result?.refreshToken)
           const payload = {
             accessToken: result?.accessToken,
             userId: result?.retailer_id,

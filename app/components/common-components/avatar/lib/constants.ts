@@ -1,4 +1,4 @@
-import { color } from "@/theme/colors"
+import { colors } from "@/theme/colors"
 
-export const AVATAR_BACKGROUND_COLOR = color.GREEN
-export const AVATAR_TEXT_COLOR = color.WHITE
+export const AVATAR_BACKGROUND_COLOR = colors.customColors.GREEN
+export const AVATAR_TEXT_COLOR = colors.palette.neutral100

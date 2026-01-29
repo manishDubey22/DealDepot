@@ -6,7 +6,7 @@ import type { DeleteAccountErrorResponse } from "./types"
 
 export function useDeleteAccountMutation() {
   return useMutation({
-    mutationKey: ACCOUNT_DELETE_KEYS.root().key,
+    mutationKey: [...ACCOUNT_DELETE_KEYS.root()],
     mutationFn: (retailerId: string) => deleteAccount(retailerId),
     retry: 1,
     retryDelay: 1000,

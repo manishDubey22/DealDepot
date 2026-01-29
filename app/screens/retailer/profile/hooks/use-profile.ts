@@ -10,14 +10,19 @@ import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { clear } from "@/utils/storage"
 
 import { CONSOLE_MESSAGES, ERROR_MESSAGES, UI_TEXT } from "../lib/constants"
-import type { UseProfileReturn } from "../lib/types"
+// import type { UseProfileReturn } from "../lib/types"
 
-export function useProfile(navigation: any): UseProfileReturn {
+export function useProfile(navigation: any) {
   const { userAuth, clearAuth } = useRetailerAuth()
   const { clearRole } = useRole()
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
-  const { data: profileResponse, isLoading, isError, error } = useWhoAmIQuery()
+  const {
+    data: profileResponse,
+    isLoading,
+    isError,
+    error,
+  } = useWhoAmIQuery(userAuth?.userId ? { userId: userAuth.userId } : undefined)
   const deleteAccountMutation = useDeleteAccountMutation()
 
   const profileData = profileResponse?.data
