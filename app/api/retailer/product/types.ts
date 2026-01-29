@@ -87,3 +87,77 @@ export interface ApiError {
   }
   message?: string
 }
+
+// Request Types
+export interface GetProductParams {
+  retailerId: string
+  productId: string
+}
+
+export interface GetProductBySortParams {
+  retailerId: string
+  productId: string
+  sortId: string // 'lthprice', 'htlprice', 'atz', 'time'
+}
+
+// Response Types
+export interface WholesalerData {
+  wholesaler_id: string
+  name: string
+  price: number
+  casePrice?: number
+  date: string
+  fileId: string
+}
+
+export type AdminPrice = {
+  [peerGroup: string]: Array<{
+    Date: string
+    price: number
+  }>
+} & {
+  Date?: string
+}
+
+export interface ProductDetailsData {
+  product_id: string
+  product_desc: string
+  category_desc: string
+  subCategory_desc?: string
+  image_url?: string
+  isFavorite: boolean
+  adminPrice: AdminPrice
+  wholesalerData: WholesalerData[]
+}
+
+export interface ProductDetailsResponse {
+  status: boolean
+  data: ProductDetailsData
+  message?: string
+}
+
+export interface SortedProductResponse {
+  status: boolean
+  data: WholesalerData[]
+  message?: string
+}
+
+// Favorite Types
+export interface ToggleFavoriteParams {
+  retailerId: string
+  productId: string
+}
+
+export interface ToggleFavoriteResponse {
+  status: boolean
+  message: string // "ADDED TO FAVORITE" | "REMOVE TO FAVORITE"
+}
+
+// Error Types
+export interface ProductDetailsError {
+  status?: number
+  data?: {
+    message?: string
+  }
+  message?: string
+}

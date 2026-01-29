@@ -12,6 +12,7 @@ import {
   Login,
   Order,
   PreviewPDF,
+  ProductDescription,
   Profile,
   SaveOrder,
   Scanner,
@@ -207,7 +208,6 @@ export const RetailerStackNavigation = ({
   return (
     <Stack.Navigator initialRouteName={initialRouteName}>
       {/* <Stack.Navigator initialRouteName={RetailerRoutes.CART}> */}
-
       <Stack.Screen
         name={RetailerRoutes.OPTION}
         component={OptionScreen}
@@ -215,7 +215,6 @@ export const RetailerStackNavigation = ({
           headerShown: false,
         }}
       />
-
       <Stack.Screen
         name={RetailerRoutes.LOGIN}
         component={Login}
@@ -311,27 +310,29 @@ export const RetailerStackNavigation = ({
             // @ts-expect-error - height property not in type but works at runtime
             height: 80,
             elevation: 5,
-            shadowColor: "rgba(0, 0, 0, 0.25)",
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Saved Order" />,
         }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.PRODUCT_DESCRIPTION}
         component={ProductDescription}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
           },
           headerStyle: {
+            // @ts-expect-error - display property not in type but works at runtime
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Product Description" />,
         }}
-      /> */}
+      />
       {/* <Stack.Screen
         name={RetailerRoutes.SALES_GRAPH}
         component={SalesGraph}
@@ -364,7 +365,6 @@ export const RetailerStackNavigation = ({
           header: () => <HeaderComponent value="Upload Files" />,
         }}
       /> */}
-
       {/* <Stack.Screen
         name={RetailerRoutes.EDIT_PROFILE}
         component={EditProfile}
@@ -452,7 +452,6 @@ export const RetailerStackNavigation = ({
           header: () => WithoutImageHeader('Subscriptions Plans'),
         }}
       /> */}
-
       {/* <Stack.Screen
         name={RetailerRoutes.FAVOURITES}
         component={Favourites}

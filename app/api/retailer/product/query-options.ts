@@ -1,21 +1,27 @@
-import { queryOptions, useQuery } from "@tanstack/react-query"
+import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import { createQueryKeys } from "@/lib/react-query/keys"
 
 import {
   getCategoryList,
+  getProduct,
+  getProductBySort,
   getProductsByNameAndCategory,
   getSearchProducts,
   getStaticPeers,
   getSubCategoryList,
   getTrendingProducts,
+  toggleFavorite,
 } from "./api"
-import { PRODUCT_KEYS, STATIC_PEERS_KEYS } from "./constants"
+import { PRODUCT_DETAILS_KEYS, PRODUCT_KEYS, STATIC_PEERS_KEYS } from "./constants"
 import type {
   CategoryListParams,
+  GetProductBySortParams,
+  GetProductParams,
   ProductsByNameAndCategoryParams,
   SearchProductsParams,
   SubCategoryListParams,
+  ToggleFavoriteParams,
 } from "./types"
 
 // Static Peers Query Keys
@@ -50,6 +56,18 @@ export const productQueryKeys = createQueryKeys([...PRODUCT_KEYS], {
   }),
   productsByNameAndCategory: (params: ProductsByNameAndCategoryParams) => ({
     key: ["search-by-category", params],
+    sub: {},
+  }),
+})
+
+// Query Keys
+export const productDetailsQueryKeys = createQueryKeys([...PRODUCT_DETAILS_KEYS], {
+  product: (params: GetProductParams) => ({
+    key: ["product", params.retailerId, params.productId],
+    sub: {},
+  }),
+  sortedProduct: (params: GetProductBySortParams) => ({
+    key: ["sorted-product", params.retailerId, params.productId, params.sortId],
     sub: {},
   }),
 })
@@ -250,4 +268,87 @@ export function useProductsByNameAndCategoryQuery(
     isError: query.isError,
     refetch: query.refetch,
   }
+}
+
+// Get Product Query Options
+export const getProductQueryOptions = (
+  params: GetProductParams,
+  options?: { enabled?: boolean },
+) => {
+  return queryOptions({
+    queryKey: productDetailsQueryKeys.product(params).key,
+    async queryFn() {
+      const response = await getProduct(params)
+      return response.data
+    },
+    enabled: options?.enabled ?? true,
+    staleTime: 2 * 60 * 1000, // 2 minutes
+  })
+}
+
+export function useProductQuery(params: GetProductParams, options?: { enabled?: boolean }) {
+  const query = useQuery(getProductQueryOptions(params, options))
+
+  return {
+    data: query.data,
+    error: query.error,
+    isLoading: query.isLoading,
+    isError: query.isError,
+    isSuccess: query.isSuccess,
+    refetch: query.refetch,
+  }
+}
+
+// Get Sorted Product Query Options
+export const getSortedProductQueryOptions = (
+  params: GetProductBySortParams,
+  options?: { enabled?: boolean },
+) => {
+  return queryOptions({
+    queryKey: productDetailsQueryKeys.sortedProduct(params).key,
+    async queryFn() {
+      const response = await getProductBySort(params)
+      return response.data
+    },
+    enabled: options?.enabled ?? true,
+    staleTime: 30 * 1000, // 30 seconds
+  })
+}
+
+export function useSortedProductQuery(
+  params: GetProductBySortParams,
+  options?: { enabled?: boolean },
+) {
+  const query = useQuery(getSortedProductQueryOptions(params, options))
+
+  return {
+    data: query.data,
+    error: query.error,
+    isLoading: query.isLoading,
+    isError: query.isError,
+    isSuccess: query.isSuccess,
+    refetch: query.refetch,
+  }
+}
+
+// Toggle Favorite Mutation
+export function useToggleFavoriteMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (params: ToggleFavoriteParams) => toggleFavorite(params),
+    onSuccess: (response, variables) => {
+      // Invalidate product query to refetch favorite status
+      queryClient.invalidateQueries({
+        queryKey: productDetailsQueryKeys.product({
+          retailerId: variables.retailerId,
+          productId: variables.productId,
+        }).key,
+      })
+      // Invalidate favorites list if it exists
+      queryClient.invalidateQueries({
+        queryKey: ["favorites"],
+      })
+    },
+  })
 }

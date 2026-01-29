@@ -1,17 +1,23 @@
 import { api } from "@/lib/api-client"
 import { getApiUrl } from "@/lib/api-config"
 
-import { PRODUCT_ENDPOINTS, STATIC_PEERS_ENDPOINT } from "./constants"
+import { PRODUCT_DETAILS_ENDPOINTS, PRODUCT_ENDPOINTS, STATIC_PEERS_ENDPOINT } from "./constants"
 import type {
   ApiRequestContext,
   CategoryListParams,
   CategoryListResponse,
+  GetProductBySortParams,
+  GetProductParams,
+  ProductDetailsResponse,
   ProductsByNameAndCategoryParams,
   ProductsResponse,
   SearchProductsParams,
+  SortedProductResponse,
   StaticPeersResponse,
   SubCategoryListParams,
   SubCategoryListResponse,
+  ToggleFavoriteParams,
+  ToggleFavoriteResponse,
 } from "./types"
 
 export const getStaticPeers = (
@@ -49,4 +55,23 @@ export const getProductsByNameAndCategory = (params: ProductsByNameAndCategoryPa
     params.subcategory,
   )}`
   return api.get<ProductsResponse>(url)
+}
+
+export const getProduct = (params: GetProductParams) => {
+  const url = `${getApiUrl()}/${PRODUCT_DETAILS_ENDPOINTS.GET_PRODUCT(params.retailerId, params.productId)}`
+  return api.get<ProductDetailsResponse>(url)
+}
+
+export const getProductBySort = (params: GetProductBySortParams) => {
+  const url = `${getApiUrl()}/${PRODUCT_DETAILS_ENDPOINTS.GET_PRODUCT_BY_SORT(
+    params.retailerId,
+    params.productId,
+    params.sortId,
+  )}`
+  return api.get<SortedProductResponse>(url)
+}
+
+export const toggleFavorite = (params: ToggleFavoriteParams) => {
+  const url = `${getApiUrl()}/${PRODUCT_DETAILS_ENDPOINTS.TOGGLE_FAVORITE(params.retailerId, params.productId)}`
+  return api.put<ToggleFavoriteResponse>(url)
 }
