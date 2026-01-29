@@ -11,6 +11,8 @@ import {
   HomeOptionList,
   Login,
   Order,
+  PreviewPDF,
+  SaveOrder,
   Scanner,
   Search,
 } from "@/screens/retailer"
@@ -96,7 +98,7 @@ const BottomTabNavigator = () => {
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: "none",
+            display: "none" as any,
           },
           headerStyle: {
             height: 80,
@@ -114,7 +116,7 @@ const BottomTabNavigator = () => {
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: "none",
+            display: "none" as any,
           },
           tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.SHOPINGCART} focused={focused} />,
           headerStyle: {
@@ -131,7 +133,7 @@ const BottomTabNavigator = () => {
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: "none",
+            display: "none" as any,
           },
           tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.SCAN} focused={focused} />,
           headerStyle: {
@@ -142,23 +144,23 @@ const BottomTabNavigator = () => {
           header: () => <HeaderComponent value="Scanner" />,
         }}
       />
-      {/* <Tab.Screen
-        name={Constant.ScreenName.SAVE_ORDER}
+      <Tab.Screen
+        name={RetailerRoutes.SAVE_ORDER}
         component={SaveOrder}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            display: "none" as any,
           },
-          tabBarIcon: ({focused}) => <TabBarIcon icon={Icon.ORDER} focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.ORDER} focused={focused} />,
           headerStyle: {
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: "rgba(0, 0, 0, 0.25)",
           },
           header: () => <HeaderComponent value="SaveOrder" />,
         }}
-      /> */}
+      />
       {/* <Tab.Screen
         name={Constant.ScreenName.PROFILE}
         component={Profile}
@@ -293,22 +295,24 @@ export const RetailerStackNavigation = ({
         }}>
         {() => <ResetPassword role={role} />}
       </Stack.Screen> */}
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.SAVE_ORDER}
         component={SaveOrder}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
           },
           headerStyle: {
+            // @ts-expect-error - height property not in type but works at runtime
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: "rgba(0, 0, 0, 0.25)",
           },
           header: () => <HeaderComponent value="Saved Order" />,
         }}
-      /> */}
+      />
       {/* <Stack.Screen
         name={RetailerRoutes.PRODUCT_DESCRIPTION}
         component={ProductDescription}
@@ -374,22 +378,24 @@ export const RetailerStackNavigation = ({
           header: () => WithoutImageHeader('Edit Profile'),
         }}
       /> */}
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.PREVIEW_PDF}
-        component={CustomPDF}
+        component={PreviewPDF}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
           },
           headerStyle: {
+            // @ts-expect-error - height property not in type but works at runtime
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: "rgba(0, 0, 0, 0.25)",
           },
           header: () => <HeaderComponent value="Preview PDF" />,
         }}
-      /> */}
+      />
       {/* <Stack.Screen
         name={RetailerRoutes.RENDER_PDF}
         component={RenderPDF}
