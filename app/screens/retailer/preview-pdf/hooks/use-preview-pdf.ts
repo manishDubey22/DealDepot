@@ -1,5 +1,7 @@
 import { useState, useCallback } from "react"
-import { Platform, PermissionsAndroid } from "react-native"
+import { Platform } from "react-native"
+// eslint-disable-next-line react-native/split-platform-components
+import { PermissionsAndroid } from "react-native"
 import RNFS from "react-native-fs"
 import RNHTMLtoPDF from "react-native-html-to-pdf"
 import Share from "react-native-share"
@@ -186,7 +188,7 @@ export function usePreviewPDF(order: Order, vendorData: VendorData): UsePreviewP
       const options = {
         html: htmlContent,
         fileName: fileName,
-        directory: Platform.OS === "ios" ? "Documents" : "Downloads",
+        directory: (Platform.OS === "ios" ? "Documents" : "Downloads") as "Documents" | "Downloads",
         base64: false,
       }
 
