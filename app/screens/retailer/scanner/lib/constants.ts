@@ -8,6 +8,8 @@ export const UI_TEXT = {
   TRY_AGAIN: "Try Again",
   CAMERA_ERROR: "Camera Error",
   CAMERA_ERROR_MESSAGE: "Unable to access camera. Please try again.",
+  CAMERA_MODULE_NOT_LINKED:
+    "Camera module not linked. Please rebuild the native app:\n\n1. Run: npx expo prebuild --clean\n2. Then: npx expo run:android (or npx expo run:ios)",
   SCANNING: "Scanning...",
   POSITION_BARCODE: "Position barcode/QR code within the frame",
 } as const

@@ -13,7 +13,7 @@ export interface UseScannerReturnWithHandler extends UseScannerReturn {
   handleCodeScanned: (codes: any[]) => void
 }
 
-export function useScanner(): UseScannerReturnWithHandler {
+export function useScanner() {
   const navigation = useNavigation()
   const [hasPermission, setHasPermission] = useState(false)
   const [isCameraActive, setIsCameraActive] = useState(false)
@@ -23,6 +23,9 @@ export function useScanner(): UseScannerReturnWithHandler {
   const isFocusedRef = useRef(false)
   const hasNavigatedRef = useRef(false)
 
+  // useCameraDevice must be called unconditionally (React Hook rules)
+  // If native module isn't linked, this will throw an error which will be caught by ErrorBoundary
+  // The ErrorBoundary will show a helpful error message with rebuild instructions
   const device = useCameraDevice("back")
 
   // Extract product ID from scanned code
@@ -221,6 +224,7 @@ export function useScanner(): UseScannerReturnWithHandler {
     isCameraActive: isCameraActive && hasPermission && !!device && appState === "active",
     isInitialized,
     cameraError,
+    device,
     handleRequestPermission,
     handleOpenSettings,
     handleRetry,
