@@ -1,11 +1,31 @@
-import { queryOptions, useQuery } from "@tanstack/react-query"
+import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import { createQueryKeys } from "@/lib/react-query/keys"
 
-import { getStaticPeers } from "./api"
-import { STATIC_PEERS_KEYS } from "./constants"
+import {
+  getCategoryList,
+  getProduct,
+  getProductBySort,
+  getProductsByNameAndCategory,
+  getSearchProducts,
+  getStaticPeers,
+  getSubCategoryList,
+  getTrendingProducts,
+  toggleFavorite,
+} from "./api"
+import { PRODUCT_DETAILS_KEYS, PRODUCT_KEYS, STATIC_PEERS_KEYS } from "./constants"
+import type {
+  CategoryListParams,
+  GetProductBySortParams,
+  GetProductParams,
+  ProductsByNameAndCategoryParams,
+  SearchProductsParams,
+  SubCategoryListParams,
+  ToggleFavoriteParams,
+} from "./types"
 
-export const queryKeys = createQueryKeys([...STATIC_PEERS_KEYS], {
+// Static Peers Query Keys
+export const staticPeersQueryKeys = createQueryKeys([...STATIC_PEERS_KEYS], {
   getStaticPeers: () => ({
     key: [],
     sub: {
@@ -16,25 +36,56 @@ export const queryKeys = createQueryKeys([...STATIC_PEERS_KEYS], {
   }),
 })
 
+// Product Query Keys
+export const productQueryKeys = createQueryKeys([...PRODUCT_KEYS], {
+  searchProducts: (params: SearchProductsParams) => ({
+    key: ["search", params],
+    sub: {},
+  }),
+  trendingProducts: (retailerId: string) => ({
+    key: ["trending", retailerId],
+    sub: {},
+  }),
+  categoryList: (params: CategoryListParams) => ({
+    key: ["categories", params.retailerId],
+    sub: {},
+  }),
+  subCategoryList: (params: SubCategoryListParams) => ({
+    key: ["subcategories", params.retailerId, params.category],
+    sub: {},
+  }),
+  productsByNameAndCategory: (params: ProductsByNameAndCategoryParams) => ({
+    key: ["search-by-category", params],
+    sub: {},
+  }),
+})
+
+// Query Keys
+export const productDetailsQueryKeys = createQueryKeys([...PRODUCT_DETAILS_KEYS], {
+  product: (params: GetProductParams) => ({
+    key: ["product", params.retailerId, params.productId],
+    sub: {},
+  }),
+  sortedProduct: (params: GetProductBySortParams) => ({
+    key: ["sorted-product", params.retailerId, params.productId, params.sortId],
+    sub: {},
+  }),
+})
+
+// Static Peers Query Options
 export const getStaticPeersQueryOptions = (_request?: void) => {
   return queryOptions({
-    queryKey: queryKeys.getStaticPeers().sub.byRequest().key,
+    queryKey: staticPeersQueryKeys.getStaticPeers().sub.byRequest().key,
     async queryFn(context) {
       const response = await getStaticPeers(undefined, context)
       return response.data
     },
-    // staleTime: 600000, // 10 minutes
-    // gcTime: 1800000, // 30 minutes
-    // retry: 2,
-    // retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    // refetchOnMount: false,
   })
 }
 
 export function useStaticPeersQuery() {
   const query = useQuery(getStaticPeersQueryOptions())
 
-  // Map status to match RTK Query behavior
   const status = query.isPending ? "pending" : query.isError ? "rejected" : "fulfilled"
 
   return {
@@ -46,4 +97,258 @@ export function useStaticPeersQuery() {
     isSuccess: query.isSuccess,
     refetch: query.refetch,
   }
+}
+
+// Search Products Query Options
+export const getSearchProductsQueryOptions = (
+  params: SearchProductsParams,
+  options?: { enabled?: boolean },
+) => {
+  return queryOptions({
+    queryKey: productQueryKeys.searchProducts(params).key,
+    async queryFn() {
+      const response = await getSearchProducts(params)
+      return response.data
+    },
+    enabled: options?.enabled ?? true,
+    staleTime: 30 * 1000, // 30 seconds
+    gcTime: 5 * 60 * 1000, // 5 minutes
+  })
+}
+
+export function useSearchProductsQuery(
+  params: SearchProductsParams,
+  options?: { enabled?: boolean },
+) {
+  const query = useQuery(getSearchProductsQueryOptions(params, options))
+
+  const status = query.isPending ? "pending" : query.isError ? "rejected" : "fulfilled"
+
+  return {
+    data: query.data,
+    error: query.error,
+    status,
+    isLoading: query.isLoading,
+    isError: query.isError,
+    isSuccess: query.isSuccess,
+    refetch: query.refetch,
+  }
+}
+
+// Trending Products Query Options
+export const getTrendingProductsQueryOptions = (
+  retailerId: string,
+  options?: { enabled?: boolean },
+) => {
+  return queryOptions({
+    queryKey: productQueryKeys.trendingProducts(retailerId).key,
+    async queryFn() {
+      const response = await getTrendingProducts(retailerId)
+      return response.data
+    },
+    enabled: options?.enabled ?? true,
+    staleTime: 1 * 60 * 1000, // 1 minute
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    retry: (failureCount, error: any) => {
+      // Don't retry on 404 errors (endpoint might not be available)
+      if (error?.response?.status === 404) {
+        return false
+      }
+      return failureCount < 2
+    },
+  })
+}
+
+export function useTrendingProductsQuery(
+  retailerId: string | undefined,
+  options?: { enabled?: boolean },
+) {
+  const query = useQuery(
+    getTrendingProductsQueryOptions(retailerId || "", {
+      enabled: options?.enabled ?? !!retailerId,
+    }),
+  )
+
+  return {
+    data: query.data,
+    error: query.error,
+    isLoading: query.isLoading,
+    isError: query.isError,
+    isSuccess: query.isSuccess,
+    refetch: query.refetch,
+  }
+}
+
+// Category List Query Options
+export const getCategoryListQueryOptions = (params: CategoryListParams) => {
+  return queryOptions({
+    queryKey: productQueryKeys.categoryList(params).key,
+    async queryFn() {
+      const response = await getCategoryList(params)
+      return response.data
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: (failureCount, error: any) => {
+      // Don't retry on 404 errors (expected for some API versions)
+      if (error?.response?.status === 404) {
+        return false
+      }
+      return failureCount < 2
+    },
+  })
+}
+
+export function useCategoryListQuery(params: CategoryListParams) {
+  const query = useQuery(getCategoryListQueryOptions(params))
+
+  return {
+    data: query.data,
+    error: query.error,
+    isLoading: query.isLoading,
+  }
+}
+
+// Subcategory List Query Options
+export const getSubCategoryListQueryOptions = (
+  params: SubCategoryListParams,
+  options?: { enabled?: boolean },
+) => {
+  return queryOptions({
+    queryKey: productQueryKeys.subCategoryList(params).key,
+    async queryFn() {
+      const response = await getSubCategoryList(params)
+      return response.data
+    },
+    enabled: options?.enabled ?? true,
+    staleTime: 2 * 60 * 1000, // 2 minutes
+  })
+}
+
+export function useSubCategoryListQuery(
+  params: SubCategoryListParams,
+  options?: { enabled?: boolean },
+) {
+  const query = useQuery(getSubCategoryListQueryOptions(params, options))
+
+  return {
+    data: query.data,
+    error: query.error,
+    isLoading: query.isLoading,
+  }
+}
+
+// Products by Name and Category Query Options
+export const getProductsByNameAndCategoryQueryOptions = (
+  params: ProductsByNameAndCategoryParams,
+  options?: { enabled?: boolean },
+) => {
+  return queryOptions({
+    queryKey: productQueryKeys.productsByNameAndCategory(params).key,
+    async queryFn() {
+      const response = await getProductsByNameAndCategory(params)
+      return response.data
+    },
+    enabled: options?.enabled ?? true,
+    staleTime: 30 * 1000, // 30 seconds
+  })
+}
+
+export function useProductsByNameAndCategoryQuery(
+  params: ProductsByNameAndCategoryParams,
+  options?: { enabled?: boolean },
+) {
+  const query = useQuery(getProductsByNameAndCategoryQueryOptions(params, options))
+
+  return {
+    data: query.data,
+    error: query.error,
+    isSuccess: query.isSuccess,
+    isError: query.isError,
+    refetch: query.refetch,
+  }
+}
+
+// Get Product Query Options
+export const getProductQueryOptions = (
+  params: GetProductParams,
+  options?: { enabled?: boolean },
+) => {
+  return queryOptions({
+    queryKey: productDetailsQueryKeys.product(params).key,
+    async queryFn() {
+      const response = await getProduct(params)
+      return response.data
+    },
+    enabled: options?.enabled ?? true,
+    staleTime: 2 * 60 * 1000, // 2 minutes
+  })
+}
+
+export function useProductQuery(params: GetProductParams, options?: { enabled?: boolean }) {
+  const query = useQuery(getProductQueryOptions(params, options))
+
+  return {
+    data: query.data,
+    error: query.error,
+    isLoading: query.isLoading,
+    isError: query.isError,
+    isSuccess: query.isSuccess,
+    refetch: query.refetch,
+  }
+}
+
+// Get Sorted Product Query Options
+export const getSortedProductQueryOptions = (
+  params: GetProductBySortParams,
+  options?: { enabled?: boolean },
+) => {
+  return queryOptions({
+    queryKey: productDetailsQueryKeys.sortedProduct(params).key,
+    async queryFn() {
+      const response = await getProductBySort(params)
+      return response.data
+    },
+    enabled: options?.enabled ?? true,
+    staleTime: 30 * 1000, // 30 seconds
+  })
+}
+
+export function useSortedProductQuery(
+  params: GetProductBySortParams,
+  options?: { enabled?: boolean },
+) {
+  const query = useQuery(getSortedProductQueryOptions(params, options))
+
+  return {
+    data: query.data,
+    error: query.error,
+    isLoading: query.isLoading,
+    isError: query.isError,
+    isSuccess: query.isSuccess,
+    refetch: query.refetch,
+  }
+}
+
+// Toggle Favorite Mutation
+export function useToggleFavoriteMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (params: ToggleFavoriteParams) => toggleFavorite(params),
+    onSuccess: (response, variables) => {
+      // Invalidate product query to refetch favorite status
+      queryClient.invalidateQueries({
+        queryKey: productDetailsQueryKeys.product({
+          retailerId: variables.retailerId,
+          productId: variables.productId,
+        }).key,
+      })
+      // Invalidate favorites list if it exists
+      queryClient.invalidateQueries({
+        queryKey: ["favorites"],
+      })
+    },
+  })
 }

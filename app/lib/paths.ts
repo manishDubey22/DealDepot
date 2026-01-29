@@ -21,6 +21,11 @@ export const retailerPaths = {
 
   order: (retailerId: string, orderId: string) =>
     `/${API_RETAILER_VERSION}/${retailerId}/${API_VERSION}/order/${orderId}`,
+
+  orders: (retailerId: string) => `/${API_RETAILER_VERSION}/${retailerId}/${API_VERSION}/orders`,
+
+  accountDelete: (retailerId: string) =>
+    `/${API_RETAILER_VERSION}/${retailerId}/${API_VERSION}/account-delete`,
 }
 
 //static paths

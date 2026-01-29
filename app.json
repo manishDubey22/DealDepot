@@ -1,8 +1,12 @@
 {
   "expo": {
     "jsEngine": "hermes",
+    "experiments": {
+      "newArchEnabled": true
+    },
     "android": {
-      "newArchEnabled": false
+      "newArchEnabled": true,
+      "permissions": ["android.permission.CAMERA"]
     },
     "ios": {
       "newArchEnabled": false

@@ -1,11 +1,23 @@
-import { Image, ImageSourcePropType, StyleSheet } from "react-native"
+import { Image, ImageSourcePropType, StyleSheet, TouchableOpacity } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 // import { useNavigation } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { HeaderComponent } from "@/components/common-components"
 import { OptionScreen } from "@/screens/common-screens/option-screen"
-import { CreateNewAccount, EmailVerification, HomeOptionList, Login } from "@/screens/retailer"
+import {
+  CreateNewAccount,
+  EmailVerification,
+  HomeOptionList,
+  Login,
+  Order,
+  PreviewPDF,
+  ProductDescription,
+  Profile,
+  SaveOrder,
+  Scanner,
+  Search,
+} from "@/screens/retailer"
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
 
@@ -77,108 +89,110 @@ const BottomTabNavigator = () => {
           headerStyle: {
             height: 80,
             elevation: 5,
-            shadowColor: "rgba(0, 0, 0, 0.25)",
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Home" />,
         }}
       />
-      {/* <Tab.Screen
-        name="Search"
-        component={Home}
+      <Tab.Screen
+        name={RetailerRoutes.SEARCH}
+        component={Search}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            display: "none" as any,
           },
           headerStyle: {
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Search" />,
           tabBarButton: () => null, // This hides the tab bar button completely
         }}
-      /> */}
+      />
 
-      {/* <Tab.Screen
-        name={Constant.ScreenName.CART}
+      <Tab.Screen
+        name={RetailerRoutes.CART}
         component={Order}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            display: "none" as any,
           },
-          tabBarIcon: ({focused}) => <TabBarIcon icon={Icon.SHOPINGCART} focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.SHOPINGCART} focused={focused} />,
           headerStyle: {
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="My Cart" />,
         }}
-      /> */}
-      {/* <Tab.Screen
-        name={Constant.ScreenName.SCAN}
+      />
+      <Tab.Screen
+        name={RetailerRoutes.SCAN}
         component={Scanner}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            display: "none" as any,
           },
-          tabBarIcon: ({focused}) => <TabBarIcon icon={Icon.SCAN} focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.SCAN} focused={focused} />,
           headerStyle: {
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Scanner" />,
         }}
-      /> */}
-      {/* <Tab.Screen
-        name={Constant.ScreenName.SAVE_ORDER}
+      />
+      <Tab.Screen
+        name={RetailerRoutes.SAVE_ORDER}
         component={SaveOrder}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            display: "none" as any,
           },
-          tabBarIcon: ({focused}) => <TabBarIcon icon={Icon.ORDER} focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.ORDER} focused={focused} />,
           headerStyle: {
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="SaveOrder" />,
         }}
-      /> */}
-      {/* <Tab.Screen
-        name={Constant.ScreenName.PROFILE}
+      />
+      <Tab.Screen
+        name={RetailerRoutes.PROFILE}
         component={Profile}
         options={{
           headerShown: true,
           headerStyle: {
-            backgroundColor: color.WHITE,
+            backgroundColor: colors.palette.neutral100,
             height: 100,
           },
           headerTitleStyle: {
-            color: '#343434',
-            fontFamily: 'Arial-Rounded-Bold',
+            color: colors.palette.charcoal500,
+            fontFamily: CommonStyles.fontFamily.fontFamily,
             fontSize: 20,
           },
           headerRightContainerStyle: {
             paddingRight: 10,
           },
-          headerTitleAlign: 'center',
+          headerTitleAlign: "center",
           // -----------Need to be navigate ---- navigation.navigate(Constant.ScreenName.EDIT_PROFILE)
           headerRight: () => (
-            <TouchableOpacity onPress={() => navigation.navigate(Constant.ScreenName.EDIT_PROFILE)}>
+            <TouchableOpacity
+            // onPress={() => navigation.navigate(RetailerRoutes.EDIT_PROFILE)}
+            >
               <TabBarIcon icon={Icon.EDIT} focused={false} />
             </TouchableOpacity>
           ),
-          headerTintColor: '#FFF',
-          tabBarIcon: ({focused}) => <TabBarIcon icon={Icon.PROFILE} focused={focused} />,
+          headerTintColor: "#FFF",
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.PROFILE} focused={focused} />,
         }}
-      /> */}
+      />
     </Tab.Navigator>
   )
 }
@@ -194,7 +208,6 @@ export const RetailerStackNavigation = ({
   return (
     <Stack.Navigator initialRouteName={initialRouteName}>
       {/* <Stack.Navigator initialRouteName={RetailerRoutes.CART}> */}
-
       <Stack.Screen
         name={RetailerRoutes.OPTION}
         component={OptionScreen}
@@ -202,7 +215,6 @@ export const RetailerStackNavigation = ({
           headerShown: false,
         }}
       />
-
       <Stack.Screen
         name={RetailerRoutes.LOGIN}
         component={Login}
@@ -285,38 +297,42 @@ export const RetailerStackNavigation = ({
         }}>
         {() => <ResetPassword role={role} />}
       </Stack.Screen> */}
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.SAVE_ORDER}
         component={SaveOrder}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
           },
           headerStyle: {
+            // @ts-expect-error - height property not in type but works at runtime
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Saved Order" />,
         }}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
         name={RetailerRoutes.PRODUCT_DESCRIPTION}
         component={ProductDescription}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
           },
           headerStyle: {
+            // @ts-expect-error - display property not in type but works at runtime
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Product Description" />,
         }}
-      /> */}
+      />
       {/* <Stack.Screen
         name={RetailerRoutes.SALES_GRAPH}
         component={SalesGraph}
@@ -349,7 +365,6 @@ export const RetailerStackNavigation = ({
           header: () => <HeaderComponent value="Upload Files" />,
         }}
       /> */}
-
       {/* <Stack.Screen
         name={RetailerRoutes.EDIT_PROFILE}
         component={EditProfile}
@@ -366,22 +381,24 @@ export const RetailerStackNavigation = ({
           header: () => WithoutImageHeader('Edit Profile'),
         }}
       /> */}
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.PREVIEW_PDF}
-        component={CustomPDF}
+        component={PreviewPDF}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
           },
           headerStyle: {
+            // @ts-expect-error - height property not in type but works at runtime
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: "rgba(0, 0, 0, 0.25)",
           },
           header: () => <HeaderComponent value="Preview PDF" />,
         }}
-      /> */}
+      />
       {/* <Stack.Screen
         name={RetailerRoutes.RENDER_PDF}
         component={RenderPDF}
@@ -435,7 +452,6 @@ export const RetailerStackNavigation = ({
           header: () => WithoutImageHeader('Subscriptions Plans'),
         }}
       /> */}
-
       {/* <Stack.Screen
         name={RetailerRoutes.FAVOURITES}
         component={Favourites}

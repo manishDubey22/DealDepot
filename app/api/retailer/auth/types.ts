@@ -92,6 +92,10 @@ export interface OTPVerifyErrorResponse {
   }
 }
 
+export interface WhoAmIRequest {
+  userId?: string
+}
+
 export interface WhoAmIResponseData {
   isSubscribed: boolean
   peerGroup: string

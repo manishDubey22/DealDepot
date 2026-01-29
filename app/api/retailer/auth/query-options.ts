@@ -4,30 +4,31 @@ import { createQueryKeys } from "@/lib/react-query/keys"
 
 import { getWhoAmI } from "./api"
 import { WHOAMI_KEYS } from "./constants"
+import type { WhoAmIRequest } from "./types"
 
 export const queryKeys = createQueryKeys([...WHOAMI_KEYS], {
   whoami: () => ({
     key: [],
     sub: {
-      byRequest: (_params?: void) => ({
-        key: [],
+      byRequest: (request?: WhoAmIRequest) => ({
+        key: request?.userId ? [request.userId] : [],
       }),
     },
   }),
 })
 
-export const getWhoAmIQueryOptions = (_request?: void) => {
+export const getWhoAmIQueryOptions = (request?: WhoAmIRequest) => {
   return queryOptions({
-    queryKey: queryKeys.whoami().sub.byRequest().key,
+    queryKey: queryKeys.whoami().sub.byRequest(request).key,
     async queryFn() {
-      const response = await getWhoAmI()
+      const response = await getWhoAmI(request)
       return response.data
     },
   })
 }
 
-export function useWhoAmIQuery() {
-  const query = useQuery(getWhoAmIQueryOptions())
+export function useWhoAmIQuery(request?: WhoAmIRequest) {
+  const query = useQuery(getWhoAmIQueryOptions(request))
 
   // Map status to match RTK Query behavior
   const status = query.isPending ? "pending" : query.isError ? "rejected" : "fulfilled"
