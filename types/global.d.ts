@@ -25,9 +25,54 @@ declare module "*.svg" {
   export default value
 }
 
-declare module "lodash/debounce" {
-  const debounce: any
-  export default debounce
+// declare module "lodash/debounce" {
+//   interface DebouncedFunction<T extends (...args: any[]) => any> {
+//     (...args: Parameters<T>): ReturnType<T> | undefined
+//     cancel(): void
+//     flush(): ReturnType<T> | undefined
+//   }
+
+//   function debounce<T extends (...args: any[]) => any>(
+//     func: T,
+//     wait?: number,
+//     options?: {
+//       leading?: boolean
+//       maxWait?: number
+//       trailing?: boolean
+//     },
+//   ): DebouncedFunction<T>
+
+//   export = debounce
+//   export default debounce
+// }
+
+declare module "react-native-html-to-pdf" {
+  interface Options {
+    html: string
+    fileName?: string
+    directory?: "Documents" | "Downloads"
+    base64?: boolean
+    width?: number
+    height?: number
+    paddingLeft?: number
+    paddingRight?: number
+    paddingTop?: number
+    paddingBottom?: number
+    padding?: number
+    bgColor?: string
+  }
+
+  interface PDF {
+    filePath: string
+    base64?: string
+  }
+
+  const RNHTMLtoPDF: {
+    convert(options: Options): Promise<PDF>
+  }
+
+  export default RNHTMLtoPDF
+  export type { Options, PDF }
 }
 
 // Extend global types
