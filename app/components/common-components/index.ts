@@ -1,3 +1,4 @@
+export { default as Avatar } from "./avatar/avatar"
 export { default as CustomCard } from "./custom-card/custom-card"
 export { default as ButtonField } from "./button/button"
 export { default as ToastConfig } from "./custom-toast/custom-toast"

@@ -1,4 +1,4 @@
-import { Image, ImageSourcePropType, StyleSheet } from "react-native"
+import { Image, ImageSourcePropType, StyleSheet, TouchableOpacity } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 // import { useNavigation } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
@@ -12,6 +12,7 @@ import {
   Login,
   Order,
   PreviewPDF,
+  Profile,
   SaveOrder,
   Scanner,
   Search,
@@ -156,39 +157,41 @@ const BottomTabNavigator = () => {
           headerStyle: {
             height: 80,
             elevation: 5,
-            shadowColor: "rgba(0, 0, 0, 0.25)",
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="SaveOrder" />,
         }}
       />
-      {/* <Tab.Screen
-        name={Constant.ScreenName.PROFILE}
+      <Tab.Screen
+        name={RetailerRoutes.PROFILE}
         component={Profile}
         options={{
           headerShown: true,
           headerStyle: {
-            backgroundColor: color.WHITE,
+            backgroundColor: colors.palette.neutral100,
             height: 100,
           },
           headerTitleStyle: {
-            color: '#343434',
-            fontFamily: 'Arial-Rounded-Bold',
+            color: colors.palette.charcoal500,
+            fontFamily: CommonStyles.fontFamily.fontFamily,
             fontSize: 20,
           },
           headerRightContainerStyle: {
             paddingRight: 10,
           },
-          headerTitleAlign: 'center',
+          headerTitleAlign: "center",
           // -----------Need to be navigate ---- navigation.navigate(Constant.ScreenName.EDIT_PROFILE)
           headerRight: () => (
-            <TouchableOpacity onPress={() => navigation.navigate(Constant.ScreenName.EDIT_PROFILE)}>
+            <TouchableOpacity
+            // onPress={() => navigation.navigate(RetailerRoutes.EDIT_PROFILE)}
+            >
               <TabBarIcon icon={Icon.EDIT} focused={false} />
             </TouchableOpacity>
           ),
-          headerTintColor: '#FFF',
-          tabBarIcon: ({focused}) => <TabBarIcon icon={Icon.PROFILE} focused={focused} />,
+          headerTintColor: "#FFF",
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.PROFILE} focused={focused} />,
         }}
-      /> */}
+      />
     </Tab.Navigator>
   )
 }
