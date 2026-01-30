@@ -18,7 +18,7 @@ import { styles } from "./lib/styles"
 import type { HeaderComponentProps } from "./lib/types"
 import { Icon } from "../../../../assets/icons/wholeSeller"
 
-const HeaderComponent: React.FC<HeaderComponentProps> = ({ value }) => {
+const HeaderComponent: React.FC<HeaderComponentProps> = ({ value, backTo }) => {
   const insets = useSafeAreaInsets()
   const navigation = useNavigation()
 
@@ -27,6 +27,8 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ value }) => {
     if (NAVIGATE_TO_OPTIONS_SCREENS.includes(value)) {
       // @ts-expect-error - navigation type doesn't include all RetailerRoutes
       navigation.navigate(RetailerRoutes.OPTIONS)
+    } else if (backTo) {
+      backTo()
     } else {
       navigation.goBack()
     }

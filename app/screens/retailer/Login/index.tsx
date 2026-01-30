@@ -22,7 +22,7 @@ export default function Login({ navigation }: any) {
     onSubmit,
     handleNavigateToResetPassword,
     handleNavigateToCreateAccount,
-    // handleBackToOption,
+    handleBackToOption,
     showModal,
     setShowModal,
   } = useRetailerLogin(navigation)
@@ -30,7 +30,7 @@ export default function Login({ navigation }: any) {
   console.log("showModal", showModal)
   return (
     <View style={styles.mainContainer}>
-      <HeaderComponent value="Login" />
+      <HeaderComponent value="Login" backTo={handleBackToOption} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <SafeAreaView style={styles.safeAreaView}>
           <View style={styles.container}>

@@ -2,21 +2,22 @@ import { StyleSheet } from "react-native"
 import { responsiveWidth } from "react-native-responsive-dimensions"
 
 import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 import { BORDER_RADIUS, FONT_FAMILY, FONT_SIZE, PADDING_HORIZONTAL } from "./constants"
 
 export const styles = StyleSheet.create({
   buttonContainer: {
     alignItems: "center",
-    backgroundColor: colors.customColors.GREEN,
-    borderRadius: BORDER_RADIUS,
+    backgroundColor: commonStyles.colors.primaryColor,
+    borderRadius: commonStyles.borderRadius.small,
     flexDirection: "row",
     justifyContent: "center",
     paddingHorizontal: PADDING_HORIZONTAL,
   },
   buttonContainerActive: {
     alignItems: "center",
-    backgroundColor: colors.customColors.GREEN,
+    backgroundColor: commonStyles.colors.primaryColor,
     borderRadius: BORDER_RADIUS,
     flexDirection: "row",
     justifyContent: "center",
