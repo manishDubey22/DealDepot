@@ -5,6 +5,7 @@ export const Icon = {
   SETTING: require("./Setting.png"),
   PROFILE: require("./Profile.png"),
   LeftArrow: require("./LeftArrow.png"),
+  LeftBackArrow: require("./left-arrow.png"),
   SHOWPASSWORD: require("./ShowPassword.png"),
   FILE_UPLOAD: require("./FileUpload.png"),
   File: require("./file.png"),

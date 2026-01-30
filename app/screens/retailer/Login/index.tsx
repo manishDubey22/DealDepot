@@ -3,6 +3,7 @@ import { Controller } from "react-hook-form"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { SafeAreaView } from "react-native-safe-area-context"
 
+import { HeaderComponent } from "@/components/common-components"
 import ButtonField from "@/components/common-components/button/button"
 import { InputFieldContianer } from "@/components/common-components/input-field-contianer/input-field-contianer"
 
@@ -21,7 +22,7 @@ export default function Login({ navigation }: any) {
     onSubmit,
     handleNavigateToResetPassword,
     handleNavigateToCreateAccount,
-    handleBackToOption,
+    // handleBackToOption,
     showModal,
     setShowModal,
   } = useRetailerLogin(navigation)
@@ -29,10 +30,12 @@ export default function Login({ navigation }: any) {
   console.log("showModal", showModal)
   return (
     <View style={styles.mainContainer}>
+      <HeaderComponent value="Login" />
       <ScrollView showsVerticalScrollIndicator={false}>
         <SafeAreaView style={styles.safeAreaView}>
           <View style={styles.container}>
-            <Text style={styles.retailerText}>{UI_TEXT.SCREEN_TITLE}</Text>
+            <Text style={styles.welcomeHeading}>{UI_TEXT.WELCOME_HEADING}</Text>
+            <Text style={styles.subtitleText}>{UI_TEXT.SUBTITLE_TEXT}</Text>
             <View>
               <Controller
                 control={control}
@@ -75,20 +78,21 @@ export default function Login({ navigation }: any) {
                 <Text style={styles.validationError}>{errors.password?.message}</Text>
               )}
             </View>
-            <TouchableOpacity
-              style={styles.passwordTextContainer}
-              onPress={() =>
-                setShowModal({
-                  resetPassword: true,
-                  otpValidation: false,
-                  resetCredentials: false,
-                })
-              }
-            >
-              <TouchableOpacity onPress={handleNavigateToResetPassword}>
-                <Text style={styles.textColor}>{UI_TEXT.FORGOT_PASSWORD_TEXT}</Text>
+            <View style={styles.forgotPasswordContainer}>
+              <TouchableOpacity
+                onPress={() =>
+                  setShowModal({
+                    resetPassword: true,
+                    otpValidation: false,
+                    resetCredentials: false,
+                  })
+                }
+              >
+                <TouchableOpacity onPress={handleNavigateToResetPassword}>
+                  <Text style={styles.textColor}>{UI_TEXT.FORGOT_PASSWORD_TEXT}</Text>
+                </TouchableOpacity>
               </TouchableOpacity>
-            </TouchableOpacity>
+            </View>
           </View>
 
           <ButtonField
@@ -97,14 +101,14 @@ export default function Login({ navigation }: any) {
             isDisabled={isLoading}
           />
 
-          <View>
+          <View style={styles.helperTextContainer}>
             <Text style={styles.helpertext1}>{UI_TEXT.NO_ACCOUNT_TEXT}</Text>
             <TouchableOpacity onPress={handleNavigateToCreateAccount}>
               <Text style={styles.helperText2}>{UI_TEXT.CREATE_ACCOUNT_TEXT}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleBackToOption}>
+            {/* <TouchableOpacity onPress={handleBackToOption}>
               <Text style={styles.backToOptionScreen}>{UI_TEXT.BACK_TO_OPTION_TEXT}</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </SafeAreaView>
       </ScrollView>

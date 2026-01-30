@@ -220,18 +220,7 @@ export const RetailerStackNavigation = ({
         name={RetailerRoutes.LOGIN}
         component={Login}
         options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: colors.palette.neutral100,
-            // height: 100,
-          },
-          headerTitleStyle: {
-            color: colors.palette.charcoal500,
-            fontFamily: CommonStyles.fontFamily.fontFamily,
-            fontSize: 20,
-          },
-          headerTitleAlign: "center",
-          headerTintColor: colors.palette.neutral100,
+          headerShown: false,
         }}
       />
       <Stack.Screen

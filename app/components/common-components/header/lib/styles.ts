@@ -4,8 +4,8 @@ import { colors } from "@/theme/colors"
 
 import {
   FONT_FAMILY,
-  HEADER_HEIGHT,
-  HEADER_PADDING_HORIZONTAL,
+  // HEADER_HEIGHT,
+  // HEADER_PADDING_HORIZONTAL,
   HEADER_TEXT_FONT_SIZE,
   ICON_CONTAINER_PADDING,
   ICON_CONTAINER_WITHOUT_BACK_ICON_PADDING_RIGHT,
@@ -14,27 +14,28 @@ import {
   ICON_PLACEHOLDER_HEIGHT,
   ICON_PLACEHOLDER_WIDTH,
   ICON_WIDTH,
-  TEXT_SHADOW_COLOR,
-  TEXT_SHADOW_OFFSET,
-  TEXT_SHADOW_RADIUS,
 } from "./constants"
 
 export const styles = StyleSheet.create({
   header: {
     alignItems: "center",
+    backgroundColor: colors.palette.neutral100,
+    borderBottomColor: colors.customColors.MEDIUM_GRAY,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: "row",
-    height: HEADER_HEIGHT,
-    justifyContent: "space-between",
-    paddingHorizontal: HEADER_PADDING_HORIZONTAL,
+    gap: 6,
+    paddingBottom: 10,
+    // height: HEADER_HEIGHT,
+    // paddingHorizontal: HEADER_PADDING_HORIZONTAL,
   },
   headerText: {
     color: colors.customColors.BLACK,
     fontFamily: FONT_FAMILY,
     fontSize: HEADER_TEXT_FONT_SIZE,
     textAlign: "center",
-    textShadowColor: TEXT_SHADOW_COLOR,
-    textShadowOffset: TEXT_SHADOW_OFFSET,
-    textShadowRadius: TEXT_SHADOW_RADIUS,
+    // textShadowColor: TEXT_SHADOW_COLOR,
+    // textShadowOffset: TEXT_SHADOW_OFFSET,
+    // textShadowRadius: TEXT_SHADOW_RADIUS,
   },
   icon: {
     height: ICON_HEIGHT,
@@ -42,6 +43,8 @@ export const styles = StyleSheet.create({
   },
   iconContainer: {
     padding: ICON_CONTAINER_PADDING,
+    paddingLeft: 0,
+    paddingRight: 20,
   },
   iconContainerWithBackIcon: {
     marginRight: ICON_CONTAINER_WITH_BACK_ICON_MARGIN_RIGHT,

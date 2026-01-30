@@ -2,10 +2,12 @@ import type { IShowModalType } from "./types"
 
 export const UI_TEXT = {
   SCREEN_TITLE: "Retailer",
-  EMAIL_FIELD_TITLE: "User Name",
-  EMAIL_PLACEHOLDER: "Email / Phone Number",
+  WELCOME_HEADING: "Welcome Back",
+  SUBTITLE_TEXT: "Sign in to continue to your account",
+  EMAIL_FIELD_TITLE: "Email",
+  EMAIL_PLACEHOLDER: "Enter your email",
   PASSWORD_FIELD_TITLE: "Password",
-  PASSWORD_PLACEHOLDER: "Enter Password",
+  PASSWORD_PLACEHOLDER: "Enter your password",
   FORGOT_PASSWORD_TEXT: "Forgot Password?",
   LOGIN_BUTTON_TEXT: "LOGIN NOW",
   NO_ACCOUNT_TEXT: "Don't have an account yet?",

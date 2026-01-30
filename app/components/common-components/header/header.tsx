@@ -8,9 +8,6 @@ import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { Heading } from "@/screens/retailer"
 
 import {
-  // GRADIENT_COLOR,
-  // GRADIENT_END,
-  // GRADIENT_START,
   HOME_SCREEN_VALUE,
   NAVIGATE_TO_OPTIONS_SCREENS,
   SHOW_NO_BACK_BUTTON,
@@ -37,25 +34,21 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ value }) => {
 
   return (
     <SafeAreaView style={{ paddingTop: insets.top }}>
-      {/* <LinearGradient
-        colors={[GRADIENT_COLOR, GRADIENT_COLOR]}
-        start={GRADIENT_START}
-        end={GRADIENT_END}
-        style={styles.header}
-      > */}
-      {!SHOW_NO_BACK_BUTTON.includes(value) && (
-        <TouchableOpacity onPress={handlePress} style={styles.iconContainer}>
-          <Image source={Icon.LeftArrow} resizeMode="contain" style={styles.icon} />
-        </TouchableOpacity>
-      )}
-      <View
-        style={
-          SHOW_NO_BACK_BUTTON.includes(value)
-            ? styles.iconContainerWithoutBackIcon
-            : styles.iconContainerWithBackIcon
-        }
-      >
-        <Text style={styles.headerText}>{value}</Text>
+      <View style={styles.header}>
+        {!SHOW_NO_BACK_BUTTON.includes(value) && (
+          <TouchableOpacity onPress={handlePress} style={styles.iconContainer}>
+            <Image source={Icon.LeftBackArrow} resizeMode="contain" style={styles.icon} />
+          </TouchableOpacity>
+        )}
+        <View
+        // style={
+        //   SHOW_NO_BACK_BUTTON.includes(value)
+        //     ? styles.iconContainerWithoutBackIcon
+        //     : styles.iconContainerWithBackIcon
+        // }
+        >
+          <Text style={styles.headerText}>{value}</Text>
+        </View>
       </View>
       {/* </LinearGradient> */}
       {value === HOME_SCREEN_VALUE && <Heading />}
