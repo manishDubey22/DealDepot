@@ -11,6 +11,9 @@ export const retailerPaths = {
   product: (retailerId: string, productId: string) =>
     `/${API_RETAILER_VERSION}/${retailerId}/${API_VERSION}/product/${productId}`,
 
+  productSalesGraph: (retailerId: string, productId: string, wholeSellerId: string) =>
+    `/${API_RETAILER_VERSION}/${retailerId}/${API_VERSION}/product/${productId}/${wholeSellerId}`,
+
   productSearch: (retailerId: string) =>
     `/${API_RETAILER_VERSION}/${retailerId}/${API_VERSION}/products/search`,
 

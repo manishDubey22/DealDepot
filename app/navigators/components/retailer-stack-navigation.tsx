@@ -15,6 +15,7 @@ import {
   ProductDescription,
   Profile,
   SaveOrder,
+  SalesGraph,
   Scanner,
   Search,
 } from "@/screens/retailer"
@@ -333,22 +334,24 @@ export const RetailerStackNavigation = ({
           header: () => <HeaderComponent value="Product Description" />,
         }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.SALES_GRAPH}
         component={SalesGraph}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
           },
           headerStyle: {
+            // @ts-expect-error - display property not in type but works at runtime
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Sales Graph" />,
         }}
-      /> */}
+      />
       {/* <Stack.Screen
         name={RetailerRoutes.UPLOAD_FILE}
         component={UploadFile}

@@ -80,10 +80,13 @@ export default function Search({ navigation }: any) {
     },
   )
   useEffect(() => {
+    console.log("22222 filteredData => ", filteredData)
+    console.log("33333 isSucces => ", isSucces)
     if (isSucces && filteredData?.data) {
+      console.log("44444 filteredData.data => ", filteredData.data)
       setItemsArray(filteredData.data)
     }
-  }, [isSucces, filteredData, refetchCategoryList])
+  }, [isSucces, filteredData, refetchCategoryList, query, selectedCategory, selectedSubCategory])
 
   const {
     data: categoryListData,
@@ -293,6 +296,7 @@ export default function Search({ navigation }: any) {
     console.log(isSuccess, "isSuccess", isLoading, "isLoading", isError, "isError")
 
     if (isSuccess && status === "fulfilled" && searchedItems?.data) {
+      console.log("55555 searchedItems.data => ", searchedItems.data)
       setItemsArray(searchedItems.data.slice(0, 20))
       setIsStartSearch(false)
     } else if (isError) {
@@ -337,7 +341,7 @@ export default function Search({ navigation }: any) {
       return (
         <FlatList
           data={ItemsArray}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item) => item.product_id.toString()}
           renderItem={({ item }) => <CardItem modifyValue={item} />}
           showsVerticalScrollIndicator={false}
         />

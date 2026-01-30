@@ -30,6 +30,7 @@ export const getStaticPeers = (
 
 export const getSearchProducts = (params: SearchProductsParams) => {
   const url = `${getApiUrl()}/${PRODUCT_ENDPOINTS.SEARCH(params.retailerId, params.name)}`
+  console.log("66666 url => ", url)
   return api.get<ProductsResponse>(url)
 }
 
@@ -54,6 +55,7 @@ export const getProductsByNameAndCategory = (params: ProductsByNameAndCategoryPa
     params.category,
     params.subcategory,
   )}`
+  console.log("1111111 url => ", url)
   return api.get<ProductsResponse>(url)
 }
 

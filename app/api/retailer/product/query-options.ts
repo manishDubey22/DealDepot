@@ -121,6 +121,7 @@ export function useSearchProductsQuery(
   options?: { enabled?: boolean },
 ) {
   const query = useQuery(getSearchProductsQueryOptions(params, options))
+  console.log("77777 query => ", query)
 
   const status = query.isPending ? "pending" : query.isError ? "rejected" : "fulfilled"
 
