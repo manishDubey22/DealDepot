@@ -19,7 +19,6 @@ import type { HeaderComponentProps } from "./lib/types"
 import { Icon } from "../../../../assets/icons/wholeSeller"
 
 const HeaderComponent: React.FC<HeaderComponentProps> = ({ value, backTo }) => {
-  const insets = useSafeAreaInsets()
   const navigation = useNavigation()
 
   const handlePress = () => {
@@ -35,7 +34,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ value, backTo }) => {
   }
 
   return (
-    <SafeAreaView style={{ paddingTop: insets.top }}>
+    <SafeAreaView>
       <View style={styles.header}>
         {!SHOW_NO_BACK_BUTTON.includes(value) && (
           <TouchableOpacity onPress={handlePress} style={styles.iconContainer}>

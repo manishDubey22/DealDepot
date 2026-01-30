@@ -35,6 +35,11 @@ export const styles = StyleSheet.create({
     color: colors.palette.neutral100,
     fontFamily: FONT_FAMILY,
     fontSize: FONT_SIZE,
+    textTransform: commonStyles.textTransform.capitalize as
+      | "capitalize"
+      | "lowercase"
+      | "uppercase"
+      | "none",
   },
   buttonTextCenter: {
     alignSelf: "center",

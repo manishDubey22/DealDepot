@@ -1,6 +1,7 @@
+import { useState } from "react"
 import { View, Text, TouchableOpacity } from "react-native"
 import { Controller } from "react-hook-form"
-import { ScrollView } from "react-native-gesture-handler"
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import ButtonField from "@/components/common-components/button/button"
@@ -11,6 +12,8 @@ import { UI_TEXT, ERROR_MESSAGES } from "./lib/constants"
 import { styles } from "./lib/styles"
 
 export default function CreateNewAccount({ navigation }: any) {
+  const [isShowPassword, setIsShowPassword] = useState(true)
+
   const {
     control,
     handleSubmit,
@@ -28,10 +31,21 @@ export default function CreateNewAccount({ navigation }: any) {
     dropdownArray,
   } = useCreateNewAccount(navigation)
 
+  const handleTogglePassword = () => {
+    setIsShowPassword((prev) => !prev)
+  }
+
   return (
     <View style={styles.mainContainer}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        bottomOffset={20}
+        contentContainerStyle={styles.scrollContent}
+      >
         <SafeAreaView style={styles.safeAreaView}>
+          <Text style={styles.heading}>{UI_TEXT.JOIN_US_HEADING}</Text>
+          <Text style={styles.subtitle}>{UI_TEXT.SUBTITLE_TEXT}</Text>
           <View style={styles.textInputContainer}>
             <Controller
               control={control}
@@ -98,7 +112,9 @@ export default function CreateNewAccount({ navigation }: any) {
                   onChangeText={(text) => {
                     onChange(text)
                   }}
-                  secureTextEntry={true}
+                  secureTextEntry={isShowPassword}
+                  showIcon={value?.length > 0 ? true : false}
+                  onTogglePassword={handleTogglePassword}
                 />
               )}
               name="password"
@@ -106,76 +122,6 @@ export default function CreateNewAccount({ navigation }: any) {
             {errors.password?.message && (
               <Text style={styles.validationError}>{errors.password?.message}</Text>
             )}
-
-            <Controller
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <InputFieldContianer
-                  title={UI_TEXT.ADDRESS_TITLE}
-                  placeholder={UI_TEXT.ADDRESS_PLACEHOLDER}
-                  textContainerStyle={styles.textInputMargin}
-                  value={value}
-                  onChangeText={(text) => {
-                    onChange(text)
-                  }}
-                />
-              )}
-              name="location"
-            />
-            {errors.location?.message && (
-              <Text style={styles.validationError}>{errors.location?.message}</Text>
-            )}
-
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <InputFieldContianer
-                  title={UI_TEXT.CITY_TITLE}
-                  placeholder={UI_TEXT.CITY_PLACEHOLDER}
-                  textContainerStyle={styles.textInputMargin}
-                  onBlur={onBlur}
-                  onChangeText={(text) => onChange(text)}
-                  value={value}
-                />
-              )}
-              name="city"
-            />
-            {errors.city && <Text style={styles.validationError}>{errors.city.message}</Text>}
-
-            <Controller
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <InputFieldContianer
-                  title={UI_TEXT.STATE_TITLE}
-                  placeholder={UI_TEXT.STATE_PLACEHOLDER}
-                  textContainerStyle={styles.textInputMargin}
-                  value={value}
-                  onChangeText={(text) => {
-                    onChange(text)
-                  }}
-                />
-              )}
-              name="state"
-            />
-            {errors.state?.message && (
-              <Text style={styles.validationError}>{errors.state?.message}</Text>
-            )}
-
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <InputFieldContianer
-                  title={UI_TEXT.ZIP_CODE_TITLE}
-                  textContainerStyle={styles.textInputMargin}
-                  placeholder={UI_TEXT.ZIP_CODE_PLACEHOLDER}
-                  onBlur={onBlur}
-                  onChangeText={(text) => onChange(text)}
-                  value={value}
-                />
-              )}
-              name="zipCode"
-            />
-            {errors.zipCode && <Text style={styles.validationError}>{errors.zipCode.message}</Text>}
 
             <Controller
               control={control}
@@ -200,6 +146,62 @@ export default function CreateNewAccount({ navigation }: any) {
               control={control}
               render={({ field: { onChange, value } }) => (
                 <InputFieldContianer
+                  title={UI_TEXT.ADDRESS_TITLE}
+                  placeholder={UI_TEXT.ADDRESS_PLACEHOLDER}
+                  textContainerStyle={styles.textInputMargin}
+                  value={value}
+                  onChangeText={(text) => {
+                    onChange(text)
+                  }}
+                />
+              )}
+              name="location"
+            />
+            {errors.location?.message && (
+              <Text style={styles.validationError}>{errors.location?.message}</Text>
+            )}
+
+            <View style={styles.cityZipContainer}>
+              <View style={styles.cityZipField}>
+                <Controller
+                  control={control}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <InputFieldContianer
+                      title={UI_TEXT.CITY_TITLE}
+                      placeholder={UI_TEXT.CITY_PLACEHOLDER}
+                      onBlur={onBlur}
+                      onChangeText={(text) => onChange(text)}
+                      value={value}
+                    />
+                  )}
+                  name="city"
+                />
+                {errors.city && <Text style={styles.validationError}>{errors.city.message}</Text>}
+              </View>
+              <View style={styles.cityZipField}>
+                <Controller
+                  control={control}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <InputFieldContianer
+                      title={UI_TEXT.ZIP_CODE_TITLE}
+                      placeholder={UI_TEXT.ZIP_CODE_PLACEHOLDER}
+                      onBlur={onBlur}
+                      onChangeText={(text) => onChange(text)}
+                      value={value}
+                    />
+                  )}
+                  name="zipCode"
+                />
+                {errors.zipCode && (
+                  <Text style={styles.validationError}>{errors.zipCode.message}</Text>
+                )}
+              </View>
+            </View>
+
+            <Controller
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <InputFieldContianer
                   title={UI_TEXT.PEER_GROUP_TITLE}
                   placeholder={UI_TEXT.PEER_GROUP_PLACEHOLDER}
                   onChangeText={(text) => {
@@ -216,9 +218,28 @@ export default function CreateNewAccount({ navigation }: any) {
             {errors.peerGroup?.message && (
               <Text style={styles.validationError}>{errors.peerGroup?.message}</Text>
             )}
+
+            <Controller
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <InputFieldContianer
+                  title={UI_TEXT.STATE_TITLE}
+                  placeholder={UI_TEXT.STATE_PLACEHOLDER}
+                  textContainerStyle={styles.textInputMargin}
+                  value={value}
+                  onChangeText={(text) => {
+                    onChange(text)
+                  }}
+                />
+              )}
+              name="state"
+            />
+            {errors.state?.message && (
+              <Text style={styles.validationError}>{errors.state?.message}</Text>
+            )}
           </View>
 
-          <View>
+          <View style={styles.checkboxContainerWrapper}>
             <TouchableOpacity
               style={styles.checkboxContainer}
               onPress={handleToggleAgreeToTerms}
@@ -233,7 +254,9 @@ export default function CreateNewAccount({ navigation }: any) {
               >
                 {agreeToTerms && <Text style={styles.checkmark}>✓</Text>}
               </View>
-              <Text style={styles.checkboxText}>{UI_TEXT.CHECKBOX_TEXT}</Text>
+              <View style={styles.checkboxTextContainer}>
+                <Text style={styles.checkboxText}>{UI_TEXT.CHECKBOX_TEXT}</Text>
+              </View>
             </TouchableOpacity>
             {checkboxError ? (
               <Text style={styles.checkboxErrorMessage}>{checkboxError}</Text>
@@ -253,13 +276,13 @@ export default function CreateNewAccount({ navigation }: any) {
             )}
             <View style={styles.helperTextContainer}>
               <Text style={styles.helpertext1}>{UI_TEXT.ALREADY_HAVE_ACCOUNT}</Text>
-              <TouchableOpacity style={styles.loginButtonContainer} onPress={handleNavigateToLogin}>
+              <TouchableOpacity onPress={handleNavigateToLogin}>
                 <Text style={styles.helperText2}>{UI_TEXT.LOGIN_NOW}</Text>
               </TouchableOpacity>
             </View>
           </View>
         </SafeAreaView>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </View>
   )
 }

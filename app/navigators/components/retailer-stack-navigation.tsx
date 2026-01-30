@@ -228,18 +228,18 @@ export const RetailerStackNavigation = ({
         component={CreateNewAccount}
         options={{
           headerShown: true,
+          headerTitleStyle: {
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
+          },
           headerStyle: {
             backgroundColor: colors.customColors.WHITE,
-            // height: 100,
+            // @ts-expect-error - height property not in type but works at runtime
+            height: 80,
+            elevation: 5,
+            shadowColor: colors.palette.grey400,
           },
-          headerTitleStyle: {
-            color: colors.palette.charcoal500,
-            fontFamily: CommonStyles.fontFamily.fontFamily,
-            fontSize: 20,
-          },
-          headerTitle: "Create New Account",
-          headerTitleAlign: "center",
-          headerTintColor: colors.palette.neutral100,
+          header: () => <HeaderComponent value="Create Account" />,
         }}
       />
       <Stack.Screen

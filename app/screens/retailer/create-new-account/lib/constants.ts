@@ -1,34 +1,38 @@
 export const UI_TEXT = {
+  // Heading and subtitle
+  JOIN_US_HEADING: "Join Us",
+  SUBTITLE_TEXT: "Create your retailer account",
+
   // Field titles
-  OWNERS_NAME_TITLE: "Owner's Name",
+  OWNERS_NAME_TITLE: "Full Name",
   STORE_NAME_TITLE: "Store Name",
   EMAIL_TITLE: "Email",
-  PASSWORD_TITLE: "Password",
-  ADDRESS_TITLE: "Address",
+  PASSWORD_TITLE: "Create a password",
+  ADDRESS_TITLE: "Location",
   CITY_TITLE: "City",
   STATE_TITLE: "State",
   ZIP_CODE_TITLE: "Zip Code",
   PHONE_NUMBER_TITLE: "Phone Number",
-  PEER_GROUP_TITLE: "Peer group",
+  PEER_GROUP_TITLE: "Peer Group",
 
   // Placeholders
-  OWNERS_NAME_PLACEHOLDER: "Owner's Name",
-  STORE_NAME_PLACEHOLDER: "Enter the Store Name",
-  EMAIL_PLACEHOLDER: "something@mail.com",
-  PASSWORD_PLACEHOLDER: "*************",
-  ADDRESS_PLACEHOLDER: "Enter your location",
-  CITY_PLACEHOLDER: "Enter your city",
+  OWNERS_NAME_PLACEHOLDER: "Enter your name",
+  STORE_NAME_PLACEHOLDER: "Enter your store name",
+  EMAIL_PLACEHOLDER: "Enter your email",
+  PASSWORD_PLACEHOLDER: "Create a password",
+  ADDRESS_PLACEHOLDER: "Enter your address",
+  CITY_PLACEHOLDER: "City",
   STATE_PLACEHOLDER: "Enter your state",
-  ZIP_CODE_PLACEHOLDER: "Enter your zip code",
-  PHONE_NUMBER_PLACEHOLDER: "+1xxxxxxxxxxxx",
-  PEER_GROUP_PLACEHOLDER: "Enter the Peer Group",
+  ZIP_CODE_PLACEHOLDER: "Zip Code",
+  PHONE_NUMBER_PLACEHOLDER: "Enter your phone number",
+  PEER_GROUP_PLACEHOLDER: "Select peer group",
 
   // Button text
-  CREATE_ACCOUNT_BUTTON: "Create Account Now",
+  CREATE_ACCOUNT_BUTTON: "Create Account",
 
   // Helper text
-  ALREADY_HAVE_ACCOUNT: "Already have an account?",
-  LOGIN_NOW: "Login Now",
+  ALREADY_HAVE_ACCOUNT: "Already have an account? ",
+  LOGIN_NOW: "Login",
 
   // Checkbox text
   CHECKBOX_TEXT:
