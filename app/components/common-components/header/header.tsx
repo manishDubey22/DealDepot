@@ -5,10 +5,10 @@ import { useNavigation } from "@react-navigation/native"
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { RetailerRoutes } from "@/navigators/retailer/routes"
-import { Heading } from "@/screens/retailer"
+// import { Heading } from "@/screens/retailer"
 
 import {
-  HOME_SCREEN_VALUE,
+  // HOME_SCREEN_VALUE,
   NAVIGATE_TO_OPTIONS_SCREENS,
   SHOW_NO_BACK_BUTTON,
   WITHOUT_IMAGE_HEADER_PADDING_LEFT,
@@ -34,7 +34,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ value, backTo }) => {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.headerContainer}>
       <View style={styles.header}>
         {!SHOW_NO_BACK_BUTTON.includes(value) && (
           <TouchableOpacity onPress={handlePress} style={styles.iconContainer}>
@@ -42,17 +42,18 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ value, backTo }) => {
           </TouchableOpacity>
         )}
         <View
-        // style={
-        //   SHOW_NO_BACK_BUTTON.includes(value)
-        //     ? styles.iconContainerWithoutBackIcon
-        //     : styles.iconContainerWithBackIcon
-        // }
+          // style={
+          //   SHOW_NO_BACK_BUTTON.includes(value)
+          //     ? styles.iconContainerWithoutBackIcon
+          //     : styles.iconContainerWithBackIcon
+          // }
+          style={styles.headerTextContainer}
         >
           <Text style={styles.headerText}>{value}</Text>
         </View>
       </View>
       {/* </LinearGradient> */}
-      {value === HOME_SCREEN_VALUE && <Heading />}
+      {/* {value === HOME_SCREEN_VALUE && <Heading />} */}
     </SafeAreaView>
   )
 }

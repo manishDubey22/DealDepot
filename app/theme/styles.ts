@@ -54,6 +54,7 @@ export const commonStyles = {
   },
   colors: {
     primaryColor: colors.customColors.GREEN,
+    secondaryColor: colors.customColors.WHITE,
   },
   fontFamily: {
     bold: "Arial-Rounded-Bold",

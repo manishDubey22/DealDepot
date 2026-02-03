@@ -21,6 +21,7 @@ import {
 } from "@/screens/retailer"
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
+import { commonStyles } from "@/theme/styles"
 
 import { Icon } from "../../../assets/icons/wholeSeller"
 import { RetailerRoutes } from "../retailer/routes"
@@ -233,7 +234,7 @@ export const RetailerStackNavigation = ({
             display: "none",
           },
           headerStyle: {
-            backgroundColor: colors.customColors.WHITE,
+            backgroundColor: commonStyles.colors.secondaryColor,
             // @ts-expect-error - height property not in type but works at runtime
             height: 80,
             elevation: 5,

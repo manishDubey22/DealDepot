@@ -43,7 +43,7 @@ export default function CreateNewAccount({ navigation }: any) {
         bottomOffset={20}
         contentContainerStyle={styles.scrollContent}
       >
-        <SafeAreaView style={styles.safeAreaView}>
+        <SafeAreaView edges={["bottom", "left", "right"]} style={styles.safeAreaView}>
           <Text style={styles.heading}>{UI_TEXT.JOIN_US_HEADING}</Text>
           <Text style={styles.subtitle}>{UI_TEXT.SUBTITLE_TEXT}</Text>
           <View style={styles.textInputContainer}>

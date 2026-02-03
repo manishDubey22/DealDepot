@@ -22,11 +22,15 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.palette.neutral100,
     borderBottomColor: colors.customColors.MEDIUM_GRAY,
     borderBottomWidth: StyleSheet.hairlineWidth,
+    display: "flex",
     flexDirection: "row",
     gap: 6,
-    paddingBottom: 10,
+    padding: 10,
     // height: HEADER_HEIGHT,
     // paddingHorizontal: HEADER_PADDING_HORIZONTAL,
+  },
+  headerContainer: {
+    height: 90,
   },
   headerText: {
     color: colors.customColors.BLACK,
@@ -36,6 +40,10 @@ export const styles = StyleSheet.create({
     // textShadowColor: TEXT_SHADOW_COLOR,
     // textShadowOffset: TEXT_SHADOW_OFFSET,
     // textShadowRadius: TEXT_SHADOW_RADIUS,
+  },
+  headerTextContainer: {
+    height: 20,
+    paddingLeft: 10,
   },
   icon: {
     height: ICON_HEIGHT,
