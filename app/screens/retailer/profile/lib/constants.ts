@@ -1,7 +1,9 @@
 export const UI_TEXT = {
   PROFILE_TITLE: "Profile",
+  RETAILER_NAME: "Retailer Name",
   NAME: "Name",
   EMAIL: "Email",
+  PREMIUM_MEMBER: "Premium Member",
   STORE_NAME: "Store Name",
   LOCATION: "Location",
   CITY: "City",

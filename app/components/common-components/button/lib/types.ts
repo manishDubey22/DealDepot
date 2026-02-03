@@ -1,3 +1,5 @@
+import { ReactNode } from "react"
+
 export interface ButtonFieldProps {
   value: string
   screen?: string
@@ -6,4 +8,7 @@ export interface ButtonFieldProps {
   btnDisable?: boolean
   handleNewPasswordScreen?: () => void
   isLoading?: boolean
+  icon?: ReactNode
+  textAlign?: "center" | "left"
+  variant?: "default" | "active" | "disabled"
 }

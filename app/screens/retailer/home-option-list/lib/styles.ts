@@ -1,22 +1,41 @@
 import { StyleSheet } from "react-native"
+import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions"
 
 import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 export const styles = StyleSheet.create({
   button: {
-    backgroundColor: colors.customColors.LIGHTGREEN,
-    color: colors.customColors.WHITE,
-    fontSize: 20,
-    padding: 15,
+    alignItems: "center",
+    backgroundColor: commonStyles.colors.primaryColor,
+    borderRadius: 12,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    paddingHorizontal: responsiveWidth(4),
+    paddingVertical: responsiveHeight(2),
+    width: "100%",
+  },
+  buttonIcon: {
+    height: 24,
+    width: 24,
+  },
+  buttonIconCircle: {
+    alignItems: "center",
+    backgroundColor: commonStyles.colors.tertiaryColor,
+    borderRadius: 999,
+    justifyContent: "center",
+    marginRight: responsiveWidth(3),
+    padding: 10,
   },
   buttonsContainer: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: 20,
-    marginBottom: 5,
+    alignSelf: "stretch",
+    gap: 16,
+    marginBottom: responsiveHeight(2),
+    marginTop: responsiveHeight(4),
+    width: "100%",
   },
   closeButton: {
-    backgroundColor: colors.customColors.LIGHTGREEN,
+    backgroundColor: colors.customColors.GREEN,
     borderRadius: 5,
     padding: 10,
   },
@@ -25,16 +44,26 @@ export const styles = StyleSheet.create({
     fontSize: 16,
   },
   contactUsText: {
-    fontSize: 16,
-    fontWeight: "bold",
+    color: colors.palette.neutral500,
+    fontSize: 14,
   },
   container: {
-    alignItems: "center",
+    backgroundColor: commonStyles.colors.secondaryColor,
     flex: 1,
-    justifyContent: "space-around",
-    marginTop: "15%",
-    padding: 10,
-    paddingBottom: "20%",
+    flexDirection: "column",
+    paddingBottom: responsiveHeight(2),
+    paddingHorizontal: responsiveWidth(5),
+    paddingTop: responsiveHeight(2),
+  },
+  contentWrapper: {
+    flex: 1,
+    justifyContent: "center",
+    // marginVertical: "auto",
+  },
+  externalLinkIcon: {
+    height: 16,
+    marginLeft: 4,
+    width: 16,
   },
   footerImage: {
     bottom: 0,
@@ -42,11 +71,17 @@ export const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
   },
+  footerRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: responsiveHeight(4),
+  },
   guide: {
     color: colors.customColors.BLACK,
     fontFamily: "Arial-Rounded-Bold",
-    fontSize: 35,
-    marginBottom: "10%",
+    fontSize: 28,
+    fontWeight: "bold",
     textAlign: "center",
   },
   icon: {
@@ -58,6 +93,22 @@ export const styles = StyleSheet.create({
     borderRadius: 50,
     marginBottom: 20,
     padding: 10,
+  },
+  iconWrapper: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  image: {
+    height: 65,
+    width: 65,
+  },
+  logoContainer: {
+    alignItems: "center",
+    borderRadius: 12,
+    height: responsiveWidth(20),
+    justifyContent: "center",
+    marginBottom: responsiveHeight(3),
+    width: responsiveWidth(20),
   },
   modalContainer: {
     alignItems: "center",
@@ -86,11 +137,27 @@ export const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
   },
-  textdata: {
-    color: colors.palette.neutral100,
-    fontSize: 26,
-    fontWeight: "700",
+  screenContentContainer: {
+    flexGrow: 1,
+  },
+
+  scrollContent: {
+    alignItems: "center",
+    flexGrow: 1,
+    justifyContent: "center",
+  },
+  subtitle: {
+    color: colors.palette.neutral500,
+    fontSize: 16,
+    marginTop: responsiveHeight(1),
     textAlign: "center",
+  },
+  textdata: {
+    color: commonStyles.colors.secondaryColor,
+    flex: 1,
+    fontSize: 17,
+    fontWeight: "600",
+    textAlign: "left",
   },
 })
 

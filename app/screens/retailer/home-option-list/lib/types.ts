@@ -1,4 +1,4 @@
-import type { WhoAmIResponse } from "@/api/retailer/auth/whoami"
+import type { WhoAmIResponse } from "@/api/retailer/auth/types"
 
 export interface UseHomeOptionListReturn {
   showPopup: boolean

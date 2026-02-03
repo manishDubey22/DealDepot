@@ -5,13 +5,10 @@ import { useNavigation } from "@react-navigation/native"
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { RetailerRoutes } from "@/navigators/retailer/routes"
-import { Heading } from "@/screens/retailer"
+// import { Heading } from "@/screens/retailer"
 
 import {
-  // GRADIENT_COLOR,
-  // GRADIENT_END,
-  // GRADIENT_START,
-  HOME_SCREEN_VALUE,
+  // HOME_SCREEN_VALUE,
   NAVIGATE_TO_OPTIONS_SCREENS,
   SHOW_NO_BACK_BUTTON,
   WITHOUT_IMAGE_HEADER_PADDING_LEFT,
@@ -21,8 +18,7 @@ import { styles } from "./lib/styles"
 import type { HeaderComponentProps } from "./lib/types"
 import { Icon } from "../../../../assets/icons/wholeSeller"
 
-const HeaderComponent: React.FC<HeaderComponentProps> = ({ value }) => {
-  const insets = useSafeAreaInsets()
+const HeaderComponent: React.FC<HeaderComponentProps> = ({ value, backTo }) => {
   const navigation = useNavigation()
 
   const handlePress = () => {
@@ -30,35 +26,34 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ value }) => {
     if (NAVIGATE_TO_OPTIONS_SCREENS.includes(value)) {
       // @ts-expect-error - navigation type doesn't include all RetailerRoutes
       navigation.navigate(RetailerRoutes.OPTIONS)
+    } else if (backTo) {
+      backTo()
     } else {
       navigation.goBack()
     }
   }
 
   return (
-    <SafeAreaView style={{ paddingTop: insets.top }}>
-      {/* <LinearGradient
-        colors={[GRADIENT_COLOR, GRADIENT_COLOR]}
-        start={GRADIENT_START}
-        end={GRADIENT_END}
-        style={styles.header}
-      > */}
-      {!SHOW_NO_BACK_BUTTON.includes(value) && (
-        <TouchableOpacity onPress={handlePress} style={styles.iconContainer}>
-          <Image source={Icon.LeftArrow} resizeMode="contain" style={styles.icon} />
-        </TouchableOpacity>
-      )}
-      <View
-        style={
-          SHOW_NO_BACK_BUTTON.includes(value)
-            ? styles.iconContainerWithoutBackIcon
-            : styles.iconContainerWithBackIcon
-        }
-      >
-        <Text style={styles.headerText}>{value}</Text>
+    <SafeAreaView style={styles.headerContainer}>
+      <View style={styles.header}>
+        {!SHOW_NO_BACK_BUTTON.includes(value) && (
+          <TouchableOpacity onPress={handlePress} style={styles.iconContainer}>
+            <Image source={Icon.LeftBackArrow} resizeMode="contain" style={styles.icon} />
+          </TouchableOpacity>
+        )}
+        <View
+          // style={
+          //   SHOW_NO_BACK_BUTTON.includes(value)
+          //     ? styles.iconContainerWithoutBackIcon
+          //     : styles.iconContainerWithBackIcon
+          // }
+          style={styles.headerTextContainer}
+        >
+          <Text style={styles.headerText}>{value}</Text>
+        </View>
       </View>
       {/* </LinearGradient> */}
-      {value === HOME_SCREEN_VALUE && <Heading />}
+      {/* {value === HOME_SCREEN_VALUE && <Heading />} */}
     </SafeAreaView>
   )
 }

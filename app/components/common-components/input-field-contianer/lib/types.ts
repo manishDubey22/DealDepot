@@ -1,4 +1,4 @@
-import { StyleProp, TextInputProps, ViewStyle } from "react-native"
+import { StyleProp, TextInputProps, TextStyle, ViewStyle } from "react-native"
 
 export interface ITextContainerProps {
   title: string
@@ -10,6 +10,7 @@ export interface ITextContainerProps {
   onTogglePassword?: () => void
   dropdownData?: Array<{ key: string; value: string }>
   setSelectedValue?: React.Dispatch<React.SetStateAction<string>>
+  titleStyle?: StyleProp<TextStyle>
 }
 
 export type IProps = ITextContainerProps & TextInputProps

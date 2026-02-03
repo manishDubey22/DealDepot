@@ -15,11 +15,13 @@ import {
   ProductDescription,
   Profile,
   SaveOrder,
+  SalesGraph,
   Scanner,
   Search,
 } from "@/screens/retailer"
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
+import { commonStyles } from "@/theme/styles"
 
 import { Icon } from "../../../assets/icons/wholeSeller"
 import { RetailerRoutes } from "../retailer/routes"
@@ -103,6 +105,9 @@ const BottomTabNavigator = () => {
             display: "none" as any,
           },
           headerStyle: {
+            backgroundColor: colors.palette.neutral100,
+            borderBottomColor: colors.palette.neutral300,
+            borderBottomWidth: StyleSheet.hairlineWidth,
             height: 80,
             elevation: 5,
             shadowColor: colors.palette.grey400,
@@ -219,18 +224,7 @@ export const RetailerStackNavigation = ({
         name={RetailerRoutes.LOGIN}
         component={Login}
         options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: colors.palette.neutral100,
-            // height: 100,
-          },
-          headerTitleStyle: {
-            color: colors.palette.charcoal500,
-            fontFamily: CommonStyles.fontFamily.fontFamily,
-            fontSize: 20,
-          },
-          headerTitleAlign: "center",
-          headerTintColor: colors.palette.neutral100,
+          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -238,18 +232,18 @@ export const RetailerStackNavigation = ({
         component={CreateNewAccount}
         options={{
           headerShown: true,
-          headerStyle: {
-            backgroundColor: colors.customColors.WHITE,
-            // height: 100,
-          },
           headerTitleStyle: {
-            color: colors.palette.charcoal500,
-            fontFamily: CommonStyles.fontFamily.fontFamily,
-            fontSize: 20,
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
           },
-          headerTitle: "Create New Account",
-          headerTitleAlign: "center",
-          headerTintColor: colors.palette.neutral100,
+          headerStyle: {
+            backgroundColor: commonStyles.colors.secondaryColor,
+            // @ts-expect-error - height property not in type but works at runtime
+            height: 80,
+            elevation: 5,
+            shadowColor: colors.palette.grey400,
+          },
+          header: () => <HeaderComponent value="Create Account" />,
         }}
       />
       <Stack.Screen
@@ -333,22 +327,24 @@ export const RetailerStackNavigation = ({
           header: () => <HeaderComponent value="Product Description" />,
         }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.SALES_GRAPH}
         component={SalesGraph}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
           },
           headerStyle: {
+            // @ts-expect-error - display property not in type but works at runtime
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Sales Graph" />,
         }}
-      /> */}
+      />
       {/* <Stack.Screen
         name={RetailerRoutes.UPLOAD_FILE}
         component={UploadFile}

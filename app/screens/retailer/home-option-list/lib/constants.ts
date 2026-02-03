@@ -9,6 +9,7 @@ export const MADRCHECKER_URL = "https://www.MADRCHECKER.com"
 
 export const UI_TEXT = {
   GUIDE_TITLE: "WIC MADR GUIDE",
+  SUBTITLE_TEXT: "Your B2B retail management platform",
   CONTACT_US_TEXT: "Contact us: www.MADRCHECKER.com",
   MODAL_TITLE: "Membership required !",
   MODAL_TEXT: "You are a using a free trail version . Upgrade to our premium membership plans.",

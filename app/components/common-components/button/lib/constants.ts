@@ -1,8 +1,8 @@
-import { CommonStyles } from "@/theme/common-styles"
+import { commonStyles } from "@/theme/styles"
 
-export const FONT_FAMILY = CommonStyles.fontFamily.fontFamily
+export const FONT_FAMILY = commonStyles.fontFamily.regular
 
-export const FONT_SIZE = 18
+export const FONT_SIZE = commonStyles.fontSize.medium
 
 export const PADDING_HORIZONTAL = 40
 

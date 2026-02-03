@@ -14,15 +14,15 @@ export const HEADER_HEIGHT = 80
 
 export const HEADER_PADDING_HORIZONTAL = 10
 
-export const HEADER_TEXT_FONT_SIZE = 24
+export const HEADER_TEXT_FONT_SIZE = 18
 
 export const FONT_FAMILY = CommonStyles.fontFamily.fontFamily
 
-export const ICON_WIDTH = 40
+export const ICON_WIDTH = 20
 
-export const ICON_HEIGHT = 40
+export const ICON_HEIGHT = 20
 
-export const ICON_CONTAINER_PADDING = 10
+export const ICON_CONTAINER_PADDING = 5
 
 export const ICON_PLACEHOLDER_WIDTH = 25
 
