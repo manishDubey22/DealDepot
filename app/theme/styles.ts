@@ -56,6 +56,8 @@ export const commonStyles = {
     primaryColor: colors.palette.green800,
     secondaryColor: colors.customColors.WHITE,
     tertiaryColor: colors.palette.green400,
+    quaternaryColor: colors.palette.red600,
+    quinaryColor: colors.palette.neutral300,
   },
   fontFamily: {
     bold: "Arial-Rounded-Bold",
@@ -71,10 +73,10 @@ export const commonStyles = {
     normal: "normal",
   },
   fontWeight: {
-    bold: "700",
-    light: "300",
-    medium: "500",
-    regular: "400",
+    bold: 700,
+    light: 300,
+    medium: 500,
+    regular: 400,
   },
   textAlign: {
     center: "center",

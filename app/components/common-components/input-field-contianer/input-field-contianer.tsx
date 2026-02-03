@@ -22,11 +22,12 @@ export const InputFieldContianer = ({
   editable,
   dropdownData,
   setSelectedValue,
+  titleStyle,
   ...rest
 }: IProps) => {
   return (
     <View style={textContainerStyle}>
-      <Text style={styles.titleText}>{title}</Text>
+      <Text style={[styles.titleText, titleStyle]}>{title}</Text>
       {dropdownData ? (
         <View style={{ marginTop: DROPDOWN_MARGIN_TOP_VALUE }}>
           <SelectList
