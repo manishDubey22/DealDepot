@@ -142,16 +142,16 @@ export default function Search({ navigation }: any) {
   return (
     <View style={styles.mainContainer}>
       <SafeAreaView style={styles.container}>
-        <View style={styles.searchCard}>
-          <SearchField
-            setQuery={setQuery}
-            query={query}
-            handleOnSearchIcon={() => query && handleSearch(query)}
-            isLoading={isLoading}
-            handleDelete={handleClearSearch}
-            debouncedSearch={debouncedSearch}
-          />
-        </View>
+        {/* <View style={styles.searchCard}> */}
+        <SearchField
+          setQuery={setQuery}
+          query={query}
+          handleOnSearchIcon={() => query && handleSearch(query)}
+          isLoading={isLoading}
+          handleDelete={handleClearSearch}
+          debouncedSearch={debouncedSearch}
+        />
+        {/* </View> */}
       </SafeAreaView>
 
       <ScrollView
@@ -166,7 +166,7 @@ export default function Search({ navigation }: any) {
             >
               <Text style={styles.peerGroupButtonText}>{selectedCategory ?? isCategoryAll}</Text>
               <Image
-                source={Icon.DOWNARROWICON}
+                source={Icon.LeftBackArrow}
                 resizeMode="contain"
                 style={styles.dropdownArrow}
               />
@@ -178,7 +178,7 @@ export default function Search({ navigation }: any) {
             >
               <Text style={styles.peerGroupButtonText}>{selectedSubCategory ?? "Subcategory"}</Text>
               <Image
-                source={Icon.DOWNARROWICON}
+                source={Icon.LeftBackArrow}
                 resizeMode="contain"
                 style={styles.dropdownArrow}
               />

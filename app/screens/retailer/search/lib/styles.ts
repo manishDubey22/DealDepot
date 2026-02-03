@@ -7,6 +7,7 @@ import {
 
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
+import { commonStyles } from "@/theme/styles"
 
 const { width, height } = Dimensions.get("window")
 
@@ -49,9 +50,10 @@ export const styles = StyleSheet.create({
     paddingTop: 12,
   },
   dropdownArrow: {
-    height: 16,
+    height: 10,
     marginLeft: 4,
-    width: 16,
+    transform: [{ rotate: "-90deg" }],
+    width: 10,
   },
   emptyText: {
     color: colors.palette.neutral600,
@@ -128,11 +130,14 @@ export const styles = StyleSheet.create({
   },
   peerGroupButton: {
     alignItems: "center",
-    backgroundColor: colors.palette.neutral300,
-    borderRadius: 999,
+    backgroundColor: commonStyles.colors.backgroundSecondary,
+    borderColor: commonStyles.colors.border,
+    borderRadius: commonStyles.borderRadius.large,
+    borderWidth: 1,
+    display: "flex",
     flex: 1,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     paddingHorizontal: responsiveWidth(4),
     paddingVertical: 12,
   },
@@ -153,8 +158,8 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   searchCard: {
-    backgroundColor: colors.palette.neutral300,
-    borderRadius: 999,
+    // backgroundColor: commonStyles.colors.backgroundSecondary,
+    borderRadius: commonStyles.borderRadius.large,
     marginBottom: 4,
     paddingHorizontal: 16,
     paddingVertical: 8,
