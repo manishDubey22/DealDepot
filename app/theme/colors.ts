@@ -122,6 +122,20 @@ const palette = {
   charcoal700: "#262626",
   charcoal800: "#1E1E1E",
   charcoal900: "#141414",
+
+  green: {
+    primary: "#6CC51D",
+    primaryDark: "#4E9E14",
+    primaryLight: "#8DD84F",
+
+    soft: "#AEDC81",
+    softDark: "#8FBE5E",
+    softLight: "#C4E69F",
+
+    mint: "#EBFFD7",
+    mintDark: "#D6F5B8",
+    mintLight: "#F3FFE6",
+  },
 } as const
 
 const customColors = {

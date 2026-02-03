@@ -58,6 +58,21 @@ export const commonStyles = {
     tertiaryColor: colors.palette.green400,
     quaternaryColor: colors.palette.red600,
     quinaryColor: colors.palette.neutral300,
+
+    background: colors.palette.neutral100,
+    backgroundSecondary: colors.palette.neutral300,
+    backgroundTertiary: colors.palette.grey100,
+
+    text: colors.palette.black500,
+    textSecondary: colors.palette.grey500,
+
+    link: colors.palette.blue400,
+
+    border: colors.palette.grey300,
+
+    primary: colors.palette.green.soft,
+    primaryDark: colors.palette.green.primary,
+    primaryLight: colors.palette.green.mint,
   },
   fontFamily: {
     bold: "Arial-Rounded-Bold",
