@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react"
 import {
   View,
   Text,
@@ -8,234 +7,57 @@ import {
   FlatList,
   RefreshControl,
 } from "react-native"
-import { useFocusEffect } from "@react-navigation/native"
-import debounce from "lodash/debounce"
 import { ScrollView } from "react-native-gesture-handler"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { Toast } from "react-native-toast-message/lib/src/Toast"
 
-import { productQueryOptions } from "@/api/retailer/product"
 import type { Product } from "@/api/retailer/product/types"
 import SearchField from "@/components/common-components/search-field/search-field"
-import { useRetailerAuth } from "@/context/RetailerAuthContext"
-import { STORAGE_KEY } from "@/lib/constants"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { colors } from "@/theme/colors"
-import { loadString, save } from "@/utils/storage"
 
 import ModalComponent from "./components/modal-component"
+import { useSearch } from "./hooks/use-search"
 import { styles } from "./lib/styles"
+import { Icon } from "../../../../assets/icons/wholeSeller"
 import { Images } from "../../../../assets/Images/wholeSeller"
 
 export default function Search({ navigation }: any) {
-  const { userAuth, userRole } = useRetailerAuth()
-  const userDetails = userAuth
-    ? {
-        userId: userAuth.userId,
-        accessToken: userAuth.accessToken,
-        refreshToken: userAuth.refreshToken,
-      }
-    : null
-
-  const [query, setQuery] = useState("")
-  const [ItemsArray, setItemsArray] = useState<Product[]>([])
-  const [trendingArray, setTrendingArray] = useState<Product[]>([])
-  const [isStartSearch, setIsStartSearch] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null)
-  const [isCategoryModalVisible, setCategoryModalVisible] = useState(false)
-  const [isSubCategoryModalVisible, setSubCategoryModalVisible] = useState(false)
-  const [shouldTrendingDataFetch, setShouldTrendingDataFetch] = useState<boolean>(false)
-  const [peerGroup, setPeerGroup] = useState("")
-  const [isCategoryAll, setIsCategoryAll] = useState<string>("Category")
-  const [refreshing, setRefreshing] = useState<boolean>(false)
-
-  const onCategorySelect = (category: string) => {
-    if (category === "All") {
-      handleShowAll()
-    } else {
-      setSelectedCategory(category)
-      setSubCategoryModalVisible(true)
-    }
-  }
-
-  const onSubCategorySelect = (subcategory: string) => {
-    setSelectedSubCategory(subcategory)
-  }
-
   const {
-    data: filteredData,
-    isSuccess: isSucces,
-    // isError: isErrorproduct,
-    refetch: refetchCategoryList,
-  } = productQueryOptions.useProductsByNameAndCategoryQuery(
-    {
-      retailerId: userDetails?.userId || "",
-      name: query,
-      category: selectedCategory || "",
-      subcategory: selectedSubCategory || "",
-    },
-    {
-      enabled: !!(userDetails?.userId && selectedCategory && selectedSubCategory),
-    },
-  )
-  useEffect(() => {
-    console.log("22222 filteredData => ", filteredData)
-    console.log("33333 isSucces => ", isSucces)
-    if (isSucces && filteredData?.data) {
-      console.log("44444 filteredData.data => ", filteredData.data)
-      setItemsArray(filteredData.data)
-    }
-  }, [isSucces, filteredData, refetchCategoryList, query, selectedCategory, selectedSubCategory])
-
-  const {
-    data: categoryListData,
-    // isLoading: isLoadingCategoryList,
-    error: categoryListError,
-  } = productQueryOptions.useCategoryListQuery({
-    retailerId: userDetails?.userId || "",
-  })
-
-  // Handle category list errors
-  useEffect(() => {
-    if (categoryListError) {
-      console.log("Category list API error:", categoryListError)
-      // Don't show error toast for 404s as this might be expected
-      if (categoryListError?.status !== 404) {
-        Toast.show({
-          type: "error",
-          text1: "Failed to load categories",
-          text2: "Some features may not be available",
-        })
-      }
-    }
-  }, [categoryListError])
-
-  const {
-    data: subCategoryListData,
-    // isLoading: isLoadingSubCategoryList,
-    // error: subCategoryListError,
-  } = productQueryOptions.useSubCategoryListQuery(
-    {
-      retailerId: userDetails?.userId || "",
-      category: selectedCategory || "",
-    },
-    {
-      enabled: !!selectedCategory && !!userDetails?.userId,
-    },
-  )
-
-  const {
-    data: trendingData,
-    isSuccess: isSuccessTrendingData,
-    isLoading: isLoadingTrendingData,
-    isError: isErrorTrendingData,
-    refetch: refetchTrendingData,
-    error: errorTrendingData,
-  } = productQueryOptions.useTrendingProductsQuery(userDetails?.userId, {
-    enabled: !!userDetails?.userId,
-  })
-
-  // Handle trending products errors
-  useEffect(() => {
-    if (errorTrendingData) {
-      console.log("Trending products API error:", errorTrendingData)
-      // Don't show error toast for 404s as this might be expected
-      if (errorTrendingData?.status !== 404) {
-        Toast.show({
-          type: "error",
-          text1: "Failed to load trending products",
-          text2: "Some features may not be available",
-        })
-      }
-    }
-  }, [errorTrendingData])
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true)
-    refetchTrendingData()
-      .then(() => {
-        const key = loadString("peergroup")
-        setPeerGroup(key || "")
-        setRefreshing(false)
-      })
-      .catch((refreshError) => {
-        console.error("Error occurred while refreshing:", refreshError)
-        setRefreshing(false)
-      })
-  }, [refetchTrendingData])
-
-  useFocusEffect(
-    useCallback(() => {
-      onRefresh()
-    }, [onRefresh]),
-  )
-
-  useEffect(() => {
-    if (trendingData?.data) {
-      setItemsArray(trendingData.data)
-    }
-  }, [trendingData])
-
-  const {
-    data: searchedItems,
-    isSuccess,
+    categoryDescArray,
+    debouncedSearch,
+    filteredData,
+    handleClearSearch,
+    handleSearch,
+    isCategoryAll,
+    isCategoryModalVisible,
+    isSubCategoryModalVisible,
     isLoading,
-    isError,
-    error,
-    refetch,
-    status,
-  } = productQueryOptions.useSearchProductsQuery(
-    {
-      name: query,
-      retailerId: userDetails?.userId || "",
-    },
-    {
-      enabled: isStartSearch && !!query && !!userDetails?.userId,
-    },
-  )
+    isLoadingTrendingData,
+    itemsArray,
+    onCategorySelect,
+    onRefresh,
+    onSubCategorySelect,
+    peerGroup,
+    query,
+    refreshing,
+    selectedCategory,
+    selectedSubCategory,
+    setCategoryModalVisible,
+    setQuery,
+    setSubCategoryModalVisible,
+    subCategoryDescArray,
+    trendingArray,
+  } = useSearch()
 
-  const handleShowAll = () => {
-    refetchTrendingData()
-    setIsStartSearch(false)
-    setQuery("")
-    setShouldTrendingDataFetch(true)
-    setSelectedCategory(null)
-    setSelectedSubCategory(null)
-    setIsCategoryAll("All")
-  }
-
-  const categoryDescArray = categoryListData?.data ? ["All", ...categoryListData.data] : []
-
-  const subCategoryDescArray = subCategoryListData?.data
-
-  const debouncedSearch = useCallback(
-    debounce((nextQuery: string) => {
-      if (nextQuery && nextQuery.trim().length > 0) {
-        setIsStartSearch(true)
-      }
-    }, 1000),
-    [],
-  )
-
-  useEffect(() => {
-    console.log(`Refetching: isStartSearch is ${isStartSearch}, query is ${query}`)
-    if (query && isStartSearch) {
-      console.log("Calling refetch...wowwwww")
-      refetch()
-    }
-  }, [query, isStartSearch, refetch, peerGroup])
-
-  useEffect(() => {
-    const key = loadString("peergroup")
-    setPeerGroup(key || "")
-  }, [])
-  console.log("peerGroup", peerGroup)
-  const CardItem = ({ modifyValue }: any) => {
+  const renderCardItem = (modifyValue: Product) => {
     const priceInfo = modifyValue?.adminPrice && modifyValue?.adminPrice[peerGroup]
     const sortedPriceInfo = priceInfo?.length
       ? [...priceInfo].sort((a, b) => new Date(b.Date).getTime() - new Date(a.Date).getTime())
       : null
+    const categorySubcategory =
+      modifyValue?.subCategory_desc != null && modifyValue?.subCategory_desc !== ""
+        ? `${modifyValue?.category_desc || ""} • ${modifyValue?.subCategory_desc || ""}`
+        : modifyValue?.category_desc || ""
 
     return (
       <TouchableOpacity
@@ -256,8 +78,8 @@ export default function Search({ navigation }: any) {
           </View>
           <View style={styles.productInfo}>
             <Text style={styles.helperText1}>{modifyValue?.product_desc}</Text>
-            <Text style={styles.helperText2}>{modifyValue?.category_desc}</Text>
-            <Text style={styles.helperText2}>00{modifyValue?.product_id}</Text>
+            <Text style={styles.helperText2}>{categorySubcategory}</Text>
+            <Text style={styles.helperText2}>ID: {modifyValue?.product_id}</Text>
           </View>
           <View style={styles.priceContainer}>
             <Text style={styles.helperText3}>
@@ -265,68 +87,9 @@ export default function Search({ navigation }: any) {
             </Text>
           </View>
         </View>
-        {/* <Image source={Icon.CART} style={{width: 25, height: 22}} /> */}
       </TouchableOpacity>
     )
   }
-
-  useEffect(() => {
-    if (isSuccessTrendingData && trendingData?.data) {
-      setTrendingArray(trendingData.data)
-      setItemsArray(trendingData.data)
-      setShouldTrendingDataFetch(false)
-    } else if (isErrorTrendingData) {
-      Toast.show({
-        type: "error",
-        text1: "Server Error",
-        position: "top",
-        topOffset: 90,
-      })
-      console.log("error occur in tendingData", errorTrendingData)
-    }
-  }, [
-    isSuccessTrendingData,
-    isErrorTrendingData,
-    trendingData,
-    shouldTrendingDataFetch,
-    errorTrendingData,
-  ])
-
-  useEffect(() => {
-    console.log(isSuccess, "isSuccess", isLoading, "isLoading", isError, "isError")
-
-    if (isSuccess && status === "fulfilled" && searchedItems?.data) {
-      console.log("55555 searchedItems.data => ", searchedItems.data)
-      setItemsArray(searchedItems.data.slice(0, 20))
-      setIsStartSearch(false)
-    } else if (isError) {
-      setQuery("")
-      Toast.show({
-        type: "error",
-        text1: "Server Error",
-        position: "top",
-        topOffset: 90,
-      })
-      setIsStartSearch(false)
-      console.log("error occur in homePage", error)
-    }
-  }, [isSuccess, isError, searchedItems, isStartSearch, refetch, status, isLoading, error])
-
-  useEffect(() => {
-    if (userDetails && userRole) {
-      try {
-        const userInfo = {
-          role: userRole,
-          authToken: userDetails?.accessToken,
-          userId: userDetails?.userId,
-          refreshToken: userDetails?.refreshToken,
-        }
-        save(STORAGE_KEY.USER_INFO, userInfo)
-      } catch (error) {
-        console.error("Error storing user details: ", error)
-      }
-    }
-  }, [userDetails, userRole])
 
   const renderData = () => {
     if (isLoading || isLoadingTrendingData) {
@@ -337,18 +100,19 @@ export default function Search({ navigation }: any) {
       )
     }
 
-    if (ItemsArray?.length > 0) {
+    if (itemsArray?.length > 0) {
       return (
         <FlatList
-          data={ItemsArray}
+          data={itemsArray}
           keyExtractor={(item) => item.product_id.toString()}
-          renderItem={({ item }) => <CardItem modifyValue={item} />}
+          renderItem={({ item }) => renderCardItem(item)}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContent}
         />
       )
     }
 
-    if (query && filteredData?.data.length === 0) {
+    if (query && filteredData?.data?.length === 0) {
       return (
         <View style={styles.loaderContainer}>
           <Text style={styles.emptyText}>No Products found</Text>
@@ -361,8 +125,9 @@ export default function Search({ navigation }: any) {
         <FlatList
           data={trendingArray}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => <CardItem modifyValue={item} />}
+          renderItem={({ item }) => renderCardItem(item)}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContent}
         />
       )
     }
@@ -374,17 +139,6 @@ export default function Search({ navigation }: any) {
     )
   }
 
-  useEffect(() => {
-    if ((query === "" || query.trim() === "") && trendingData?.data) {
-      setItemsArray(trendingData.data)
-    }
-  }, [query, trendingData])
-
-  const handleSearch = (query: string) => {
-    setQuery(query)
-    setIsStartSearch(true)
-  }
-
   return (
     <View style={styles.mainContainer}>
       <SafeAreaView style={styles.container}>
@@ -394,14 +148,7 @@ export default function Search({ navigation }: any) {
             query={query}
             handleOnSearchIcon={() => query && handleSearch(query)}
             isLoading={isLoading}
-            handleDelete={() => {
-              refetchTrendingData()
-              setIsStartSearch(false)
-              setQuery("")
-              setShouldTrendingDataFetch(true)
-              setSelectedCategory(null)
-              setSelectedSubCategory(null)
-            }}
+            handleDelete={handleClearSearch}
             debouncedSearch={debouncedSearch}
           />
         </View>
@@ -411,26 +158,30 @@ export default function Search({ navigation }: any) {
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        {!(!isLoading && ItemsArray?.length > 0 && query) && (
+        {!(!isLoading && itemsArray?.length > 0 && query) && (
           <View style={styles.categoryContainer}>
             <TouchableOpacity
               style={styles.peerGroupButton}
-              onPress={() => {
-                setCategoryModalVisible(true)
-              }}
+              onPress={() => setCategoryModalVisible(true)}
             >
-              <Text style={styles.peerGroupButtonText}>
-                {selectedCategory ? selectedCategory : isCategoryAll}
-              </Text>
+              <Text style={styles.peerGroupButtonText}>{selectedCategory ?? isCategoryAll}</Text>
+              <Image
+                source={Icon.DOWNARROWICON}
+                resizeMode="contain"
+                style={styles.dropdownArrow}
+              />
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.peerGroupButton}
               onPress={() => selectedCategory && setSubCategoryModalVisible(true)}
             >
-              <Text style={styles.peerGroupButtonText}>
-                {selectedSubCategory ? selectedSubCategory : "SubCategory"}
-              </Text>
+              <Text style={styles.peerGroupButtonText}>{selectedSubCategory ?? "Subcategory"}</Text>
+              <Image
+                source={Icon.DOWNARROWICON}
+                resizeMode="contain"
+                style={styles.dropdownArrow}
+              />
             </TouchableOpacity>
 
             <ModalComponent

@@ -1,49 +1,65 @@
-import { Dimensions, StyleSheet } from "react-native"
-import { responsiveFontSize, responsiveHeight } from "react-native-responsive-dimensions"
+import { Dimensions, Platform, StyleSheet } from "react-native"
+import {
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from "react-native-responsive-dimensions"
 
 import { colors } from "@/theme/colors"
+import { CommonStyles } from "@/theme/common-styles"
 
-const { width, height } = Dimensions.get("window") // Get the full width and height of the screen
+const { width, height } = Dimensions.get("window")
 
 export const styles = StyleSheet.create({
   cardBox: {
     alignItems: "center",
-    backgroundColor: colors.customColors.WHITE,
-    borderRadius: 5,
-    display: "flex",
-    elevation: 1,
+    backgroundColor: colors.palette.neutral100,
+    borderRadius: 12,
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 6,
-    paddingHorizontal: 26,
-    paddingVertical: 12,
-    shadowColor: colors.palette.grey500,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
+    marginBottom: 12,
+    marginHorizontal: 2,
+    paddingHorizontal: responsiveWidth(4),
+    paddingVertical: 14,
+    ...Platform.select({
+      android: { elevation: 2 },
+      ios: {
+        shadowColor: colors.palette.neutral900,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.08,
+        shadowRadius: 4,
+      },
+    }),
   },
   cardBoxLeft: {
     alignItems: "center",
-    display: "flex",
+    flex: 1,
     flexDirection: "row",
     gap: 12,
-    justifyContent: "space-evenly",
+    justifyContent: "flex-start",
   },
   categoryContainer: {
-    marginTop: 5,
+    flexDirection: "row",
+    gap: responsiveWidth(3),
+    marginBottom: 12,
+    marginTop: 12,
   },
   container: {
-    paddingTop: 10,
+    paddingHorizontal: 0,
+    paddingTop: 12,
+  },
+  dropdownArrow: {
+    height: 16,
+    marginLeft: 4,
+    width: 16,
   },
   emptyText: {
+    color: colors.palette.neutral600,
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "500",
   },
   fileImage: {
-    borderRadius: 5,
+    borderRadius: 8,
     height: 45,
     width: 45,
   },
@@ -60,29 +76,31 @@ export const styles = StyleSheet.create({
   },
   helperText1: {
     color: colors.customColors.BLACK,
-    fontFamily: "Arial-Rounded-Bold",
-    fontSize: 14,
+    fontFamily: CommonStyles.fontFamily.fontFamily,
+    fontSize: 15,
+    fontWeight: "700",
   },
   helperText2: {
-    color: colors.customColors.BLACK,
-    fontFamily: "Arial-Rounded-Bold",
-    fontSize: 17,
+    color: colors.palette.neutral500,
+    fontFamily: CommonStyles.fontFamily.fontFamily,
+    fontSize: 13,
   },
   helperText3: {
-    color: colors.customColors.PASTEL_RED,
-    fontSize: 17,
+    color: colors.customColors.GREEN,
+    fontSize: 16,
     fontWeight: "700",
   },
   image: {
-    height: 60,
-    width: 30,
+    borderRadius: 8,
+    height: 64,
+    width: 64,
   },
   imageContainer: {
-    width: "20%",
+    width: 64,
   },
   latestTrendsHeading: {
     color: colors.customColors.GREEN,
-    fontFamily: "Arial-Rounded-Bold",
+    fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: responsiveFontSize(3),
     marginVertical: 10,
     textAlign: "center",
@@ -90,11 +108,13 @@ export const styles = StyleSheet.create({
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
   },
+  listContent: {
+    paddingBottom: responsiveHeight(8),
+  },
   loaderConatiner: {
     alignItems: "center",
-    display: "flex",
-    flexDirection: "column",
     flex: 1,
+    flexDirection: "column",
     justifyContent: "center",
   },
   loaderContainer: {
@@ -102,43 +122,51 @@ export const styles = StyleSheet.create({
     paddingTop: responsiveHeight(30),
   },
   mainContainer: {
-    backgroundColor: colors.palette.grey50,
+    backgroundColor: colors.palette.neutral200,
     flex: 1,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingHorizontal: responsiveWidth(5),
   },
   peerGroupButton: {
-    backgroundColor: colors.customColors.LIGHTGREEN,
-    borderColor: colors.customColors.MEDIUM_GRAY,
-    marginBottom: 10,
-    padding: 10,
-    width: "100%",
+    alignItems: "center",
+    backgroundColor: colors.palette.neutral300,
+    borderRadius: 999,
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    paddingHorizontal: responsiveWidth(4),
+    paddingVertical: 12,
   },
   peerGroupButtonText: {
-    color: colors.palette.neutral100,
-    fontSize: 25,
-    fontWeight: "800",
-    letterSpacing: 2,
-    textAlign: "center",
+    color: colors.palette.neutral700,
+    fontFamily: CommonStyles.fontFamily.fontFamily,
+    fontSize: 14,
+    fontWeight: "500",
   },
   priceContainer: {
     alignItems: "flex-end",
-    width: "20%",
+    justifyContent: "center",
+    minWidth: 56,
   },
   productInfo: {
-    display: "flex",
-    gap: 8,
-    width: "60%",
+    flex: 1,
+    gap: 2,
+    justifyContent: "center",
   },
   searchCard: {
-    backgroundColor: colors.palette.neutral100,
-    borderRadius: 8,
-    elevation: 3,
-    padding: 5,
-    shadowColor: colors.customColors.BLACK,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    backgroundColor: colors.palette.neutral300,
+    borderRadius: 999,
+    marginBottom: 4,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    ...Platform.select({
+      android: { elevation: 1 },
+      ios: {
+        shadowColor: colors.palette.neutral900,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.06,
+        shadowRadius: 2,
+      },
+    }),
   },
 })
 
