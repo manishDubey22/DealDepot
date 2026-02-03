@@ -36,13 +36,14 @@ export const styles = StyleSheet.create({
     color: colors.customColors.BLACK,
     fontFamily: FONT_FAMILY,
     fontSize: HEADER_TEXT_FONT_SIZE,
+    fontWeight: "bold",
     textAlign: "center",
     // textShadowColor: TEXT_SHADOW_COLOR,
     // textShadowOffset: TEXT_SHADOW_OFFSET,
     // textShadowRadius: TEXT_SHADOW_RADIUS,
   },
   headerTextContainer: {
-    height: 20,
+    height: 30,
     paddingLeft: 10,
   },
   icon: {

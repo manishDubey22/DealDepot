@@ -28,40 +28,48 @@ const HomeOptionList = () => {
   const { showPopup, setShowPopup, navigateHome, madrCheckerLink, buttons } = useHomeOptionList()
 
   return (
-    <Screen preset="auto">
+    <Screen preset="auto" contentContainerStyle={styles.screenContentContainer}>
       <View style={styles.container}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
-        >
-          <Text style={styles.guide}>{UI_TEXT.GUIDE_TITLE}</Text>
-          <Text style={styles.subtitle}>{UI_TEXT.SUBTITLE_TEXT}</Text>
-          <View style={styles.buttonsContainer}>
-            {buttons.map((buttonLabel, index) => {
-              const iconSource = getButtonIcon(buttonLabel)
-              return (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.button}
-                  onPress={() => navigateHome(buttonLabel)}
-                >
-                  {iconSource ? (
-                    <View style={styles.buttonIconCircle}>
-                      <Image source={iconSource} resizeMode="contain" style={styles.buttonIcon} />
-                    </View>
-                  ) : null}
-                  <Text style={styles.textdata}>{buttonLabel}</Text>
-                </TouchableOpacity>
-              )
-            })}
-          </View>
-        </ScrollView>
+        <View style={styles.contentWrapper}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.scrollContent}
+          >
+            {/* Icon Container */}
+            <View style={styles.logoContainer}>
+              <View style={styles.iconWrapper}>
+                <Image source={Icon.LOGO} style={styles.image} />
+              </View>
+            </View>
+            <Text style={styles.guide}>{UI_TEXT.GUIDE_TITLE}</Text>
+            <Text style={styles.subtitle}>{UI_TEXT.SUBTITLE_TEXT}</Text>
+            <View style={styles.buttonsContainer}>
+              {buttons.map((buttonLabel, index) => {
+                const iconSource = getButtonIcon(buttonLabel)
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.button}
+                    onPress={() => navigateHome(buttonLabel)}
+                  >
+                    {iconSource ? (
+                      <View style={styles.buttonIconCircle}>
+                        <Image source={iconSource} resizeMode="contain" style={styles.buttonIcon} />
+                      </View>
+                    ) : null}
+                    <Text style={styles.textdata}>{buttonLabel}</Text>
+                  </TouchableOpacity>
+                )
+              })}
+            </View>
+          </ScrollView>
+        </View>
         <TouchableOpacity style={styles.footerRow} onPress={madrCheckerLink} activeOpacity={0.8}>
           <Text style={styles.contactUsText}>{UI_TEXT.CONTACT_US_TEXT}</Text>
-          <Image source={Icon.UPARROW} resizeMode="contain" style={styles.externalLinkIcon} />
+          {/* <Image source={Icon.UPARROW} resizeMode="contain" style={styles.externalLinkIcon} /> */}
         </TouchableOpacity>
       </View>
-      <Image source={Icon.FOOTER} style={styles.footerImage} />
+      {/* <Image source={Icon.FOOTER} style={styles.footerImage} /> */}
       <Modal transparent={true} visible={showPopup} animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>

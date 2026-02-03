@@ -2,11 +2,12 @@ import { StyleSheet } from "react-native"
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions"
 
 import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 export const styles = StyleSheet.create({
   button: {
     alignItems: "center",
-    backgroundColor: colors.customColors.GREEN,
+    backgroundColor: commonStyles.colors.primaryColor,
     borderRadius: 12,
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -20,7 +21,7 @@ export const styles = StyleSheet.create({
   },
   buttonIconCircle: {
     alignItems: "center",
-    backgroundColor: colors.palette.neutral200,
+    backgroundColor: commonStyles.colors.tertiaryColor,
     borderRadius: 999,
     justifyContent: "center",
     marginRight: responsiveWidth(3),
@@ -47,11 +48,17 @@ export const styles = StyleSheet.create({
     fontSize: 14,
   },
   container: {
-    backgroundColor: colors.palette.neutral200,
+    backgroundColor: commonStyles.colors.secondaryColor,
     flex: 1,
-    paddingBottom: "20%",
+    flexDirection: "column",
+    paddingBottom: responsiveHeight(2),
     paddingHorizontal: responsiveWidth(5),
     paddingTop: responsiveHeight(2),
+  },
+  contentWrapper: {
+    flex: 1,
+    justifyContent: "center",
+    // marginVertical: "auto",
   },
   externalLinkIcon: {
     height: 16,
@@ -87,6 +94,22 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 10,
   },
+  iconWrapper: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  image: {
+    height: 65,
+    width: 65,
+  },
+  logoContainer: {
+    alignItems: "center",
+    borderRadius: 12,
+    height: responsiveWidth(20),
+    justifyContent: "center",
+    marginBottom: responsiveHeight(3),
+    width: responsiveWidth(20),
+  },
   modalContainer: {
     alignItems: "center",
     backgroundColor: colors.palette.black500,
@@ -114,9 +137,14 @@ export const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
   },
+  screenContentContainer: {
+    flexGrow: 1,
+  },
+
   scrollContent: {
     alignItems: "center",
     flexGrow: 1,
+    justifyContent: "center",
   },
   subtitle: {
     color: colors.palette.neutral500,
@@ -125,7 +153,7 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
   textdata: {
-    color: colors.palette.neutral100,
+    color: commonStyles.colors.secondaryColor,
     flex: 1,
     fontSize: 17,
     fontWeight: "600",
