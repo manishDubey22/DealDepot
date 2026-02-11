@@ -79,10 +79,10 @@ export default function Scanner() {
         />
       )}
       <View style={styles.overlay} pointerEvents="none">
-        <View style={styles.overlayTop} />
+        {/* <View style={styles.overlayTop} />
         <View style={styles.overlayBottom} />
         <View style={styles.overlayLeft} />
-        <View style={styles.overlayRight} />
+        <View style={styles.overlayRight} /> */}
         <View style={styles.centerContent}>
           <View style={styles.frame} />
           <Text style={styles.instructionText}>{UI_TEXT.POSITION_BARCODE}</Text>
