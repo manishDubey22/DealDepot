@@ -79,13 +79,14 @@ export default function Scanner() {
         />
       )}
       <View style={styles.overlay} pointerEvents="none">
-        <View style={styles.scanFrame}>
-          <View style={[styles.scanFrameCorner, styles.topLeft]} />
-          <View style={[styles.scanFrameCorner, styles.topRight]} />
-          <View style={[styles.scanFrameCorner, styles.bottomLeft]} />
-          <View style={[styles.scanFrameCorner, styles.bottomRight]} />
+        <View style={styles.overlayTop} />
+        <View style={styles.overlayBottom} />
+        <View style={styles.overlayLeft} />
+        <View style={styles.overlayRight} />
+        <View style={styles.centerContent}>
+          <View style={styles.frame} />
+          <Text style={styles.instructionText}>{UI_TEXT.POSITION_BARCODE}</Text>
         </View>
-        <Text style={styles.instructionText}>{UI_TEXT.POSITION_BARCODE}</Text>
       </View>
     </View>
   )
