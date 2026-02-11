@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useState } from "react"
+import { forwardRef, ReactNode, useRef, useState } from "react"
 import {
   KeyboardAvoidingView,
   KeyboardAvoidingViewProps,
@@ -7,16 +7,51 @@ import {
   ScrollView,
   ScrollViewProps,
   StyleProp,
+  StyleSheet,
   View,
   ViewStyle,
 } from "react-native"
 import { useScrollToTop } from "@react-navigation/native"
 import { SystemBars, SystemBarsProps, SystemBarStyle } from "react-native-edge-to-edge"
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
 
 import { useAppTheme } from "@/theme/context"
 import { $styles } from "@/theme/styles"
 import { ExtendedEdge, useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
+
+const fallbackKeyboardWrapperStyle = StyleSheet.create({ root: { flex: 1 } })
+
+function KeyboardAwareScrollViewFallbackInner(
+  props: ScrollViewProps & { bottomOffset?: number; children?: ReactNode },
+  ref: React.Ref<ScrollView>,
+) {
+  const { bottomOffset = 50, style, contentContainerStyle, children, ...rest } = props
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      keyboardVerticalOffset={bottomOffset}
+      style={[fallbackKeyboardWrapperStyle.root, style]}
+    >
+      <ScrollView
+        ref={ref}
+        contentContainerStyle={contentContainerStyle}
+        keyboardShouldPersistTaps="handled"
+        {...rest}
+      >
+        {children}
+      </ScrollView>
+    </KeyboardAvoidingView>
+  )
+}
+
+const KeyboardAwareScrollViewFallback = forwardRef(KeyboardAwareScrollViewFallbackInner)
+
+let KeyboardAwareScrollView: React.ComponentType<any>
+try {
+  const k = require("react-native-keyboard-controller")
+  KeyboardAwareScrollView = k?.KeyboardAwareScrollView ?? KeyboardAwareScrollViewFallback
+} catch {
+  KeyboardAwareScrollView = KeyboardAwareScrollViewFallback
+}
 
 export const DEFAULT_BOTTOM_OFFSET = 50
 
@@ -210,7 +245,7 @@ function ScreenWithScrolling(props: ScreenProps) {
       bottomOffset={keyboardBottomOffset}
       {...{ keyboardShouldPersistTaps, scrollEnabled, ref }}
       {...ScrollViewProps}
-      onLayout={(e) => {
+      onLayout={(e: LayoutChangeEvent) => {
         onLayout(e)
         ScrollViewProps?.onLayout?.(e)
       }}

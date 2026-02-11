@@ -40,9 +40,10 @@ export default function Order({ navigation }: any) {
           </View>
           <View style={styles.productInfo}>
             <Text style={styles.productDesc}>{item.product_desc}</Text>
-            {item.subCategory_desc && (
+            {item.subCategory_desc != null && item.subCategory_desc !== "" && (
               <Text style={styles.productCategory}>{item.subCategory_desc}</Text>
             )}
+            <Text style={styles.wholesalerText}>{item.wholesaler_id}</Text>
             <Text style={styles.productId}>ID: {item.product_id}</Text>
           </View>
           <View style={styles.priceContainer}>
@@ -52,17 +53,21 @@ export default function Order({ navigation }: any) {
 
         <View style={styles.quantityContainer}>
           <TouchableOpacity
-            style={styles.quantityButton}
+            style={[styles.quantityButton, styles.quantityButtonMinus]}
             onPress={() => handleDecrement(item)}
             disabled={isLoading}
           >
-            <Text style={styles.quantityButtonText}>-</Text>
+            <Text style={[styles.quantityButtonText, styles.quantityButtonTextMinus]}>-</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleQuantityPress(item)} disabled={isLoading}>
+          <TouchableOpacity
+            style={styles.quantityPill}
+            onPress={() => handleQuantityPress(item)}
+            disabled={isLoading}
+          >
             <Text style={styles.quantityText}>{item.items}</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.quantityButton}
+            style={[styles.quantityButton, styles.quantityButtonPlus]}
             onPress={() => handleIncrement(item)}
             disabled={isLoading}
           >
@@ -90,6 +95,9 @@ export default function Order({ navigation }: any) {
       )
     }
 
+    const totalItemCount = cartData.reduce((sum, i) => sum + i.items, 0)
+    const totalPrice = cartData.reduce((sum, i) => sum + i.price * i.items, 0)
+
     return (
       <>
         <FlatList
@@ -99,13 +107,21 @@ export default function Order({ navigation }: any) {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.contentContainer}
           ListFooterComponent={
-            <View style={styles.saveOrderButton}>
-              <ButtonField
-                value={UI_TEXT.SAVE_ORDER}
-                onPress={handlePlaceOrder}
-                isDisabled={isLoading || !cartData || cartData.length === 0}
-                isLoading={isLoading}
-              />
+            <View style={styles.footerSummary}>
+              <View style={styles.footerSummaryLeft}>
+                <Text style={styles.footerSummaryTotalLabel}>
+                  {totalItemCount} {totalItemCount === 1 ? "item" : "items"}
+                </Text>
+                <Text style={styles.footerSummaryTotalPrice}>${totalPrice.toFixed(2)}</Text>
+              </View>
+              <View style={styles.saveOrderButton}>
+                <ButtonField
+                  value={UI_TEXT.SAVE_ORDER}
+                  onPress={handlePlaceOrder}
+                  isDisabled={isLoading || !cartData || cartData.length === 0}
+                  isLoading={isLoading}
+                />
+              </View>
             </View>
           }
         />

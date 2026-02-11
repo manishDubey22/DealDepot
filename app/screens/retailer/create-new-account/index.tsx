@@ -1,7 +1,13 @@
 import { useState } from "react"
-import { View, Text, TouchableOpacity } from "react-native"
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native"
 import { Controller } from "react-hook-form"
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import ButtonField from "@/components/common-components/button/button"
@@ -10,6 +16,41 @@ import { InputFieldContianer } from "@/components/common-components/input-field-
 import { useCreateNewAccount } from "./hooks/use-create-new-account"
 import { UI_TEXT, ERROR_MESSAGES } from "./lib/constants"
 import { styles } from "./lib/styles"
+
+function KeyboardAwareScrollViewFallback(props: {
+  children?: React.ReactNode
+  showsVerticalScrollIndicator?: boolean
+  keyboardShouldPersistTaps?: "handled" | "always" | "never"
+  bottomOffset?: number
+  contentContainerStyle?: object
+}) {
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      keyboardVerticalOffset={props.bottomOffset ?? 20}
+      style={fallbackScrollWrapperStyle}
+    >
+      <ScrollView
+        showsVerticalScrollIndicator={props.showsVerticalScrollIndicator ?? false}
+        keyboardShouldPersistTaps={props.keyboardShouldPersistTaps ?? "handled"}
+        contentContainerStyle={props.contentContainerStyle}
+        style={fallbackScrollWrapperStyle}
+      >
+        {props.children}
+      </ScrollView>
+    </KeyboardAvoidingView>
+  )
+}
+
+const fallbackScrollWrapperStyle = { flex: 1 }
+
+let KeyboardAwareScrollView: typeof KeyboardAwareScrollViewFallback
+try {
+  const k = require("react-native-keyboard-controller")
+  KeyboardAwareScrollView = k?.KeyboardAwareScrollView ?? KeyboardAwareScrollViewFallback
+} catch {
+  KeyboardAwareScrollView = KeyboardAwareScrollViewFallback
+}
 
 export default function CreateNewAccount({ navigation }: any) {
   const [isShowPassword, setIsShowPassword] = useState(true)

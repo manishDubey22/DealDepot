@@ -127,6 +127,9 @@ const BottomTabNavigator = () => {
           },
           tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.SHOPINGCART} focused={focused} />,
           headerStyle: {
+            backgroundColor: colors.palette.neutral100,
+            borderBottomColor: colors.palette.neutral300,
+            borderBottomWidth: StyleSheet.hairlineWidth,
             height: 80,
             elevation: 5,
             shadowColor: colors.palette.grey400,

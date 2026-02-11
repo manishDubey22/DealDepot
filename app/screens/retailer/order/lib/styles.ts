@@ -1,4 +1,5 @@
-import { StyleSheet } from "react-native"
+import { Platform, StyleSheet } from "react-native"
+import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions"
 
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
@@ -6,17 +7,19 @@ import { CommonStyles } from "@/theme/common-styles"
 export const styles = StyleSheet.create({
   cardBox: {
     backgroundColor: colors.palette.neutral100,
-    borderRadius: 8,
-    elevation: 2,
-    marginBottom: 12,
-    padding: 12,
-    shadowColor: colors.palette.black500,
-    shadowOffset: {
-      height: 1,
-      width: 0,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    borderRadius: 12,
+    marginBottom: 14,
+    paddingHorizontal: responsiveWidth(4),
+    paddingVertical: 14,
+    ...Platform.select({
+      android: { elevation: 2 },
+      ios: {
+        shadowColor: colors.palette.neutral900,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.08,
+        shadowRadius: 4,
+      },
+    }),
   },
   cardBoxLeft: {
     alignItems: "center",
@@ -25,16 +28,17 @@ export const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: responsiveWidth(5),
+    paddingTop: responsiveHeight(1),
   },
   contentContainer: {
-    paddingBottom: 100,
+    paddingBottom: responsiveHeight(18),
   },
   emptyContainer: {
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
-    padding: 20,
+    padding: 24,
   },
   emptyText: {
     color: colors.palette.neutral550,
@@ -42,61 +46,96 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
   },
+  footerSummary: {
+    alignItems: "center",
+    backgroundColor: colors.palette.neutral200,
+    borderTopColor: colors.palette.neutral300,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: responsiveWidth(5),
+    paddingVertical: responsiveHeight(2),
+  },
+  footerSummaryLeft: {
+    justifyContent: "center",
+  },
+  footerSummaryTotalLabel: {
+    color: colors.palette.neutral600,
+    fontFamily: CommonStyles.fontFamily.fontFamily,
+    fontSize: 14,
+  },
+  footerSummaryTotalPrice: {
+    color: colors.customColors.BLACK,
+    fontFamily: CommonStyles.fontFamily.fontFamily,
+    fontSize: 22,
+    fontWeight: "700",
+    marginTop: 2,
+  },
   imageContainer: {
-    width: "20%",
+    width: 72,
   },
   loaderContainer: {
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
-    padding: 20,
+    padding: 24,
   },
   mainContainer: {
-    backgroundColor: colors.palette.neutral100,
+    backgroundColor: colors.palette.neutral200,
     flex: 1,
   },
   priceContainer: {
     alignItems: "flex-end",
-    width: "20%",
+    justifyContent: "flex-start",
+    minWidth: 56,
   },
   priceText: {
     color: colors.customColors.GREEN,
     fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "700",
   },
   productCategory: {
-    color: colors.palette.neutral550,
+    color: colors.palette.neutral500,
     fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 14,
+    fontSize: 13,
+    marginTop: 2,
   },
   productDesc: {
-    color: colors.palette.neutral900,
+    color: colors.customColors.BLACK,
     fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 15,
+    fontWeight: "700",
   },
   productId: {
-    color: colors.palette.neutral550,
+    color: colors.palette.neutral500,
     fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: 12,
+    marginTop: 2,
   },
   productImage: {
-    height: 60,
-    width: 30,
+    borderRadius: 8,
+    height: 72,
+    width: 72,
   },
   productInfo: {
-    display: "flex",
     flex: 1,
-    gap: 8,
+    gap: 2,
+    justifyContent: "flex-start",
+    minWidth: 0,
   },
   quantityButton: {
     alignItems: "center",
-    backgroundColor: colors.customColors.LIGHTGREEN,
-    borderRadius: 4,
+    borderRadius: 999,
     height: 36,
     justifyContent: "center",
     width: 36,
+  },
+  quantityButtonMinus: {
+    backgroundColor: colors.palette.neutral300,
+  },
+  quantityButtonPlus: {
+    backgroundColor: colors.customColors.GREEN,
   },
   quantityButtonText: {
     color: colors.palette.neutral100,
@@ -104,24 +143,43 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
   },
+  quantityButtonTextMinus: {
+    color: colors.palette.neutral700,
+  },
   quantityContainer: {
     alignItems: "center",
     flexDirection: "row",
-    gap: 12,
-    justifyContent: "center",
-    marginTop: 12,
+    gap: 10,
+    justifyContent: "flex-end",
+    marginTop: 10,
+  },
+  quantityPill: {
+    alignItems: "center",
+    backgroundColor: colors.customColors.GREEN,
+    borderRadius: 999,
+    minWidth: 40,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
   },
   quantityText: {
-    color: colors.palette.neutral900,
+    color: colors.palette.neutral100,
     fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 18,
-    fontWeight: "600",
-    minWidth: 40,
+    fontSize: 16,
+    fontWeight: "700",
     textAlign: "center",
   },
   saveOrderButton: {
-    marginTop: 20,
-    paddingHorizontal: 16,
+    borderRadius: 999,
+    minWidth: 120,
+    paddingHorizontal: responsiveWidth(6),
+    paddingVertical: responsiveHeight(1.8),
+  },
+  wholesalerText: {
+    color: colors.customColors.GREEN,
+    fontFamily: CommonStyles.fontFamily.fontFamily,
+    fontSize: 13,
+    fontWeight: "600",
+    marginTop: 2,
   },
 })
 
