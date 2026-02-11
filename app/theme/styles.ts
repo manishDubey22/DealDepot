@@ -62,9 +62,11 @@ export const commonStyles = {
     background: colors.palette.neutral100,
     backgroundSecondary: colors.palette.neutral300,
     backgroundTertiary: colors.palette.grey100,
+    backgroundQuaternary: colors.palette.grey400,
 
     text: colors.palette.black500,
     textSecondary: colors.palette.grey500,
+    textTertiary: colors.palette.neutral100,
 
     link: colors.palette.blue400,
 
@@ -108,5 +110,5 @@ export const commonStyles = {
     capitalize: "capitalize",
     lowercase: "lowercase",
     uppercase: "uppercase",
-  },
+  } as const,
 }

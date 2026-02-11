@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form"
 import Toast from "react-native-toast-message"
@@ -70,11 +70,16 @@ export function useEditProfile(navigation: any) {
 
   const watchedValues = watch()
   const [btnDisable, setBtnDisable] = useState(true)
+  const hasInitializedRef = useRef(false)
 
+  // Only initialize form values ONCE when profileData first loads
   useEffect(() => {
     if (!profileData) return
+    if (hasInitializedRef.current) return
     reset(defaultValues)
-  }, [profileData, reset, defaultValues])
+    hasInitializedRef.current = true
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profileData?.name, reset])
 
   useEffect(() => {
     const hasChange =

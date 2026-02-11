@@ -55,132 +55,146 @@ export default function EditProfile({ navigation }: { navigation: any }) {
               </View>
 
               <View style={styles.fieldsContainer}>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <InputFieldContianer
-                      title={UI_TEXT.RETAILER_NAME}
-                      placeholder={UI_TEXT.RETAILER_NAME}
-                      textContainerStyle={styles.fieldCard}
-                      titleStyle={styles.titleText}
-                      value={value}
-                      onChangeText={onChange}
-                    />
+                <View style={styles.fieldContainer}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <InputFieldContianer
+                        title={UI_TEXT.RETAILER_NAME}
+                        placeholder={UI_TEXT.RETAILER_NAME}
+                        // textContainerStyle={styles.fieldCard}
+                        titleStyle={styles.titleText}
+                        value={value}
+                        onChangeText={onChange}
+                      />
+                    )}
+                    name="name"
+                  />
+                  {errors.name?.message && (
+                    <Text style={styles.errorText}>{errors.name.message}</Text>
                   )}
-                  name="name"
-                />
-                {errors.name?.message && (
-                  <Text style={{ color: colors.palette.angry500 }}>{errors.name.message}</Text>
-                )}
+                </View>
 
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <InputFieldContianer
-                      title={UI_TEXT.STORE_NAME}
-                      placeholder={UI_TEXT.STORE_NAME}
-                      textContainerStyle={styles.fieldCard}
-                      titleStyle={styles.titleText}
-                      value={value}
-                      onChangeText={onChange}
-                    />
+                <View style={styles.fieldContainer}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <InputFieldContianer
+                        title={UI_TEXT.STORE_NAME}
+                        placeholder={UI_TEXT.STORE_NAME}
+                        // textContainerStyle={styles.fieldCard}
+                        titleStyle={styles.titleText}
+                        value={value}
+                        onChangeText={onChange}
+                      />
+                    )}
+                    name="storeName"
+                  />
+                  {errors.storeName?.message && (
+                    <Text style={styles.errorText}>{errors.storeName.message}</Text>
                   )}
-                  name="storeName"
-                />
-                {errors.storeName?.message && (
-                  <Text style={{ color: colors.palette.angry500 }}>{errors.storeName.message}</Text>
-                )}
+                </View>
 
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <InputFieldContianer
-                      title={UI_TEXT.PHONE}
-                      placeholder={UI_TEXT.PHONE}
-                      textContainerStyle={styles.fieldCard}
-                      titleStyle={styles.titleText}
-                      value={value}
-                      onChangeText={onChange}
-                    />
+                <View style={styles.fieldContainer}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <InputFieldContianer
+                        title={UI_TEXT.PHONE}
+                        placeholder={UI_TEXT.PHONE}
+                        // textContainerStyle={styles.fieldCard}
+                        titleStyle={styles.titleText}
+                        value={value}
+                        onChangeText={onChange}
+                      />
+                    )}
+                    name="number"
+                  />
+                  {errors.number?.message && (
+                    <Text style={styles.errorText}>{errors.number.message}</Text>
                   )}
-                  name="number"
-                />
-                {errors.number?.message && (
-                  <Text style={{ color: colors.palette.angry500 }}>{errors.number.message}</Text>
-                )}
+                </View>
 
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <InputFieldContianer
-                      title={UI_TEXT.LOCATION}
-                      placeholder={UI_TEXT.LOCATION}
-                      textContainerStyle={styles.fieldCard}
-                      titleStyle={styles.titleText}
-                      value={value}
-                      onChangeText={onChange}
-                    />
+                <View style={styles.fieldContainer}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <InputFieldContianer
+                        title={UI_TEXT.LOCATION}
+                        placeholder={UI_TEXT.LOCATION}
+                        // textContainerStyle={styles.fieldCard}
+                        titleStyle={styles.titleText}
+                        value={value}
+                        onChangeText={onChange}
+                      />
+                    )}
+                    name="location"
+                  />
+                  {errors.location?.message && (
+                    <Text style={styles.errorText}>{errors.location.message}</Text>
                   )}
-                  name="location"
-                />
-                {errors.location?.message && (
-                  <Text style={{ color: colors.palette.angry500 }}>{errors.location.message}</Text>
-                )}
+                </View>
 
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <InputFieldContianer
-                      title={UI_TEXT.CITY}
-                      placeholder={UI_TEXT.CITY}
-                      textContainerStyle={styles.fieldCard}
-                      titleStyle={styles.titleText}
-                      value={value}
-                      onChangeText={onChange}
-                    />
+                <View style={styles.fieldContainer}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <InputFieldContianer
+                        title={UI_TEXT.CITY}
+                        placeholder={UI_TEXT.CITY}
+                        // textContainerStyle={styles.fieldCard}
+                        titleStyle={styles.titleText}
+                        value={value}
+                        onChangeText={onChange}
+                      />
+                    )}
+                    name="city"
+                  />
+                  {errors.city?.message && (
+                    <Text style={styles.errorText}>{errors.city.message}</Text>
                   )}
-                  name="city"
-                />
-                {errors.city?.message && (
-                  <Text style={{ color: colors.palette.angry500 }}>{errors.city.message}</Text>
-                )}
+                </View>
 
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <InputFieldContianer
-                      title={UI_TEXT.ZIP_CODE}
-                      placeholder={UI_TEXT.ZIP_CODE}
-                      textContainerStyle={styles.fieldCard}
-                      titleStyle={styles.titleText}
-                      value={value}
-                      onChangeText={onChange}
-                    />
+                <View style={styles.fieldContainer}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <InputFieldContianer
+                        title={UI_TEXT.ZIP_CODE}
+                        placeholder={UI_TEXT.ZIP_CODE}
+                        // textContainerStyle={styles.fieldCard}
+                        titleStyle={styles.titleText}
+                        value={value}
+                        onChangeText={onChange}
+                      />
+                    )}
+                    name="zipCode"
+                  />
+                  {errors.zipCode?.message && (
+                    <Text style={styles.errorText}>{errors.zipCode.message}</Text>
                   )}
-                  name="zipCode"
-                />
-                {errors.zipCode?.message && (
-                  <Text style={{ color: colors.palette.angry500 }}>{errors.zipCode.message}</Text>
-                )}
+                </View>
 
-                <Controller
-                  control={control}
-                  render={({ field: { onChange } }) => (
-                    <InputFieldContianer
-                      title={UI_TEXT.PEER_GROUP}
-                      placeholder={UI_TEXT.PEER_GROUP}
-                      textContainerStyle={styles.fieldCard}
-                      titleStyle={styles.titleText}
-                      dropdownData={dropdownArray}
-                      setSelectedValue={onChange}
-                      onChangeText={onChange}
-                    />
+                <View style={styles.fieldContainer}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange } }) => (
+                      <InputFieldContianer
+                        title={UI_TEXT.PEER_GROUP}
+                        placeholder={UI_TEXT.PEER_GROUP}
+                        // textContainerStyle={styles.fieldCard}
+                        titleStyle={styles.titleText}
+                        dropdownData={dropdownArray}
+                        setSelectedValue={onChange}
+                        onChangeText={onChange}
+                      />
+                    )}
+                    name="peerGroup"
+                  />
+                  {errors.peerGroup?.message && (
+                    <Text style={styles.errorText}>{errors.peerGroup.message}</Text>
                   )}
-                  name="peerGroup"
-                />
-                {errors.peerGroup?.message && (
-                  <Text style={{ color: colors.palette.angry500 }}>{errors.peerGroup.message}</Text>
-                )}
+                </View>
               </View>
 
               <View style={styles.buttonContainer}>
@@ -189,6 +203,7 @@ export default function EditProfile({ navigation }: { navigation: any }) {
                   onPress={handleSubmit(onSubmit)}
                   btnDisable={btnDisable}
                   isLoading={isLoading}
+                  variant={btnDisable || isLoading ? "disabled" : "active"}
                 />
               </View>
             </>

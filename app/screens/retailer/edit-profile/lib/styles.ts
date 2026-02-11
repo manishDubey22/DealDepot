@@ -20,14 +20,20 @@ export const styles = StyleSheet.create({
     paddingHorizontal: responsiveWidth(5),
     paddingTop: responsiveHeight(2),
   },
+  errorText: {
+    color: colors.palette.angry500,
+    fontSize: 12,
+    marginLeft: 4,
+    marginTop: 4,
+  },
   fieldCard: {
     backgroundColor: commonStyles.colors.secondaryColor,
-    borderRadius: commonStyles.borderRadius.medium,
-    marginBottom: responsiveHeight(1.5),
+    borderRadius: 16,
+    marginBottom: 0,
     paddingHorizontal: responsiveWidth(4),
-    paddingVertical: responsiveHeight(1.5),
+    paddingVertical: responsiveHeight(2),
     ...Platform.select({
-      android: { elevation: 2 },
+      android: { elevation: 3 },
       ios: {
         shadowColor: colors.palette.neutral900,
         shadowOffset: { width: 0, height: 1 },
@@ -35,6 +41,9 @@ export const styles = StyleSheet.create({
         shadowRadius: 4,
       },
     }),
+  },
+  fieldContainer: {
+    marginBottom: 18,
   },
   fieldsContainer: {
     marginBottom: responsiveHeight(2),
