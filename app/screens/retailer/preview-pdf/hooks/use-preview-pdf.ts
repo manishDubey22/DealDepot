@@ -2,8 +2,8 @@ import { useState, useCallback } from "react"
 import { Platform } from "react-native"
 // eslint-disable-next-line react-native/split-platform-components
 import { PermissionsAndroid } from "react-native"
-import RNFS from "react-native-fs"
-import RNHTMLtoPDF from "react-native-html-to-pdf"
+// import RNFS from "react-native-fs"
+// import RNHTMLtoPDF from "react-native-html-to-pdf"
 import Share from "react-native-share"
 import Toast from "react-native-toast-message"
 
@@ -141,7 +141,7 @@ const generateHTMLContent = (order: Order, vendorData: VendorData): string => {
 
 export function usePreviewPDF(order: Order, vendorData: VendorData): UsePreviewPDFReturn {
   const [isLoading, setIsLoading] = useState(false)
-  const [pdfPath, setPdfPath] = useState<string | null>(null)
+  const [pdfPath] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   // Request storage permission for Android
@@ -179,23 +179,26 @@ export function usePreviewPDF(order: Order, vendorData: VendorData): UsePreviewP
       const htmlContent = generateHTMLContent(order, vendorData)
       const fileName = `Order_${order.orderId}_${Date.now()}.pdf`
 
+      console.log(htmlContent)
+      console.log(fileName)
+
       // Determine file path based on platform
-      const filePath =
-        Platform.OS === "ios"
-          ? `${RNFS.DocumentDirectoryPath}/${fileName}`
-          : `${RNFS.DownloadDirectoryPath}/${fileName}`
+      // const filePath =
+      //   Platform.OS === "ios"
+      //     ? `${RNFS.DocumentDirectoryPath}/${fileName}`
+      //     : `${RNFS.DownloadDirectoryPath}/${fileName}`
 
-      const options = {
-        html: htmlContent,
-        fileName: fileName,
-        directory: (Platform.OS === "ios" ? "Documents" : "Downloads") as "Documents" | "Downloads",
-        base64: false,
-      }
+      // const options = {
+      //   html: htmlContent,
+      //   fileName: fileName,
+      //   directory: (Platform.OS === "ios" ? "Documents" : "Downloads") as "Documents" | "Downloads",
+      //   base64: false,
+      // }
 
-      const file = await RNHTMLtoPDF.convert(options)
-      console.log(CONSOLE_MESSAGES.PDF_GENERATED, file.filePath)
+      // const file = await RNHTMLtoPDF.convert(options)
+      // console.log(CONSOLE_MESSAGES.PDF_GENERATED, file.filePath)
 
-      setPdfPath(file.filePath || filePath)
+      // setPdfPath(file.filePath || filePath)
       Toast.show({
         text1: UI_TEXT.SUCCESS,
         type: "success",

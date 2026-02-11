@@ -129,6 +129,7 @@ export const styles = StyleSheet.create({
   },
   mainContainer: {
     backgroundColor: colors.palette.neutral100,
+    flex: 1,
     paddingLeft: Platform.OS === "ios" ? 10 : null,
     paddingRight: Platform.OS === "ios" ? 10 : null,
   },

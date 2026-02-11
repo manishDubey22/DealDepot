@@ -36,6 +36,15 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
         ],
       },
     },
-    plugins: [...existingPlugins, "react-native-vision-camera"],
+    plugins: [
+      ...existingPlugins,
+      [
+        "expo-camera",
+        {
+          cameraPermission:
+            "Allow $(PRODUCT_NAME) to access your camera to scan barcodes and QR codes.",
+        },
+      ],
+    ],
   }
 }

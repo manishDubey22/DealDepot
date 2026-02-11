@@ -10,7 +10,7 @@ import { useState } from "react"
 import { ActivityIndicator, StyleSheet, View } from "react-native"
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 // import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { MenuProvider } from "react-native-popup-menu"
+// import { MenuProvider } from "react-native-popup-menu"
 import { responsiveHeight } from "react-native-responsive-dimensions"
 // import SplashScreen from "react-native-splash-screen"
 import Toast from "react-native-toast-message"
@@ -305,11 +305,11 @@ export const AppNavigator = () => {
 
   return (
     <ThemeProvider>
-      <MenuProvider>
-        <MainStack />
-        <Toast config={toastConfig} />
-        {/* <NoInternetConnection /> */}
-      </MenuProvider>
+      {/* <MenuProvider> */}
+      <MainStack />
+      <Toast config={toastConfig} />
+      {/* <NoInternetConnection /> */}
+      {/* </MenuProvider> */}
     </ThemeProvider>
   )
 }

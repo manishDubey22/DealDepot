@@ -1,6 +1,6 @@
-import { Component, ErrorInfo, ReactNode } from "react"
+import type { ComponentType } from "react"
+import { useRef, useState } from "react"
 import { View, Text } from "react-native"
-import { Camera } from "react-native-vision-camera"
 
 import { ErrorState } from "./components/error-state"
 import { PermissionUI } from "./components/permission-ui"
@@ -8,61 +8,52 @@ import { useScanner } from "./hooks/use-scanner"
 import { UI_TEXT } from "./lib/constants"
 import { styles } from "./lib/styles"
 
-// Error Boundary to catch native module errors
-class ScannerErrorBoundary extends Component<
-  { children: ReactNode; onError: (error: Error) => void },
-  { hasError: boolean; error: Error | null }
-> {
-  constructor(props: { children: ReactNode; onError: (error: Error) => void }) {
-    super(props)
-    this.state = { hasError: false, error: null }
-  }
+const BARCODE_TYPES_EXPO = ["qr", "ean13", "code128"] as const
 
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error }
-  }
-
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Scanner ErrorBoundary caught error:", error, errorInfo)
-    this.props.onError(error)
-  }
-
-  render() {
-    if (this.state.hasError && this.state.error) {
-      const errorMessage =
-        this.state.error.message?.includes("getConstants") ||
-        this.state.error.message?.includes("CameraDevices")
-          ? UI_TEXT.CAMERA_MODULE_NOT_LINKED
-          : this.state.error.message || UI_TEXT.CAMERA_ERROR_MESSAGE
-
-      return (
-        <ErrorState
-          error={errorMessage}
-          onRetry={() => {
-            this.setState({ hasError: false, error: null })
-          }}
-        />
-      )
-    }
-
-    return this.props.children
-  }
+let CameraView: ComponentType<{
+  style?: unknown
+  facing?: "back" | "front"
+  barcodeScannerSettings?: { barcodeTypes: readonly string[] }
+  onBarcodeScanned?: (result: { type?: string; data?: string }) => void
+  onMountError?: (event: { message: string }) => void
+}> | null = null
+try {
+  CameraView = require("expo-camera").CameraView
+} catch {
+  // Native module not linked (e.g. Expo Go); show error from useScanner instead
 }
 
-function ScannerContent() {
+export default function Scanner() {
+  const lastScannedRef = useRef<string | null>(null)
+  const [mountError, setMountError] = useState<string | null>(null)
   const {
     hasPermission,
     isCameraActive,
-    // isInitialized,
     cameraError,
     handleRequestPermission,
     handleOpenSettings,
     handleRetry,
     handleCodeScanned,
-    device,
   } = useScanner()
 
-  // Show permission UI if permission not granted
+  const onBarcodeScanned = (result: { type?: string; data?: string }) => {
+    const data = result?.data ?? ""
+    if (!data) return
+    if (lastScannedRef.current === data) return
+    lastScannedRef.current = data
+    handleCodeScanned(result)
+  }
+
+  const onRetry = () => {
+    setMountError(null)
+    handleRetry()
+  }
+
+  const displayError = cameraError || mountError
+  if (displayError) {
+    return <ErrorState error={displayError} onRetry={onRetry} />
+  }
+
   if (!hasPermission) {
     return (
       <PermissionUI
@@ -72,26 +63,22 @@ function ScannerContent() {
     )
   }
 
-  // Show error state if camera error
-  if (cameraError || !device) {
-    return <ErrorState error={cameraError || "Camera device not available"} onRetry={handleRetry} />
-  }
-
-  // Show camera view
   return (
     <View style={styles.container}>
-      {isCameraActive && device && (
-        <Camera
+      {isCameraActive && CameraView && (
+        <CameraView
           style={styles.camera}
-          device={device}
-          isActive={isCameraActive}
-          codeScanner={{
-            codeTypes: ["qr", "ean-13", "code-128"],
-            onCodeScanned: handleCodeScanned,
+          facing="back"
+          barcodeScannerSettings={{
+            barcodeTypes: [...BARCODE_TYPES_EXPO],
+          }}
+          onBarcodeScanned={onBarcodeScanned}
+          onMountError={({ message }) => {
+            setMountError(message || UI_TEXT.CAMERA_ERROR_MESSAGE)
           }}
         />
       )}
-      <View style={styles.overlay}>
+      <View style={styles.overlay} pointerEvents="none">
         <View style={styles.scanFrame}>
           <View style={[styles.scanFrameCorner, styles.topLeft]} />
           <View style={[styles.scanFrameCorner, styles.topRight]} />
@@ -101,17 +88,5 @@ function ScannerContent() {
         <Text style={styles.instructionText}>{UI_TEXT.POSITION_BARCODE}</Text>
       </View>
     </View>
-  )
-}
-
-export default function Scanner() {
-  const handleError = (error: Error) => {
-    console.error("Scanner error:", error)
-  }
-
-  return (
-    <ScannerErrorBoundary onError={handleError}>
-      <ScannerContent />
-    </ScannerErrorBoundary>
   )
 }

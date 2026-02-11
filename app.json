@@ -6,10 +6,20 @@
     },
     "android": {
       "newArchEnabled": true,
-      "permissions": ["android.permission.CAMERA"]
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.manish.mern.dealdepot"
     },
     "ios": {
       "newArchEnabled": false
+    },
+    "extra": {
+      "eas": {
+        "projectId": "16861625-888c-4a03-9fd2-99bcd4dc444b"
+      }
     }
   }
 }

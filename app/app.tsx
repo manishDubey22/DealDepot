@@ -18,6 +18,7 @@ if (__DEV__) {
 }
 import "./utils/gestureHandler"
 
+import type { ReactNode } from "react"
 import { useEffect, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import { useFonts } from "expo-font"
@@ -25,9 +26,17 @@ import { useFonts } from "expo-font"
 import { NavigationContainer } from "@react-navigation/native"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
-import { KeyboardProvider } from "react-native-keyboard-controller"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { Provider } from "react-redux"
+
+let KeyboardProviderWrapper: (props: { children: ReactNode }) => ReactNode
+try {
+  const keyboardController = require("react-native-keyboard-controller")
+  KeyboardProviderWrapper =
+    keyboardController?.KeyboardProvider ?? (({ children }: { children: ReactNode }) => children)
+} catch {
+  KeyboardProviderWrapper = ({ children }: { children: ReactNode }) => children
+}
 
 import { queryClient } from "@/lib/react-query/queryClient"
 
@@ -110,13 +119,13 @@ export function App() {
             <RetailerAuthProvider>
               <NavigationContainer>
                 <RoleProvider>
-                  <KeyboardProvider>
+                  <KeyboardProviderWrapper>
                     {/* <VersionProvider> */}
                     <View style={styles.mainContainer}>
                       <AppNavigator />
                     </View>
                     {/* </VersionProvider> */}
-                  </KeyboardProvider>
+                  </KeyboardProviderWrapper>
                 </RoleProvider>
               </NavigationContainer>
             </RetailerAuthProvider>
