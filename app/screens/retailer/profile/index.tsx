@@ -2,9 +2,10 @@ import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from "rea
 import { useNavigation } from "@react-navigation/native"
 import Toast from "react-native-toast-message"
 
-import { Avatar, InputFieldContianer, PopupModal } from "@/components/common-components"
+import { Avatar, PopupModal } from "@/components/common-components"
 import { colors } from "@/theme/colors"
 
+import { ProfileField } from "./components/profile-field"
 import { useProfile } from "./hooks/use-profile"
 import { UI_TEXT } from "./lib/constants"
 import { styles } from "./lib/styles"
@@ -45,70 +46,14 @@ export default function Profile() {
             </View>
 
             <View style={styles.fieldsContainer}>
-              <InputFieldContianer
-                editable={false}
-                placeholder={UI_TEXT.RETAILER_NAME}
-                textContainerStyle={styles.fieldCard}
-                title={UI_TEXT.RETAILER_NAME}
-                value={profileData.name}
-                titleStyle={styles.titleText}
-              />
-              <InputFieldContianer
-                editable={false}
-                placeholder={UI_TEXT.EMAIL}
-                textContainerStyle={styles.fieldCard}
-                title={UI_TEXT.EMAIL}
-                value={profileData.email}
-                titleStyle={styles.titleText}
-              />
-              <InputFieldContianer
-                editable={false}
-                placeholder={UI_TEXT.STORE_NAME}
-                textContainerStyle={styles.fieldCard}
-                title={UI_TEXT.STORE_NAME}
-                value={profileData.storeName}
-                titleStyle={styles.titleText}
-              />
-              <InputFieldContianer
-                editable={false}
-                placeholder={UI_TEXT.PHONE}
-                textContainerStyle={styles.fieldCard}
-                title={UI_TEXT.PHONE}
-                value={profileData.number}
-                titleStyle={styles.titleText}
-              />
-              <InputFieldContianer
-                editable={false}
-                placeholder={UI_TEXT.LOCATION}
-                textContainerStyle={styles.fieldCard}
-                title={UI_TEXT.LOCATION}
-                value={profileData.location}
-                titleStyle={styles.titleText}
-              />
-              <InputFieldContianer
-                editable={false}
-                placeholder={UI_TEXT.CITY}
-                textContainerStyle={styles.fieldCard}
-                title={UI_TEXT.CITY}
-                value={profileData.city}
-                titleStyle={styles.titleText}
-              />
-              <InputFieldContianer
-                editable={false}
-                placeholder={UI_TEXT.ZIP_CODE}
-                textContainerStyle={styles.fieldCard}
-                title={UI_TEXT.ZIP_CODE}
-                value={profileData.zipCode}
-                titleStyle={styles.titleText}
-              />
-              <InputFieldContianer
-                editable={false}
-                placeholder={UI_TEXT.PEER_GROUP}
-                textContainerStyle={styles.fieldCard}
-                title={UI_TEXT.PEER_GROUP}
-                value={profileData.peerGroup}
-                titleStyle={styles.titleText}
-              />
+              <ProfileField label={UI_TEXT.RETAILER_NAME} value={profileData.name} />
+              <ProfileField label={UI_TEXT.EMAIL} value={profileData.email} />
+              <ProfileField label={UI_TEXT.STORE_NAME} value={profileData.storeName} />
+              <ProfileField label={UI_TEXT.PHONE} value={profileData.number} />
+              <ProfileField label={UI_TEXT.LOCATION} value={profileData.location} />
+              <ProfileField label={UI_TEXT.CITY} value={profileData.city} />
+              <ProfileField label={UI_TEXT.ZIP_CODE} value={profileData.zipCode} />
+              <ProfileField label={UI_TEXT.PEER_GROUP} value={profileData.peerGroup} />
             </View>
 
             <View style={styles.buttonsContainer}>

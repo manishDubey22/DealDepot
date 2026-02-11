@@ -26,3 +26,12 @@ export interface UseProfileReturn {
   handleCancelDelete: () => void
   handleBackPress: () => boolean
 }
+
+export interface ProfileFieldProps {
+  label: string
+  value?: string
+  isEditing?: boolean
+  editable?: boolean
+  onChangeText?: (text: string) => void
+  placeholder?: string
+}

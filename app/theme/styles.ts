@@ -81,7 +81,8 @@ export const commonStyles = {
   fontSize: {
     large: 20,
     medium: 16,
-    small: 12,
+    small: 14,
+    xSmall: 12,
   },
   fontStyle: {
     italic: "italic",
@@ -89,15 +90,16 @@ export const commonStyles = {
   },
   fontWeight: {
     bold: 700,
-    light: 300,
+    semiBold: 600,
     medium: 500,
     regular: 400,
-  },
+    light: 300,
+  } as const,
   textAlign: {
     center: "center",
     left: "left",
     right: "right",
-  },
+  } as const,
   textDecoration: {
     none: "none",
     underline: "underline",
