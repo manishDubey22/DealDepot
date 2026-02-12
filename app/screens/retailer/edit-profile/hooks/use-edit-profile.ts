@@ -4,9 +4,8 @@ import { useForm } from "react-hook-form"
 import Toast from "react-native-toast-message"
 
 import { useWhoAmIQuery } from "@/api/retailer/auth/query-options"
-import { useGetStaticPeerGroupsQuery, useUpdateProfileMutation } from "@/api/retailer/profile"
+import { profileMutationOptions, profileQueryOptions } from "@/api/retailer/profile"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
-import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { editProfileSchema } from "@/utils/schema/edit-profile-schema"
 import { saveString } from "@/utils/storage"
 
@@ -18,8 +17,8 @@ export function useEditProfile(navigation: any) {
   const retailerId = userAuth?.userId ?? ""
 
   const { data: profileResponse } = useWhoAmIQuery(retailerId ? { userId: retailerId } : undefined)
-  const { data: peersResponse } = useGetStaticPeerGroupsQuery()
-  const updateProfileMutation = useUpdateProfileMutation()
+  const { data: peersResponse } = profileQueryOptions.useGetStaticPeerGroupsQuery()
+  const updateProfileMutation = profileMutationOptions.useUpdateProfileMutation()
 
   const profileData = profileResponse?.data
     ? {
@@ -123,7 +122,14 @@ export function useEditProfile(navigation: any) {
             type: "success",
             text1: (message ?? UI_TEXT.UPDATE).toUpperCase(),
           })
-          navigation.navigate(RetailerRoutes.PROFILE)
+          // Navigate back to Profile screen
+          // EditProfile is a Stack screen opened from Profile (Tab screen)
+          // goBack() returns to the previous screen in the stack (Profile tab)
+          setTimeout(() => {
+            if (navigation.goBack) {
+              navigation.goBack()
+            }
+          }, 100)
         }
       } catch (error) {
         console.error("Edit profile update failed", error)
