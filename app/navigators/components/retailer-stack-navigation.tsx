@@ -9,6 +9,7 @@ import {
   CreateNewAccount,
   EditProfile,
   EmailVerification,
+  Favourites,
   HomeOptionList,
   Login,
   Order,
@@ -454,22 +455,24 @@ export const RetailerStackNavigation = ({
           header: () => WithoutImageHeader('Subscriptions Plans'),
         }}
       /> */}
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.FAVOURITES}
         component={Favourites}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
           },
           headerStyle: {
+            // @ts-expect-error - height property not in type but works at runtime
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Favourites" />,
         }}
-      /> */}
+      />
       {/* <Stack.Screen
         name={RetailerRoutes.PRICEHISTORY}
         component={PriceHistory}

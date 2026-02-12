@@ -32,6 +32,9 @@ export const retailerPaths = {
 
   updateProfile: (retailerId: string) =>
     `/${API_RETAILER_VERSION}/${retailerId}/${API_VERSION}/update-profile`,
+
+  favorites: (retailerId: string) =>
+    `/${API_RETAILER_VERSION}/${retailerId}/${API_VERSION}/favorites`,
 }
 
 //static paths
