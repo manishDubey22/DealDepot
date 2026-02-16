@@ -62,9 +62,11 @@ export const commonStyles = {
     background: colors.palette.neutral100,
     backgroundSecondary: colors.palette.neutral300,
     backgroundTertiary: colors.palette.grey100,
+    backgroundQuaternary: colors.palette.grey400,
 
     text: colors.palette.black500,
     textSecondary: colors.palette.grey500,
+    textTertiary: colors.palette.neutral100,
 
     link: colors.palette.blue400,
 
@@ -81,7 +83,8 @@ export const commonStyles = {
   fontSize: {
     large: 20,
     medium: 16,
-    small: 12,
+    small: 14,
+    xSmall: 12,
   },
   fontStyle: {
     italic: "italic",
@@ -89,15 +92,16 @@ export const commonStyles = {
   },
   fontWeight: {
     bold: 700,
-    light: 300,
+    semiBold: 600,
     medium: 500,
     regular: 400,
-  },
+    light: 300,
+  } as const,
   textAlign: {
     center: "center",
     left: "left",
     right: "right",
-  },
+  } as const,
   textDecoration: {
     none: "none",
     underline: "underline",
@@ -106,5 +110,5 @@ export const commonStyles = {
     capitalize: "capitalize",
     lowercase: "lowercase",
     uppercase: "uppercase",
-  },
+  } as const,
 }

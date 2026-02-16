@@ -2,7 +2,6 @@ import { Platform, StyleSheet } from "react-native"
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions"
 
 import { colors } from "@/theme/colors"
-import { CommonStyles } from "@/theme/common-styles"
 import { commonStyles } from "@/theme/styles"
 
 export const styles = StyleSheet.create({
@@ -49,18 +48,18 @@ export const styles = StyleSheet.create({
   },
   deleteButtonText: {
     color: colors.palette.neutral100,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
+    fontFamily: commonStyles.fontFamily.bold,
     fontSize: 16,
-    textAlign: "center",
+    textAlign: commonStyles.textAlign.center,
   },
   fieldCard: {
     backgroundColor: commonStyles.colors.secondaryColor,
-    borderRadius: commonStyles.borderRadius.medium,
-    marginBottom: responsiveHeight(1.5),
-    paddingHorizontal: responsiveWidth(4),
-    paddingVertical: responsiveHeight(1.5),
+    borderRadius: commonStyles.borderRadius.large,
+    marginBottom: responsiveHeight(2),
+    paddingHorizontal: responsiveWidth(4.5),
+    paddingVertical: responsiveHeight(2),
     ...Platform.select({
-      android: { elevation: 2 },
+      android: { elevation: 3 },
       ios: {
         shadowColor: colors.palette.neutral900,
         shadowOffset: { width: 0, height: 1 },
@@ -69,9 +68,33 @@ export const styles = StyleSheet.create({
       },
     }),
   },
+  fieldLabel: {
+    color: colors.palette.grey700,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: 13,
+    fontWeight: commonStyles.fontWeight.medium,
+    marginBottom: 6,
+  },
+  fieldValue: {
+    color: colors.palette.black700,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: commonStyles.fontSize.medium,
+    fontWeight: commonStyles.fontWeight.semiBold,
+  },
   fieldsContainer: {
     marginBottom: responsiveHeight(2),
     marginTop: responsiveHeight(2),
+  },
+  input: {
+    borderColor: colors.palette.grey300,
+    borderRadius: commonStyles.borderRadius.medium,
+    borderWidth: 1,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: 16,
+    padding: 12,
+  },
+  inputContainer: {
+    marginTop: 6,
   },
   loaderContainer: {
     alignItems: "center",
@@ -98,10 +121,10 @@ export const styles = StyleSheet.create({
   },
   logoutButtonText: {
     color: colors.customColors.BLACK,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 16,
-    fontWeight: "600",
-    textAlign: "center",
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: commonStyles.fontSize.medium,
+    fontWeight: commonStyles.fontWeight.semiBold,
+    textAlign: commonStyles.textAlign.center,
   },
   mainContainer: {
     backgroundColor: colors.palette.neutral200,
@@ -115,17 +138,18 @@ export const styles = StyleSheet.create({
   },
   premiumMemberText: {
     color: colors.palette.neutral600,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 14,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: commonStyles.fontSize.small,
+    fontWeight: commonStyles.fontWeight.semiBold,
   },
   titleText: {
-    fontWeight: "bold",
+    fontWeight: commonStyles.fontWeight.bold,
   },
   userName: {
     color: colors.customColors.BLACK,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 20,
-    fontWeight: "700",
-    textAlign: "center",
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: commonStyles.fontSize.large,
+    fontWeight: commonStyles.fontWeight.bold,
+    textAlign: commonStyles.textAlign.center,
   },
 })

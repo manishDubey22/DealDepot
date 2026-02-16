@@ -29,11 +29,18 @@ export const retailerPaths = {
 
   accountDelete: (retailerId: string) =>
     `/${API_RETAILER_VERSION}/${retailerId}/${API_VERSION}/account-delete`,
+
+  updateProfile: (retailerId: string) =>
+    `/${API_RETAILER_VERSION}/${retailerId}/${API_VERSION}/update-profile`,
+
+  favorites: (retailerId: string) =>
+    `/${API_RETAILER_VERSION}/${retailerId}/${API_VERSION}/favorites`,
 }
 
 //static paths
 export const staticPaths = {
   getAppVersion: () => `/${API_STATIC_VERSION}/${API_VERSION}/get-version`,
+  getPeerGroups: () => `/${API_STATIC_VERSION}/${API_VERSION}/peer-groups`,
 }
 
 export const userPaths = {

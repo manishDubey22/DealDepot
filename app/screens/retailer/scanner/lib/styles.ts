@@ -3,33 +3,27 @@ import { StyleSheet, Dimensions } from "react-native"
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
 
-const { width } = Dimensions.get("window")
+const { width, height } = Dimensions.get("window")
+
+const FRAME_SIZE = 260
+const INSTRUCTION_MARGIN_TOP = 20
+const OVERLAY_GAP_VERTICAL = (height - FRAME_SIZE) / 2
+const OVERLAY_GAP_SIDE = (width - FRAME_SIZE) / 2
 
 export const styles = StyleSheet.create({
-  bottomLeft: {
-    borderBottomLeftRadius: 12,
-    borderBottomWidth: 4,
-    borderLeftWidth: 4,
-    bottom: -2,
-    left: -2,
-  },
-  bottomRight: {
-    borderBottomRightRadius: 12,
-    borderBottomWidth: 4,
-    borderRightWidth: 4,
-    bottom: -2,
-    right: -2,
-  },
   buttonContainer: {
     gap: 12,
     width: "100%",
   },
   camera: {
-    flex: 1,
+    ...StyleSheet.absoluteFillObject,
+  },
+  centerContent: {
+    alignItems: "center",
   },
   container: {
-    backgroundColor: colors.palette.black500,
     flex: 1,
+    position: "relative",
   },
   errorContainer: {
     alignItems: "center",
@@ -58,19 +52,58 @@ export const styles = StyleSheet.create({
     marginBottom: 12,
     textAlign: "center",
   },
+  frame: {
+    backgroundColor: colors.transparent,
+    borderColor: colors.customColors.GREEN,
+    borderRadius: 16,
+    borderWidth: 3,
+    height: FRAME_SIZE,
+    width: FRAME_SIZE,
+  },
   instructionText: {
     color: colors.palette.neutral100,
     fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: 16,
-    marginTop: 30,
+    marginTop: INSTRUCTION_MARGIN_TOP,
     paddingHorizontal: 20,
     textAlign: "center",
   },
   overlay: {
+    ...StyleSheet.absoluteFillObject,
     alignItems: "center",
-    backgroundColor: colors.transparent,
-    flex: 1,
     justifyContent: "center",
+  },
+  overlayBottom: {
+    backgroundColor: colors.palette.overlay50,
+    bottom: 0,
+    height: Math.max(0, OVERLAY_GAP_VERTICAL),
+    left: 0,
+    position: "absolute",
+    right: 0,
+  },
+  overlayLeft: {
+    backgroundColor: colors.palette.overlay50,
+    height: FRAME_SIZE,
+    left: 0,
+    position: "absolute",
+    top: OVERLAY_GAP_VERTICAL,
+    width: Math.max(0, OVERLAY_GAP_SIDE),
+  },
+  overlayRight: {
+    backgroundColor: colors.palette.overlay50,
+    height: FRAME_SIZE,
+    position: "absolute",
+    right: 0,
+    top: OVERLAY_GAP_VERTICAL,
+    width: Math.max(0, OVERLAY_GAP_SIDE),
+  },
+  overlayTop: {
+    backgroundColor: colors.palette.overlay50,
+    height: Math.max(0, OVERLAY_GAP_VERTICAL),
+    left: 0,
+    position: "absolute",
+    right: 0,
+    top: 0,
   },
   permissionContainer: {
     alignItems: "center",
@@ -98,34 +131,6 @@ export const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 12,
     textAlign: "center",
-  },
-  scanFrame: {
-    backgroundColor: colors.transparent,
-    borderColor: colors.customColors.GREEN,
-    borderRadius: 12,
-    borderWidth: 2,
-    height: width * 0.8,
-    width: width * 0.8,
-  },
-  scanFrameCorner: {
-    borderColor: colors.customColors.GREEN,
-    height: 30,
-    position: "absolute",
-    width: 30,
-  },
-  topLeft: {
-    borderLeftWidth: 4,
-    borderTopLeftRadius: 12,
-    borderTopWidth: 4,
-    left: -2,
-    top: -2,
-  },
-  topRight: {
-    borderRightWidth: 4,
-    borderTopRightRadius: 12,
-    borderTopWidth: 4,
-    right: -2,
-    top: -2,
   },
 })
 

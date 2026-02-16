@@ -1,13 +1,15 @@
 import { Image, ImageSourcePropType, StyleSheet, TouchableOpacity } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-// import { useNavigation } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { HeaderComponent } from "@/components/common-components"
 import { OptionScreen } from "@/screens/common-screens/option-screen"
 import {
   CreateNewAccount,
+  EditProfile,
   EmailVerification,
+  Favourites,
   HomeOptionList,
   Login,
   Order,
@@ -70,7 +72,7 @@ const TabBarIcon = ({ icon, focused }: { icon: ImageSourcePropType; focused: boo
 }
 
 const BottomTabNavigator = () => {
-  // const navigation = useNavigation()
+  const navigation = useNavigation()
   return (
     <Tab.Navigator
       screenOptions={{
@@ -192,7 +194,7 @@ const BottomTabNavigator = () => {
           // -----------Need to be navigate ---- navigation.navigate(Constant.ScreenName.EDIT_PROFILE)
           headerRight: () => (
             <TouchableOpacity
-            // onPress={() => navigation.navigate(RetailerRoutes.EDIT_PROFILE)}
+              onPress={() => (navigation as any).navigate(RetailerRoutes.EDIT_PROFILE)}
             >
               <TabBarIcon icon={Icon.EDIT} focused={false} />
             </TouchableOpacity>
@@ -364,22 +366,24 @@ export const RetailerStackNavigation = ({
           header: () => <HeaderComponent value="Upload Files" />,
         }}
       /> */}
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.EDIT_PROFILE}
         component={EditProfile}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
           },
           headerStyle: {
+            // @ts-expect-error - height property not in type but works at runtime
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
-          header: () => WithoutImageHeader('Edit Profile'),
+          header: () => <HeaderComponent value="Edit Profile" />,
         }}
-      /> */}
+      />
       <Stack.Screen
         name={RetailerRoutes.PREVIEW_PDF}
         component={PreviewPDF}
@@ -451,22 +455,24 @@ export const RetailerStackNavigation = ({
           header: () => WithoutImageHeader('Subscriptions Plans'),
         }}
       /> */}
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.FAVOURITES}
         component={Favourites}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
           },
           headerStyle: {
+            // @ts-expect-error - height property not in type but works at runtime
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Favourites" />,
         }}
-      /> */}
+      />
       {/* <Stack.Screen
         name={RetailerRoutes.PRICEHISTORY}
         component={PriceHistory}
