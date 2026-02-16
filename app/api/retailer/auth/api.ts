@@ -1,6 +1,6 @@
 import { api } from "@/lib/api-client"
 import { getApiUrl } from "@/lib/api-config"
-import { userPaths } from "@/lib/paths"
+import { userPaths, resetPasswordPaths } from "@/lib/paths"
 
 import type {
   LoginApiResponse,
@@ -11,6 +11,12 @@ import type {
   OTPVerifyResponse,
   WhoAmIRequest,
   WhoAmIResponse,
+  ResetPasswordRequestPayload,
+  ResetPasswordRequestResponse,
+  ResetPasswordVerifyPayload,
+  ResetPasswordVerifyResponse,
+  ResetPasswordCompletePayload,
+  ResetPasswordCompleteResponse,
 } from "./types"
 
 export const postLoginData = (request: LoginRequest) => {
@@ -31,4 +37,19 @@ export const getWhoAmI = (request?: WhoAmIRequest) => {
   const url = `${getApiUrl()}/${userPaths.whoami()}`
   // POST request with userId in body if provided
   return api.post<WhoAmIResponse>(url, request?.userId ? { userId: request.userId } : {})
+}
+
+export function postResetPasswordRequest(payload: ResetPasswordRequestPayload) {
+  const url = `${getApiUrl()}/${resetPasswordPaths.request()}`
+  return api.post<ResetPasswordRequestResponse>(url, payload)
+}
+
+export function postResetPasswordVerify(payload: ResetPasswordVerifyPayload) {
+  const url = `${getApiUrl()}/${resetPasswordPaths.verify()}`
+  return api.post<ResetPasswordVerifyResponse>(url, payload)
+}
+
+export function patchResetPasswordComplete(payload: ResetPasswordCompletePayload) {
+  const url = `${getApiUrl()}/${resetPasswordPaths.complete()}`
+  return api.patch<ResetPasswordCompleteResponse>(url, payload)
 }

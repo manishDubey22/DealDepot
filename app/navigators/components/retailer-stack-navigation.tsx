@@ -16,6 +16,7 @@ import {
   PreviewPDF,
   ProductDescription,
   Profile,
+  ResetPassword,
   SaveOrder,
   SalesGraph,
   Scanner,
@@ -210,7 +211,7 @@ export const RetailerStackNavigation = ({
   role,
   authToken,
 }: {
-  role: string | unknown | undefined
+  role: string | null
   authToken: string | unknown | undefined
 }) => {
   const initialRouteName = role && authToken ? RetailerRoutes.TAB_CONTAINER : RetailerRoutes.LOGIN
@@ -277,25 +278,26 @@ export const RetailerStackNavigation = ({
           headerShown: false,
         }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.RESET_PASSWORD}
         options={{
           headerShown: true,
           headerStyle: {
             backgroundColor: colors.customColors.WHITE,
-            height: 100,
+            // height: 100,
           },
           headerTitleStyle: {
             color: colors.palette.charcoal500,
             fontFamily: CommonStyles.fontFamily.fontFamily,
             fontSize: 20,
           },
-          headerTitle: 'Reset Password',
-          headerTitleAlign: 'center',
+          headerTitle: "Reset Password",
+          headerTitleAlign: "center",
           headerTintColor: colors.palette.neutral100,
-        }}>
-        {() => <ResetPassword role={role} />}
-      </Stack.Screen> */}
+        }}
+      >
+        {({ navigation }) => <ResetPassword role={role} navigation={navigation} />}
+      </Stack.Screen>
       <Stack.Screen
         name={RetailerRoutes.SAVE_ORDER}
         component={SaveOrder}

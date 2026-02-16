@@ -1,6 +1,13 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query"
 
-import { postLoginData, postOtpVerify, postRegisterData } from "./api"
+import {
+  postLoginData,
+  postOtpVerify,
+  postRegisterData,
+  postResetPasswordRequest,
+  postResetPasswordVerify,
+  patchResetPasswordComplete,
+} from "./api"
 import type {
   LoginApiResponse,
   LoginErrorResponse,
@@ -11,6 +18,12 @@ import type {
   RegisterErrorResponse,
   RegisterRequest,
   RegisterResponse,
+  ResetPasswordRequestPayload,
+  ResetPasswordRequestResponse,
+  ResetPasswordVerifyPayload,
+  ResetPasswordVerifyResponse,
+  ResetPasswordCompletePayload,
+  ResetPasswordCompleteResponse,
 } from "./types"
 
 export function useLoginMutation(
@@ -77,6 +90,75 @@ export function useOtpVerifyMutation(
     mutateAsync: mutation.mutateAsync,
     isPending: mutation.isPending,
     isLoading: mutation.isPending,
+    isError: mutation.isError,
+    isSuccess: mutation.isSuccess,
+    error: mutation.error,
+    data: mutation.data,
+    reset: mutation.reset,
+  }
+}
+
+export function useResetPasswordRequestMutation() {
+  const mutation = useMutation<
+    { data: ResetPasswordRequestResponse },
+    { response?: { data?: { message?: string } }; data?: { message?: string } },
+    ResetPasswordRequestPayload
+  >({
+    mutationFn: async (payload) => {
+      const response = await postResetPasswordRequest(payload)
+      return { data: response.data }
+    },
+  })
+  return {
+    mutate: mutation.mutate,
+    mutateAsync: mutation.mutateAsync,
+    isPending: mutation.isPending,
+    isError: mutation.isError,
+    isSuccess: mutation.isSuccess,
+    error: mutation.error,
+    data: mutation.data,
+    reset: mutation.reset,
+  }
+}
+
+export function useResetPasswordVerifyMutation() {
+  const mutation = useMutation<
+    ResetPasswordVerifyResponse,
+    { response?: { data?: { message?: string } }; data?: { message?: string } },
+    ResetPasswordVerifyPayload
+  >({
+    mutationFn: async (payload) => {
+      const response = await postResetPasswordVerify(payload)
+      return response.data
+    },
+  })
+  return {
+    mutate: mutation.mutate,
+    mutateAsync: mutation.mutateAsync,
+    isPending: mutation.isPending,
+    isError: mutation.isError,
+    isSuccess: mutation.isSuccess,
+    error: mutation.error,
+    data: mutation.data,
+    reset: mutation.reset,
+  }
+}
+
+export function useResetPasswordCompleteMutation() {
+  const mutation = useMutation<
+    ResetPasswordCompleteResponse,
+    unknown,
+    ResetPasswordCompletePayload
+  >({
+    mutationFn: async (payload) => {
+      const response = await patchResetPasswordComplete(payload)
+      return response.data
+    },
+  })
+  return {
+    mutate: mutation.mutate,
+    mutateAsync: mutation.mutateAsync,
+    isPending: mutation.isPending,
     isError: mutation.isError,
     isSuccess: mutation.isSuccess,
     error: mutation.error,

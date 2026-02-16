@@ -49,3 +49,9 @@ export const userPaths = {
   verify: () => `${API_USER_VERSION}/${API_VERSION}/${API_RETAILER_VERSION}/verify`,
   whoami: () => `${API_VERSION}/whoami`,
 }
+
+export const resetPasswordPaths = {
+  request: () => `reset-password/${API_VERSION}/request`,
+  verify: () => `reset-password/${API_VERSION}/verify`,
+  complete: () => `reset-password/${API_VERSION}/complete`,
+}
