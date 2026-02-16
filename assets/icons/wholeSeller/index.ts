@@ -42,4 +42,5 @@ export const Icon = {
   RESET_PASSWORD: require("./resetPassword.png"),
   EMAIL: require("./email.png"),
   VERIFIED_EMAIL: require("./verification.png"),
+  UPLOAD_FILES: require("./uploadFile.png"),
 }

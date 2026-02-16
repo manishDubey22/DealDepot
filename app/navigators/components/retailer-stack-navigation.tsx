@@ -357,7 +357,7 @@ export const RetailerStackNavigation = ({
         name={RetailerRoutes.UPLOAD_FILE}
         component={UploadFiles}
         options={{
-          headerShown: true,
+          headerShown: false,
           headerTitleStyle: {
             // @ts-expect-error - display property not in type but works at runtime
             display: "none",
@@ -368,7 +368,7 @@ export const RetailerStackNavigation = ({
             elevation: 5,
             shadowColor: colors.palette.grey400,
           },
-          header: () => <HeaderComponent value="Upload Files" />,
+          // header: () => <HeaderComponent value="Upload Files" />,
         }}
       />
       <Stack.Screen

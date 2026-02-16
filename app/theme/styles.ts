@@ -29,10 +29,11 @@ export const $styles = {
 
 export const commonStyles = {
   borderColor: {
-    primary: colors.customColors.GREEN,
+    primary: colors.palette.green.primary,
     quaternary: colors.customColors.WHITE,
     secondary: colors.customColors.MEDIUM_GRAY,
     tertiary: colors.customColors.BLACK,
+    quinary: colors.palette.grey300,
   },
   borderRadius: {
     large: 12,
