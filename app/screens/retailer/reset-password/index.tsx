@@ -1,7 +1,9 @@
-import { View, Text, ScrollView, TextInput } from "react-native"
+import { View, Text, ScrollView, TextInput, Image } from "react-native"
 import { Controller } from "react-hook-form"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { SafeAreaView } from "react-native-safe-area-context"
+
+import { Icon } from "@assets/icons/wholeSeller"
 
 import { HeaderComponent } from "@/components/common-components"
 import ButtonField from "@/components/common-components/button/button"
@@ -41,24 +43,29 @@ export default function ResetPassword({ role, navigation }: ResetPasswordScreenP
           <View style={styles.container}>
             {step === "email" && (
               <>
+                <View style={styles.containerIconCircle}>
+                  <Image source={Icon.EMAIL} style={styles.icon} />
+                </View>
                 <Text style={styles.stepTitle}>{UI_TEXT.STEP_EMAIL_TITLE}</Text>
                 <Text style={styles.stepSubtitle}>{UI_TEXT.STEP_EMAIL_SUBTITLE}</Text>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <InputFieldContianer
-                      title={UI_TEXT.EMAIL_FIELD_TITLE}
-                      placeholder={UI_TEXT.EMAIL_PLACEHOLDER}
-                      textContainerStyle={styles.textInputMargin}
-                      value={value}
-                      onChangeText={(text) => onChange(text?.trimEnd())}
-                    />
+                <View style={styles.containerInput}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <InputFieldContianer
+                        title={UI_TEXT.EMAIL_FIELD_TITLE}
+                        placeholder={UI_TEXT.EMAIL_PLACEHOLDER}
+                        textContainerStyle={styles.textInputMargin}
+                        value={value}
+                        onChangeText={(text) => onChange(text?.trimEnd())}
+                      />
+                    )}
+                    name={FORM_FIELDS.EMAIL}
+                  />
+                  {errors.email?.message && (
+                    <Text style={styles.validationError}>{errors.email?.message}</Text>
                   )}
-                  name={FORM_FIELDS.EMAIL}
-                />
-                {errors.email?.message && (
-                  <Text style={styles.validationError}>{errors.email?.message}</Text>
-                )}
+                </View>
                 <ButtonField
                   value={UI_TEXT.REQUEST_BUTTON}
                   onPress={handleSubmit(onSubmitEmail)}

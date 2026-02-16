@@ -281,19 +281,19 @@ export const RetailerStackNavigation = ({
       <Stack.Screen
         name={RetailerRoutes.RESET_PASSWORD}
         options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: colors.customColors.WHITE,
-            // height: 100,
-          },
-          headerTitleStyle: {
-            color: colors.palette.charcoal500,
-            fontFamily: CommonStyles.fontFamily.fontFamily,
-            fontSize: 20,
-          },
-          headerTitle: "Reset Password",
-          headerTitleAlign: "center",
-          headerTintColor: colors.palette.neutral100,
+          headerShown: false,
+          // headerStyle: {
+          //   backgroundColor: colors.customColors.WHITE,
+          //   // height: 100,
+          // },
+          // headerTitleStyle: {
+          //   color: colors.palette.charcoal500,
+          //   fontFamily: CommonStyles.fontFamily.fontFamily,
+          //   fontSize: 20,
+          // },
+          // headerTitle: "Reset Password",
+          // headerTitleAlign: "center",
+          // headerTintColor: colors.palette.neutral100,
         }}
       >
         {({ navigation }) => <ResetPassword role={role} navigation={navigation} />}

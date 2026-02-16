@@ -3,12 +3,26 @@ import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimen
 
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
+import { commonStyles } from "@/theme/styles"
 
 export const styles = StyleSheet.create({
   buttonMargin: {
     marginTop: responsiveHeight(4),
   },
   container: {
+    marginTop: responsiveHeight(2),
+  },
+  containerIconCircle: {
+    backgroundColor: commonStyles.colors.tertiaryColor,
+    borderRadius: 999,
+    height: "20%",
+    margin: "auto",
+    marginBottom: responsiveHeight(2),
+    padding: 10,
+    width: "20%",
+  },
+  containerInput: {
+    marginBottom: responsiveHeight(2),
     marginTop: responsiveHeight(2),
   },
   helperText2: {
@@ -29,6 +43,12 @@ export const styles = StyleSheet.create({
     fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: 16,
     textAlign: "center",
+  },
+  icon: {
+    alignSelf: "center",
+    height: "90%",
+    margin: "auto",
+    width: "90%",
   },
   mainContainer: {
     backgroundColor: colors.customColors.WHITE,

@@ -55,7 +55,7 @@ export const commonStyles = {
   colors: {
     primaryColor: colors.palette.green800,
     secondaryColor: colors.customColors.WHITE,
-    tertiaryColor: colors.palette.green400,
+    tertiaryColor: colors.palette.green100,
     quaternaryColor: colors.palette.red600,
     quinaryColor: colors.palette.neutral300,
 

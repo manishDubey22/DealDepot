@@ -39,4 +39,6 @@ export const Icon = {
   BACKARROWICON: require("./backArrows.png"),
   LOGO: require("./Logo.jpg"),
   FOOTER: require("./Footer_image.png"),
+  RESET_PASSWORD: require("./resetPassword.png"),
+  EMAIL: require("./email.png"),
 }
