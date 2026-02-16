@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
     width: 70,
   },
   containerInput: {
-    marginBottom: responsiveHeight(2),
+    marginBottom: responsiveHeight(4),
   },
   helperText2: {
     color: colors.customColors.GREEN,
@@ -97,7 +97,8 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
   textInputMargin: {
-    marginTop: responsiveHeight(2),
+    height: 56,
+    // marginTop: responsiveHeight(5),
   },
   validationError: {
     color: colors.customColors.PASTEL_RED,
