@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, Image, ActivityIndicator } from "react-native"
+import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import { HeaderComponent } from "@/components/common-components"
@@ -124,32 +124,21 @@ export default function UploadFiles() {
             })}
           </View>
 
-          <TouchableOpacity
-            style={[styles.uploadButton, !selectedPeerGroup && styles.uploadButtonDisabled]}
+          {/* <View style={styles.stepButton}> */}
+          <ButtonField
+            value={isUploading ? UI_TEXT.UPLOADING : UI_TEXT.UPLOAD_PDF_FILE}
             onPress={handleDocumentUpload}
-            disabled={!selectedPeerGroup || isUploading}
-            activeOpacity={0.8}
-          >
-            {isUploading ? (
-              <ActivityIndicator color="#FFF" size="small" />
-            ) : (
-              <>
-                <Image
-                  source={Icon.UPLOAD_FILES}
-                  style={styles.uploadButtonIcon}
-                  resizeMode="contain"
-                />
-                <Text
-                  style={[
-                    styles.uploadButtonText,
-                    !selectedPeerGroup && styles.uploadButtonTextDisabled,
-                  ]}
-                >
-                  {isUploading ? UI_TEXT.UPLOADING : UI_TEXT.UPLOAD_PDF_FILE}
-                </Text>
-              </>
-            )}
-          </TouchableOpacity>
+            isDisabled={!selectedPeerGroup || isUploading}
+            isLoading={isUploading}
+            icon={
+              <Image
+                source={Icon.UPLOAD_FILES}
+                style={styles.uploadButtonIcon}
+                resizeMode="contain"
+              />
+            }
+          />
+          {/* </View> */}
 
           <View style={styles.fileTypeInfo}>
             <Text style={styles.fileTypeInfoText}>{UI_TEXT.FILE_TYPE_INFO}</Text>
