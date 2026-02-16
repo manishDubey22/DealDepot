@@ -21,6 +21,7 @@ import {
   SalesGraph,
   Scanner,
   Search,
+  UploadFiles,
 } from "@/screens/retailer"
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
@@ -352,22 +353,24 @@ export const RetailerStackNavigation = ({
           header: () => <HeaderComponent value="Sales Graph" />,
         }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.UPLOAD_FILE}
-        component={UploadFile}
+        component={UploadFiles}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
           },
           headerStyle: {
+            // @ts-expect-error - display property not in type but works at runtime
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Upload Files" />,
         }}
-      /> */}
+      />
       <Stack.Screen
         name={RetailerRoutes.EDIT_PROFILE}
         component={EditProfile}

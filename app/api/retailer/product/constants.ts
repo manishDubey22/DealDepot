@@ -25,3 +25,6 @@ export const PRODUCT_DETAILS_ENDPOINTS = {
   TOGGLE_FAVORITE: (retailerId: string, productId: string) =>
     `retailer/${retailerId}/v1/favorite/${productId}`,
 } as const
+
+export const UPLOAD_RETAILER_FILE_ENDPOINT = (retailerId: string, peerGroup: string) =>
+  `retailer/${retailerId}/v1/upload/${encodeURIComponent(peerGroup)}`
