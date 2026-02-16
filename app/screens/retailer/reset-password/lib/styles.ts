@@ -15,15 +15,13 @@ export const styles = StyleSheet.create({
   containerIconCircle: {
     backgroundColor: commonStyles.colors.tertiaryColor,
     borderRadius: 999,
-    height: "20%",
+    height: 70,
     margin: "auto",
-    marginBottom: responsiveHeight(2),
     padding: 10,
-    width: "20%",
+    width: 70,
   },
   containerInput: {
     marginBottom: responsiveHeight(2),
-    marginTop: responsiveHeight(2),
   },
   helperText2: {
     color: colors.customColors.GREEN,
@@ -69,7 +67,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     gap: responsiveWidth(3),
     justifyContent: "center",
-    marginTop: responsiveHeight(3),
+    marginVertical: responsiveHeight(3),
   },
   otpSubtitleEmail: {
     color: colors.customColors.GREEN,
