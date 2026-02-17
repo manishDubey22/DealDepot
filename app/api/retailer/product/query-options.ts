@@ -11,6 +11,7 @@ import {
   getStaticPeers,
   getSubCategoryList,
   getTrendingProducts,
+  postUploadRetailerFile,
   toggleFavorite,
 } from "./api"
 import { PRODUCT_DETAILS_KEYS, PRODUCT_KEYS, STATIC_PEERS_KEYS } from "./constants"
@@ -22,6 +23,7 @@ import type {
   SearchProductsParams,
   SubCategoryListParams,
   ToggleFavoriteParams,
+  UploadRetailerFileParams,
 } from "./types"
 
 // Static Peers Query Keys
@@ -351,5 +353,12 @@ export function useToggleFavoriteMutation() {
         queryKey: ["favorites"],
       })
     },
+  })
+}
+
+// Upload Retailer File Mutation
+export function useUploadRetailerFileMutation() {
+  return useMutation({
+    mutationFn: (params: UploadRetailerFileParams) => postUploadRetailerFile(params),
   })
 }

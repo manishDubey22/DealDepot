@@ -8,6 +8,8 @@ export const DROPDOWN_MARGIN_TOP = 5
 
 export const TEXT_INPUT_MARGIN_TOP = 6
 
+export const TEXT_INPUT_HEIGHT = 44
+
 export const TEXT_INPUT_PADDING_HORIZONTAL = 2
 
 export const SHADOW_OFFSET_HEIGHT = 4

@@ -161,3 +161,14 @@ export interface ProductDetailsError {
   }
   message?: string
 }
+
+// Upload Retailer File
+export interface UploadRetailerFileParams {
+  formData: FormData
+  retailerId: string
+  peer_group: string
+}
+
+export interface UploadRetailerFileResponse {
+  message?: string
+}

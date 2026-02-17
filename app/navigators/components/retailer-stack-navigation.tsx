@@ -13,13 +13,19 @@ import {
   HomeOptionList,
   Login,
   Order,
+  PaymentFailure,
+  PaymentLoading,
+  PaymentSuccess,
   PreviewPDF,
   ProductDescription,
   Profile,
+  ResetPassword,
   SaveOrder,
   SalesGraph,
   Scanner,
   Search,
+  SubscriptionPlans,
+  UploadFiles,
 } from "@/screens/retailer"
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
@@ -210,7 +216,7 @@ export const RetailerStackNavigation = ({
   role,
   authToken,
 }: {
-  role: string | unknown | undefined
+  role: string | null
   authToken: string | unknown | undefined
 }) => {
   const initialRouteName = role && authToken ? RetailerRoutes.TAB_CONTAINER : RetailerRoutes.LOGIN
@@ -277,25 +283,26 @@ export const RetailerStackNavigation = ({
           headerShown: false,
         }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.RESET_PASSWORD}
         options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: colors.customColors.WHITE,
-            height: 100,
-          },
-          headerTitleStyle: {
-            color: colors.palette.charcoal500,
-            fontFamily: CommonStyles.fontFamily.fontFamily,
-            fontSize: 20,
-          },
-          headerTitle: 'Reset Password',
-          headerTitleAlign: 'center',
-          headerTintColor: colors.palette.neutral100,
-        }}>
-        {() => <ResetPassword role={role} />}
-      </Stack.Screen> */}
+          headerShown: false,
+          // headerStyle: {
+          //   backgroundColor: colors.customColors.WHITE,
+          //   // height: 100,
+          // },
+          // headerTitleStyle: {
+          //   color: colors.palette.charcoal500,
+          //   fontFamily: CommonStyles.fontFamily.fontFamily,
+          //   fontSize: 20,
+          // },
+          // headerTitle: "Reset Password",
+          // headerTitleAlign: "center",
+          // headerTintColor: colors.palette.neutral100,
+        }}
+      >
+        {({ navigation }) => <ResetPassword role={role} navigation={navigation} />}
+      </Stack.Screen>
       <Stack.Screen
         name={RetailerRoutes.SAVE_ORDER}
         component={SaveOrder}
@@ -350,22 +357,24 @@ export const RetailerStackNavigation = ({
           header: () => <HeaderComponent value="Sales Graph" />,
         }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.UPLOAD_FILE}
-        component={UploadFile}
+        component={UploadFiles}
         options={{
-          headerShown: true,
+          headerShown: false,
           headerTitleStyle: {
-            display: 'none',
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
           },
           headerStyle: {
+            // @ts-expect-error - display property not in type but works at runtime
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
-          header: () => <HeaderComponent value="Upload Files" />,
+          // header: () => <HeaderComponent value="Upload Files" />,
         }}
-      /> */}
+      />
       <Stack.Screen
         name={RetailerRoutes.EDIT_PROFILE}
         component={EditProfile}
@@ -418,43 +427,45 @@ export const RetailerStackNavigation = ({
           header: () => <HeaderComponent value="Render PDF" />,
         }}
       /> */}
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.FAILURE}
-        component={FailureScreen}
+        component={PaymentFailure}
         options={{
           headerShown: false,
         }}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
         name={RetailerRoutes.SUCCESS}
-        component={SuccessScreen}
+        component={PaymentSuccess}
         options={{
           headerShown: false,
         }}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
         name={RetailerRoutes.LOADING}
-        component={LoadingScreen}
+        component={PaymentLoading}
         options={{
           headerShown: false,
         }}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
         name={RetailerRoutes.SUBSCRIPTIONPLAN}
         component={SubscriptionPlans}
         options={{
           headerShown: true,
           headerTitleStyle: {
-            display: 'none',
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
           },
           headerStyle: {
+            // @ts-expect-error - height property not in type but works at runtime
             height: 80,
             elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowColor: colors.palette.grey400,
           },
-          header: () => WithoutImageHeader('Subscriptions Plans'),
+          header: () => <HeaderComponent value="Subscriptions Plans" />,
         }}
-      /> */}
+      />
       <Stack.Screen
         name={RetailerRoutes.FAVOURITES}
         component={Favourites}

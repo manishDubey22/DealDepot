@@ -17,6 +17,7 @@ import {
   TEXT_INPUT_MARGIN_TOP,
   TEXT_INPUT_PADDING_HORIZONTAL,
   ICON_CONTAINER_PADDING_HORIZONTAL,
+  TEXT_INPUT_HEIGHT,
 } from "./constants"
 
 export const styles = StyleSheet.create({
@@ -44,6 +45,7 @@ export const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
+    height: TEXT_INPUT_HEIGHT,
     padding: Platform.OS === "ios" ? IOS_TEXT_INPUT_PADDING : null,
   },
   textInputContainer: {

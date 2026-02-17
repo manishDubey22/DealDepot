@@ -131,3 +131,31 @@ export interface WhoAmIErrorResponse {
     }
   }
 }
+
+export interface ResetPasswordRequestPayload {
+  email: string
+  role: string
+}
+
+export interface ResetPasswordRequestResponse {
+  message?: string
+}
+
+export interface ResetPasswordVerifyPayload {
+  email: string
+  otp: string
+}
+
+export interface ResetPasswordVerifyResponse {
+  message?: string
+  data?: { resetPasswordToken?: string }
+}
+
+export interface ResetPasswordCompletePayload {
+  password: string
+  resetPasswordToken: string
+}
+
+export interface ResetPasswordCompleteResponse {
+  message?: string
+}

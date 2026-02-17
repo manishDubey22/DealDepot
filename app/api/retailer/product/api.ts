@@ -1,7 +1,12 @@
 import { api } from "@/lib/api-client"
 import { getApiUrl } from "@/lib/api-config"
 
-import { PRODUCT_DETAILS_ENDPOINTS, PRODUCT_ENDPOINTS, STATIC_PEERS_ENDPOINT } from "./constants"
+import {
+  PRODUCT_DETAILS_ENDPOINTS,
+  PRODUCT_ENDPOINTS,
+  STATIC_PEERS_ENDPOINT,
+  UPLOAD_RETAILER_FILE_ENDPOINT,
+} from "./constants"
 import type {
   ApiRequestContext,
   CategoryListParams,
@@ -18,6 +23,8 @@ import type {
   SubCategoryListResponse,
   ToggleFavoriteParams,
   ToggleFavoriteResponse,
+  UploadRetailerFileParams,
+  UploadRetailerFileResponse,
 } from "./types"
 
 export const getStaticPeers = (
@@ -76,4 +83,9 @@ export const getProductBySort = (params: GetProductBySortParams) => {
 export const toggleFavorite = (params: ToggleFavoriteParams) => {
   const url = `${getApiUrl()}/${PRODUCT_DETAILS_ENDPOINTS.TOGGLE_FAVORITE(params.retailerId, params.productId)}`
   return api.put<ToggleFavoriteResponse>(url)
+}
+
+export const postUploadRetailerFile = (params: UploadRetailerFileParams) => {
+  const url = `${getApiUrl()}/${UPLOAD_RETAILER_FILE_ENDPOINT(params.retailerId, params.peer_group)}`
+  return api.post<UploadRetailerFileResponse>(url, params.formData)
 }
