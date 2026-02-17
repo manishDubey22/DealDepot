@@ -40,6 +40,7 @@ try {
 
 import { useInAppUpdates } from "@/hooks/useInAppUpdate"
 import { queryClient } from "@/lib/react-query/queryClient"
+import { checkForAppUpdate } from "@/services/updateService"
 
 // import { AuthProvider } from "./context/AuthContext" // @demo remove-current-line
 import { RetailerAuthProvider } from "./context/RetailerAuthContext"
@@ -82,6 +83,10 @@ import * as storage from "./utils/storage"
  */
 export function App() {
   useInAppUpdates()
+
+  useEffect(() => {
+    checkForAppUpdate()
+  }, [])
 
   const {
     // initialNavigationState,
