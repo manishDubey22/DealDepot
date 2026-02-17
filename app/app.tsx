@@ -38,6 +38,7 @@ try {
   KeyboardProviderWrapper = ({ children }: { children: ReactNode }) => children
 }
 
+import { useInAppUpdates } from "@/hooks/useInAppUpdate"
 import { queryClient } from "@/lib/react-query/queryClient"
 
 // import { AuthProvider } from "./context/AuthContext" // @demo remove-current-line
@@ -80,6 +81,8 @@ import * as storage from "./utils/storage"
  * @returns {JSX.Element} The rendered `App` component.
  */
 export function App() {
+  useInAppUpdates()
+
   const {
     // initialNavigationState,
     // onNavigationStateChange,
