@@ -3,6 +3,8 @@ import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimen
 
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
+import { spacing } from "@/theme/spacing"
+import { commonStyles } from "@/theme/styles"
 
 export const styles = StyleSheet.create({
   addButton: {
@@ -20,6 +22,9 @@ export const styles = StyleSheet.create({
   blurOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: colors.palette.neutral100,
+  },
+  blurredContainer: {
+    opacity: 0.5,
   },
   cartControls: {
     alignItems: "center",
@@ -138,9 +143,24 @@ export const styles = StyleSheet.create({
     minWidth: 40,
     textAlign: "center",
   },
+  section: {
+    marginBottom: spacing.lg,
+  },
+  sectionHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: spacing.sm,
+  },
+  sectionTitle: {
+    color: colors.customColors.BLACK,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: commonStyles.fontSize.medium,
+    fontWeight: commonStyles.fontWeight.regular,
+  },
   wholesalerDate: {
     color: colors.palette.grey500,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
+    fontFamily: commonStyles.fontFamily.bold,
     fontSize: 12,
     marginTop: 4,
   },

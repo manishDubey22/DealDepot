@@ -27,17 +27,22 @@ const generateHTMLContent = (order: Order, vendorData: VendorData): string => {
     return pdfData
       .map((data) => {
         const itemRows = data.items
-          .map(
-            (item) => `
+          .map((item) => {
+            const price = typeof item.price === "number" && !isNaN(item.price) ? item.price : 0
+            const productTotalPrice =
+              typeof item.productTotalPrice === "number" && !isNaN(item.productTotalPrice)
+                ? item.productTotalPrice
+                : 0
+            return `
           <tr>
             <td style="padding: 8px; border: 1px solid #ddd; text-align: left;">${item.product_id}</td>
             <td style="padding: 8px; border: 1px solid #ddd; text-align: left;">${item.name}</td>
             <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.items}</td>
-            <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">$${item.price.toFixed(2)}</td>
-            <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">$${item.productTotalPrice.toFixed(2)}</td>
+            <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">$${price.toFixed(2)}</td>
+            <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">$${productTotalPrice.toFixed(2)}</td>
           </tr>
-        `,
-          )
+        `
+          })
           .join("")
 
         return `
