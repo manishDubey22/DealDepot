@@ -66,7 +66,6 @@ The `ButtonField` component accepts the following props:
 
 ```tsx
 import ButtonField from "@/components/common-components/button/button"
-
 ;<ButtonField value="Submit" onPress={handleSubmit} />
 ```
 
@@ -76,7 +75,6 @@ import ButtonField from "@/components/common-components/button/button"
 import ButtonField from "@/components/common-components/button/button"
 import { Image } from "react-native"
 import { Icon } from "@/assets/icons/wholeSeller"
-
 ;<ButtonField
   value="Upload File"
   onPress={handleUpload}
@@ -88,7 +86,6 @@ import { Icon } from "@/assets/icons/wholeSeller"
 
 ```tsx
 import ButtonField from "@/components/common-components/button/button"
-
 ;<ButtonField value="Submit" onPress={handleSubmit} isDisabled={!isFormValid} />
 ```
 
@@ -96,7 +93,6 @@ import ButtonField from "@/components/common-components/button/button"
 
 ```tsx
 import ButtonField from "@/components/common-components/button/button"
-
 ;<ButtonField
   value="Submitting..."
   onPress={handleSubmit}
@@ -109,7 +105,6 @@ import ButtonField from "@/components/common-components/button/button"
 
 ```tsx
 import ButtonField from "@/components/common-components/button/button"
-
 ;<ButtonField value="Selected" onPress={handleSelect} variant="active" />
 ```
 
@@ -117,7 +112,6 @@ import ButtonField from "@/components/common-components/button/button"
 
 ```tsx
 import ButtonField from "@/components/common-components/button/button"
-
 ;<ButtonField value="View Details" onPress={handleView} textAlign="left" icon={<IconComponent />} />
 ```
 
