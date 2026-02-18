@@ -26,8 +26,6 @@ export function useEmailVerification(navigation: any): UseEmailVerificationRetur
     authMutationOptions.useOtpVerifyMutation()
   const { setUserAuth } = useRetailerAuth()
 
-  console.log(CONSOLE_MESSAGES.EMAIL_LOG + email)
-
   const handleOtpChange = useCallback(
     (value: string, index: number) => {
       const updatedOtp = [...otp]
@@ -41,7 +39,6 @@ export function useEmailVerification(navigation: any): UseEmailVerificationRetur
         }
       } else {
         if (index > 0) {
-          console.log(CONSOLE_MESSAGES.UPDATED_OTP_LOG, updatedOtp)
           inputRefs.current[index - 1]?.focus()
         }
       }
@@ -96,14 +93,10 @@ export function useEmailVerification(navigation: any): UseEmailVerificationRetur
           text1: response.message.toUpperCase(),
         })
 
-        console.log(CONSOLE_MESSAGES.SUCCESS_LOG, response)
-
         // Navigate to tab container
         navigation.navigate(RetailerRoutes.TAB_CONTAINER)
       }
     } catch (error: any) {
-      console.log(CONSOLE_MESSAGES.ERROR_LOG, error)
-
       // Extract error message
       let errorMessage = ERROR_MESSAGES.VERIFICATION_FAILED
       if (error?.response?.data?.message) {

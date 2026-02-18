@@ -7,7 +7,6 @@ import {
   FlatList,
   RefreshControl,
 } from "react-native"
-import { ScrollView } from "react-native-gesture-handler"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import type { Product } from "@/api/retailer/product/types"
@@ -48,6 +47,9 @@ export default function Search({ navigation }: any) {
     subCategoryDescArray,
     trendingArray,
   } = useSearch()
+
+  const listData = (itemsArray?.length ?? 0) > 0 ? itemsArray : (trendingArray ?? [])
+  const showCategoryHeader = isLoading || !(itemsArray?.length ?? 0) || !query
 
   const renderCardItem = (modifyValue: Product) => {
     const priceInfo = modifyValue?.adminPrice && modifyValue?.adminPrice[peerGroup]
@@ -91,7 +93,30 @@ export default function Search({ navigation }: any) {
     )
   }
 
-  const renderData = () => {
+  const renderListHeader = () => {
+    if (!showCategoryHeader) return null
+    return (
+      <View style={styles.categoryContainer}>
+        <TouchableOpacity
+          style={styles.peerGroupButton}
+          onPress={() => setCategoryModalVisible(true)}
+        >
+          <Text style={styles.peerGroupButtonText}>{selectedCategory ?? isCategoryAll}</Text>
+          <Image source={Icon.LeftBackArrow} resizeMode="contain" style={styles.dropdownArrow} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.peerGroupButton}
+          onPress={() => selectedCategory && setSubCategoryModalVisible(true)}
+        >
+          <Text style={styles.peerGroupButtonText}>{selectedSubCategory ?? "Subcategory"}</Text>
+          <Image source={Icon.LeftBackArrow} resizeMode="contain" style={styles.dropdownArrow} />
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  const renderListEmpty = () => {
     if (isLoading || isLoadingTrendingData) {
       return (
         <View style={styles.loaderContainer}>
@@ -99,19 +124,6 @@ export default function Search({ navigation }: any) {
         </View>
       )
     }
-
-    if (itemsArray?.length > 0) {
-      return (
-        <FlatList
-          data={itemsArray}
-          keyExtractor={(item) => item.product_id.toString()}
-          renderItem={({ item }) => renderCardItem(item)}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.listContent}
-        />
-      )
-    }
-
     if (query && filteredData?.data?.length === 0) {
       return (
         <View style={styles.loaderContainer}>
@@ -119,19 +131,6 @@ export default function Search({ navigation }: any) {
         </View>
       )
     }
-
-    if (trendingArray?.length > 0) {
-      return (
-        <FlatList
-          data={trendingArray}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => renderCardItem(item)}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.listContent}
-        />
-      )
-    }
-
     return (
       <View style={styles.loaderContainer}>
         <Text style={styles.emptyText}>No Products found</Text>
@@ -142,7 +141,6 @@ export default function Search({ navigation }: any) {
   return (
     <View style={styles.mainContainer}>
       <SafeAreaView style={styles.container}>
-        {/* <View style={styles.searchCard}> */}
         <SearchField
           setQuery={setQuery}
           query={query}
@@ -151,56 +149,32 @@ export default function Search({ navigation }: any) {
           handleDelete={handleClearSearch}
           debouncedSearch={debouncedSearch}
         />
-        {/* </View> */}
       </SafeAreaView>
 
-      <ScrollView
+      <FlatList
+        data={listData}
+        keyExtractor={(item) => item.product_id.toString()}
+        renderItem={({ item }) => renderCardItem(item)}
+        ListHeaderComponent={renderListHeader}
+        ListEmptyComponent={renderListEmpty}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.listContent}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      >
-        {!(!isLoading && itemsArray?.length > 0 && query) && (
-          <View style={styles.categoryContainer}>
-            <TouchableOpacity
-              style={styles.peerGroupButton}
-              onPress={() => setCategoryModalVisible(true)}
-            >
-              <Text style={styles.peerGroupButtonText}>{selectedCategory ?? isCategoryAll}</Text>
-              <Image
-                source={Icon.LeftBackArrow}
-                resizeMode="contain"
-                style={styles.dropdownArrow}
-              />
-            </TouchableOpacity>
+      />
 
-            <TouchableOpacity
-              style={styles.peerGroupButton}
-              onPress={() => selectedCategory && setSubCategoryModalVisible(true)}
-            >
-              <Text style={styles.peerGroupButtonText}>{selectedSubCategory ?? "Subcategory"}</Text>
-              <Image
-                source={Icon.LeftBackArrow}
-                resizeMode="contain"
-                style={styles.dropdownArrow}
-              />
-            </TouchableOpacity>
+      <ModalComponent
+        visible={isCategoryModalVisible}
+        items={categoryDescArray}
+        onSelect={onCategorySelect}
+        onClose={() => setCategoryModalVisible(false)}
+      />
 
-            <ModalComponent
-              visible={isCategoryModalVisible}
-              items={categoryDescArray}
-              onSelect={onCategorySelect}
-              onClose={() => setCategoryModalVisible(false)}
-            />
-
-            <ModalComponent
-              visible={isSubCategoryModalVisible}
-              items={subCategoryDescArray}
-              onSelect={onSubCategorySelect}
-              onClose={() => setSubCategoryModalVisible(false)}
-            />
-          </View>
-        )}
-        {renderData()}
-      </ScrollView>
+      <ModalComponent
+        visible={isSubCategoryModalVisible}
+        items={subCategoryDescArray}
+        onSelect={onSubCategorySelect}
+        onClose={() => setSubCategoryModalVisible(false)}
+      />
     </View>
   )
 }

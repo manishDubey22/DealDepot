@@ -4,12 +4,13 @@ import { styles } from "./peer-group-price-card.styles"
 
 interface PeerGroupPriceCardProps {
   peerGroupName: string
-  price: number
+  price: number | string
   updatedDate?: string
 }
 
 export function PeerGroupPriceCard({ peerGroupName, price, updatedDate }: PeerGroupPriceCardProps) {
-  const displayPrice = typeof price === "number" && !isNaN(price) ? price : 0
+  const priceNumber = Number(price)
+  const displayPrice = !isNaN(priceNumber) && isFinite(priceNumber) ? priceNumber : 0
   const formattedDate = updatedDate
     ? new Date(updatedDate).toLocaleDateString("en-US", {
         year: "numeric",

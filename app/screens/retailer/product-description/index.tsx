@@ -143,12 +143,6 @@ export default function ProductDescription() {
         ? wholesaler.casePrice / 12
         : displayUnitPrice
 
-    console.log("11111111111 wholesaler =>", wholesaler)
-    console.log("11111111111 displayUnitPrice =>", displayUnitPrice)
-    console.log("11111111111 casePrice =>", casePrice)
-    console.log("11111111111 perUnitPrice =>", perUnitPrice)
-    console.log("11111111111 unitPrice =>", unitPrice)
-
     return (
       <View style={showBlur ? styles.blurredContainer : undefined}>
         <WholesalerCard
@@ -194,18 +188,6 @@ export default function ProductDescription() {
       </View>
     )
   }
-
-  console.log("11111111111 wholesalerData =>", wholesalerData)
-  console.log("peerGroupPrice =>", peerGroupPrice)
-  console.log("uiSelectedPeerGroup =>", uiSelectedPeerGroup)
-  console.log("isSubscribed =>", isSubscribed)
-  console.log("peerGroups =>", peerGroups)
-  console.log("selectedPeerGroup =>", selectedPeerGroup)
-  console.log("showQuantityModal =>", showQuantityModal)
-  console.log("showSortModal =>", showSortModal)
-  console.log("showPeerGroupModal =>", showPeerGroupModal)
-  console.log("selectedWholesaler =>", selectedWholesaler)
-  console.log("11111111111 quantityInput =>", quantityInput)
 
   return (
     <View style={styles.mainContainer}>
