@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
   },
   pill: {
     backgroundColor: commonStyles.colors.backgroundQuinary,
-    borderRadius: 20,
+    borderRadius: commonStyles.borderRadius.large,
     paddingHorizontal: spacing.sm,
     paddingVertical: 6,
   },

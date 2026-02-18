@@ -152,6 +152,12 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: spacing.sm,
   },
+  sectionPeerGroupPrice: {
+    backgroundColor: commonStyles.colors.primaryLight,
+    borderRadius: commonStyles.borderRadius.medium,
+    marginBottom: spacing.lg,
+    padding: spacing.lg,
+  },
   sectionTitle: {
     color: commonStyles.colors.text,
     fontFamily: commonStyles.fontFamily.bold,

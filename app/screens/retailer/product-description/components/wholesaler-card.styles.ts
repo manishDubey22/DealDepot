@@ -64,16 +64,24 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: spacing.sm,
   },
-  updatedDate: {
+  updatedDateLine: {
+    marginTop: spacing.xxs,
+  },
+  updatedLabel: {
     color: commonStyles.colors.textSecondary,
     fontFamily: commonStyles.fontFamily.regular,
     fontSize: commonStyles.fontSize.small,
-    marginTop: spacing.xxs,
+  },
+  updatedDateValue: {
+    color: commonStyles.colors.textSecondary,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: commonStyles.fontSize.small,
+    fontWeight: commonStyles.fontWeight.bold,
   },
   wholesalerName: {
     color: commonStyles.colors.primaryColor,
     fontFamily: commonStyles.fontFamily.bold,
     fontSize: commonStyles.fontSize.medium,
-    fontWeight: commonStyles.fontWeight.semiBold,
+    fontWeight: commonStyles.fontWeight.bold,
   },
 })

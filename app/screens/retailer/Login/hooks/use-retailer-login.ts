@@ -65,7 +65,13 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<IFormInput>({ resolver: yupResolver(loginSchema) })
+  } = useForm<IFormInput>({
+    resolver: yupResolver(loginSchema),
+    defaultValues: {
+      email: "7z47vigy9y@elatter.com",
+      password: "Java@123",
+    },
+  })
 
   const handleTogglePassword = useCallback(() => {
     setIsShowPassword((prev) => !prev)

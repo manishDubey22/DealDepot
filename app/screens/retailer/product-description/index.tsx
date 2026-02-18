@@ -5,6 +5,7 @@ import Toast from "react-native-toast-message"
 
 import type { CartItem } from "@/api/retailer/order"
 import { productQueryOptions } from "@/api/retailer/product"
+import { WholesalerData } from "@/api/retailer/product/types"
 import { colors } from "@/theme/colors"
 // import { spacing } from "@/theme/spacing"
 // import { commonStyles } from "@/theme/styles"
@@ -61,23 +62,24 @@ export default function ProductDescription() {
   const { data: staticPeersData } = productQueryOptions.useStaticPeersQuery()
   const peerGroups = staticPeersData?.data || []
 
-  // Local UI state for peer group selection (defaults to first peer group)
+  // Local UI state for peer group selection (defaults to first peer group when available)
   const [uiSelectedPeerGroup, setUiSelectedPeerGroup] = useState<string | null>(null)
 
-  // Initialize UI peer group selection
+  // Default to first peer group when peer groups load, or sync with stored value from hook
   useEffect(() => {
-    if (peerGroups.length > 0 && !uiSelectedPeerGroup) {
-      // Use selectedPeerGroup from hook if available, otherwise use first peer group
-      setUiSelectedPeerGroup(selectedPeerGroup || peerGroups[0])
-    }
-  }, [peerGroups, selectedPeerGroup, uiSelectedPeerGroup])
-
-  // Sync with hook's selectedPeerGroup when it changes
-  useEffect(() => {
-    if (selectedPeerGroup) {
-      setUiSelectedPeerGroup(selectedPeerGroup)
-    }
-  }, [selectedPeerGroup])
+    if (peerGroups.length === 0) return
+    setUiSelectedPeerGroup((prev) => {
+      const storedInList =
+        selectedPeerGroup && peerGroups.includes(selectedPeerGroup) ? selectedPeerGroup : null
+      const firstGroup = peerGroups[0]
+      // Keep current if it's still in the list
+      if (prev && peerGroups.includes(prev)) return prev
+      // Prefer stored value from hook if it's in the list
+      if (storedInList) return storedInList
+      // Default to first peer group so PeerGroupPriceCard shows
+      return firstGroup
+    })
+  }, [peerGroups, selectedPeerGroup])
 
   // Handle UI-level peer group selection
   const handleUiPeerGroupSelect = (peerGroup: string) => {
@@ -121,12 +123,18 @@ export default function ProductDescription() {
   }, [adminPrice, uiSelectedPeerGroup])
 
   // Render wholesaler item
-  const renderWholesalerItem = ({ item: wholesaler, index }: { item: any; index: number }) => {
+  const renderWholesalerItem = ({
+    item: wholesaler,
+    index,
+  }: {
+    item: WholesalerData
+    index: number
+  }) => {
     const cartItem = getCartItem(wholesaler.wholesaler_id)
     const isInCart = !!cartItem
     const showBlur = !isSubscribed && index >= 2
     const unitPrice = getPeerGroupPrice(wholesaler)
-    const displayUnitPrice = typeof unitPrice === "number" && !isNaN(unitPrice) ? unitPrice : 0
+    const displayUnitPrice = unitPrice > 0 && !isNaN(unitPrice) ? unitPrice : 0
     const casePrice = wholesaler.casePrice ?? displayUnitPrice
     // Calculate per unit price from case price if available (assuming case has multiple units)
     // If casePrice exists and is different from unitPrice, calculate per unit; otherwise use unitPrice
@@ -134,6 +142,12 @@ export default function ProductDescription() {
       wholesaler.casePrice && wholesaler.casePrice > 0 && wholesaler.casePrice !== displayUnitPrice
         ? wholesaler.casePrice / 12
         : displayUnitPrice
+
+    console.log("11111111111 wholesaler =>", wholesaler)
+    console.log("11111111111 displayUnitPrice =>", displayUnitPrice)
+    console.log("11111111111 casePrice =>", casePrice)
+    console.log("11111111111 perUnitPrice =>", perUnitPrice)
+    console.log("11111111111 unitPrice =>", unitPrice)
 
     return (
       <View style={showBlur ? styles.blurredContainer : undefined}>
@@ -181,6 +195,18 @@ export default function ProductDescription() {
     )
   }
 
+  console.log("11111111111 wholesalerData =>", wholesalerData)
+  console.log("peerGroupPrice =>", peerGroupPrice)
+  console.log("uiSelectedPeerGroup =>", uiSelectedPeerGroup)
+  console.log("isSubscribed =>", isSubscribed)
+  console.log("peerGroups =>", peerGroups)
+  console.log("selectedPeerGroup =>", selectedPeerGroup)
+  console.log("showQuantityModal =>", showQuantityModal)
+  console.log("showSortModal =>", showSortModal)
+  console.log("showPeerGroupModal =>", showPeerGroupModal)
+  console.log("selectedWholesaler =>", selectedWholesaler)
+  console.log("11111111111 quantityInput =>", quantityInput)
+
   return (
     <View style={styles.mainContainer}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -197,8 +223,8 @@ export default function ProductDescription() {
         />
 
         {/* 2. Peer Group Price Section */}
-        {isSubscribed && peerGroups.length > 0 && (
-          <View style={styles.section}>
+        {peerGroups.length > 0 && (
+          <View style={styles.sectionPeerGroupPrice}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Peer Group Price</Text>
               <PeerGroupSelector

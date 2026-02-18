@@ -50,7 +50,12 @@ export function WholesalerCard({
       <View style={styles.topRow}>
         <View style={styles.leftSection}>
           <Text style={styles.wholesalerName}>{wholesalerName}</Text>
-          {formattedDate && <Text style={styles.updatedDate}>Updated: {formattedDate}</Text>}
+          {formattedDate && (
+            <Text style={styles.updatedDateLine}>
+              <Text style={styles.updatedLabel}>Updated: </Text>
+              <Text style={styles.updatedDateValue}>{formattedDate}</Text>
+            </Text>
+          )}
         </View>
         <Text style={styles.chevron}>›</Text>
       </View>

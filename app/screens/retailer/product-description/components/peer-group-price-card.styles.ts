@@ -5,7 +5,7 @@ import { commonStyles } from "@/theme/styles"
 
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: commonStyles.colors.backgroundTertiary,
+    backgroundColor: commonStyles.colors.background,
     borderRadius: 16,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -33,8 +33,9 @@ export const styles = StyleSheet.create({
   },
   updatedDate: {
     color: commonStyles.colors.textSecondary,
-    fontFamily: commonStyles.fontFamily.regular,
+    fontFamily: commonStyles.fontFamily.bold,
     fontSize: commonStyles.fontSize.small,
+    fontWeight: commonStyles.fontWeight.bold,
     marginTop: spacing.xxs,
   },
   updatedLabel: {
