@@ -129,7 +129,7 @@ export default function ProductDescription() {
     async (quantity: number) => {
       if (!selectedWholesaler) return
       try {
-        await handleQuantitySubmit(quantity)
+        await (handleQuantitySubmit as (overrideQuantity?: number) => Promise<void>)(quantity)
         // Close bottom sheet after successful submission
         quantityBottomSheetRef.current?.dismiss()
         setSelectedWholesaler(null)
