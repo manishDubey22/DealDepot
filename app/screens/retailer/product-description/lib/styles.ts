@@ -153,10 +153,10 @@ export const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   sectionTitle: {
-    color: colors.customColors.BLACK,
+    color: commonStyles.colors.text,
     fontFamily: commonStyles.fontFamily.bold,
     fontSize: commonStyles.fontSize.medium,
-    fontWeight: commonStyles.fontWeight.regular,
+    fontWeight: commonStyles.fontWeight.bold,
   },
   wholesalerDate: {
     color: colors.palette.grey500,

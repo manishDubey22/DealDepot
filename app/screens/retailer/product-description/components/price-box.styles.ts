@@ -6,7 +6,7 @@ import { commonStyles } from "@/theme/styles"
 export const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    backgroundColor: commonStyles.colors.backgroundTertiary,
+    backgroundColor: commonStyles.colors.backgroundQuinary,
     borderRadius: commonStyles.borderRadius.medium,
     flex: 1,
     marginHorizontal: spacing.xxs,

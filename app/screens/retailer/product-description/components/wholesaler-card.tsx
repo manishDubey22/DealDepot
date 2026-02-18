@@ -57,8 +57,8 @@ export function WholesalerCard({
 
       <View style={styles.priceBoxesRow}>
         <PriceBox label="Unit Price" value={unitPrice} />
-        <PriceBox label="Case Price" value={casePrice} />
-        <PriceBox label="Per Unit" value={perUnitPrice} />
+        <PriceBox label="Case Price" value={casePrice !== undefined ? casePrice : unitPrice} />
+        <PriceBox label="Per Unit" value={perUnitPrice !== undefined ? perUnitPrice : unitPrice} />
       </View>
 
       {isInCart ? (

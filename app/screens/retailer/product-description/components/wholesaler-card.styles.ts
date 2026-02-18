@@ -18,8 +18,10 @@ export const styles = StyleSheet.create({
     fontWeight: "300",
   },
   container: {
-    backgroundColor: commonStyles.colors.backgroundSecondary,
+    backgroundColor: commonStyles.colors.backgroundTertiary,
+    borderColor: commonStyles.colors.border,
     borderRadius: commonStyles.borderRadius.xLarge,
+    borderWidth: 1,
     elevation: 3,
     marginBottom: spacing.md,
     padding: spacing.md,

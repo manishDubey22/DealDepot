@@ -86,6 +86,6 @@ export const styles = StyleSheet.create({
     color: commonStyles.colors.text,
     fontFamily: commonStyles.fontFamily.bold,
     fontSize: commonStyles.fontSize.large,
-    fontWeight: commonStyles.fontWeight.semiBold,
+    fontWeight: commonStyles.fontWeight.bold,
   },
 })
