@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react"
+import { useState, useEffect, useMemo, useRef, useCallback } from "react"
 import type { ComponentRef } from "react"
 import { ActivityIndicator, FlatList, ScrollView, Text, View } from "react-native"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
@@ -14,7 +14,7 @@ import { PeerGroupModal } from "./components/peer-group-modal"
 import { PeerGroupPriceCard } from "./components/peer-group-price-card"
 import { PeerGroupSelector } from "./components/peer-group-selector"
 import { ProductHeaderCard } from "./components/product-header-card"
-import { QuantityModal } from "./components/quantity-modal"
+import { QuantityBottomSheet } from "./components/quantity-bottom-sheet"
 import { SortBottomSheet } from "./components/sort-bottom-sheet"
 import { SortButton } from "./components/sort-button"
 import { WholesalerCard } from "./components/wholesaler-card"
@@ -34,26 +34,22 @@ export default function ProductDescription() {
     cartItems,
     selectedPeerGroup,
     isSubscribed,
-    showQuantityModal,
     showPeerGroupModal,
     selectedWholesaler,
-    quantityInput,
     handleToggleFavorite,
-    handleAddToCart,
+    // handleAddToCart,
     handleIncrement,
     handleDecrement,
     handleQuantitySubmit,
     handleSortSelect,
     handlePeerGroupSelect,
     handleNavigateToPriceHistory,
-    // handleNavigateToSalesGraph,
-    setShowQuantityModal,
     setShowPeerGroupModal,
-    setQuantityInput,
     setSelectedWholesaler,
   } = useProductDescription(navigation)
 
   const sortBottomSheetRef = useRef<ComponentRef<typeof BottomSheetModal>>(null)
+  const quantityBottomSheetRef = useRef<ComponentRef<typeof BottomSheetModal>>(null)
 
   // Get peer groups for selector
   const { data: staticPeersData } = productQueryOptions.useStaticPeersQuery()
@@ -119,6 +115,36 @@ export default function ProductDescription() {
     }
   }, [adminPrice, uiSelectedPeerGroup])
 
+  // Handle add to cart with bottom sheet
+  const handleAddToCartWithSheet = useCallback(
+    (wholesaler: WholesalerData) => {
+      setSelectedWholesaler(wholesaler)
+      quantityBottomSheetRef.current?.present()
+    },
+    [setSelectedWholesaler],
+  )
+
+  // Handle quantity confirm from bottom sheet
+  const handleQuantityConfirm = useCallback(
+    async (quantity: number) => {
+      if (!selectedWholesaler) return
+      try {
+        await handleQuantitySubmit(quantity)
+        // Close bottom sheet after successful submission
+        quantityBottomSheetRef.current?.dismiss()
+        setSelectedWholesaler(null)
+      } catch (error) {
+        // Error is handled in handleQuantitySubmit
+        console.log("error =>", error)
+        Toast.show({
+          type: "error",
+          text1: "Failed to add to cart",
+        })
+      }
+    },
+    [selectedWholesaler, handleQuantitySubmit, setSelectedWholesaler],
+  )
+
   // Render wholesaler item
   const renderWholesalerItem = ({
     item: wholesaler,
@@ -144,7 +170,7 @@ export default function ProductDescription() {
           casePrice={casePrice}
           // onPress={() => handleNavigateToSalesGraph(wholesaler)}
           onPress={() => {}}
-          onAddToCart={() => handleAddToCart(wholesaler)}
+          onAddToCart={() => handleAddToCartWithSheet(wholesaler)}
           disabled={showBlur}
           isLoading={false}
           isInCart={isInCart}
@@ -152,9 +178,7 @@ export default function ProductDescription() {
           onIncrement={() => handleIncrement(wholesaler)}
           onDecrement={() => handleDecrement(wholesaler)}
           onQuantityPress={() => {
-            setSelectedWholesaler(wholesaler)
-            setQuantityInput((cartItem?.items || 0).toString())
-            setShowQuantityModal(true)
+            handleAddToCartWithSheet(wholesaler)
           }}
         />
       </View>
@@ -180,8 +204,6 @@ export default function ProductDescription() {
       </View>
     )
   }
-
-  console.log("11111111111 wholesalerData =>", wholesalerData)
 
   return (
     <View style={styles.mainContainer}>
@@ -242,24 +264,25 @@ export default function ProductDescription() {
 
       {/* Modals & Bottom Sheets */}
       <SortBottomSheet ref={sortBottomSheetRef} onSelect={handleSortSelect} />
+      {selectedWholesaler && (
+        <QuantityBottomSheet
+          ref={quantityBottomSheetRef}
+          wholesalerName={selectedWholesaler.name}
+          unitPrice={
+            typeof getPeerGroupPrice(selectedWholesaler) === "number" &&
+            !isNaN(getPeerGroupPrice(selectedWholesaler))
+              ? getPeerGroupPrice(selectedWholesaler)
+              : selectedWholesaler.price
+          }
+          onConfirm={handleQuantityConfirm}
+        />
+      )}
       <PeerGroupModal
         visible={showPeerGroupModal}
         peerGroups={peerGroups}
         selectedPeerGroup={selectedPeerGroup}
         onSelect={handlePeerGroupSelect}
         onClose={() => setShowPeerGroupModal(false)}
-      />
-      <QuantityModal
-        visible={showQuantityModal}
-        wholesaler={selectedWholesaler}
-        quantity={quantityInput}
-        onQuantityChange={setQuantityInput}
-        onSubmit={handleQuantitySubmit}
-        onClose={() => {
-          setShowQuantityModal(false)
-          setSelectedWholesaler(null)
-        }}
-        isLoading={false}
       />
 
       <Toast />

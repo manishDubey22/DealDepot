@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
   icon: {
     height: 14,
     marginRight: 4,
+    opacity: 0.7,
     width: 14,
   },
   text: {

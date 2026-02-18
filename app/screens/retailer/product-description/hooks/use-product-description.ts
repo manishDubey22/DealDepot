@@ -331,61 +331,65 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
   )
 
   // Quantity submit (for modal)
-  const handleQuantitySubmit = useCallback(async () => {
-    if (!selectedWholesaler || !retailerId) return
+  const handleQuantitySubmit = useCallback(
+    async (overrideQuantity?: number) => {
+      if (!selectedWholesaler || !retailerId) return
 
-    const quantity = parseInt(quantityInput)
-    if (isNaN(quantity) || quantity < 0) {
-      Toast.show({
-        type: "error",
-        text1: "Invalid quantity",
-      })
-      return
-    }
+      const quantity = overrideQuantity !== undefined ? overrideQuantity : parseInt(quantityInput)
+      if (isNaN(quantity) || quantity < 0) {
+        Toast.show({
+          type: "error",
+          text1: "Invalid quantity",
+        })
+        return
+      }
 
-    const fileId = getFileId()
-    if (!fileId) {
-      Toast.show({
-        type: "error",
-        text1: ERROR_MESSAGES.CART_UPDATE_ERROR,
-        text2: "File ID not found",
-      })
-      return
-    }
+      const fileId = getFileId()
+      if (!fileId) {
+        Toast.show({
+          type: "error",
+          text1: ERROR_MESSAGES.CART_UPDATE_ERROR,
+          text2: "File ID not found",
+        })
+        return
+      }
 
-    try {
-      await updateCartMutation.mutateAsync({
-        retailerId,
-        data: {
-          wholesaler_id: selectedWholesaler.wholesaler_id,
-          product_id: productId,
-          items: quantity,
-          fileId,
-        },
-      })
-      Toast.show({
-        type: "success",
-        text1: UI_TEXT.CART_UPDATED_SUCCESS,
-      })
-      console.log(CONSOLE_MESSAGES.CART_UPDATED)
-      setShowQuantityModal(false)
-      refetchCart()
-    } catch (error) {
-      console.error(CONSOLE_MESSAGES.CART_UPDATE_ERROR, error)
-      Toast.show({
-        type: "error",
-        text1: ERROR_MESSAGES.CART_UPDATE_ERROR,
-      })
-    }
-  }, [
-    selectedWholesaler,
-    quantityInput,
-    retailerId,
-    productId,
-    getFileId,
-    updateCartMutation,
-    refetchCart,
-  ])
+      try {
+        await updateCartMutation.mutateAsync({
+          retailerId,
+          data: {
+            wholesaler_id: selectedWholesaler.wholesaler_id,
+            product_id: productId,
+            items: quantity,
+            fileId,
+          },
+        })
+        Toast.show({
+          type: "success",
+          text1: UI_TEXT.CART_UPDATED_SUCCESS,
+        })
+        console.log(CONSOLE_MESSAGES.CART_UPDATED)
+        setShowQuantityModal(false)
+        refetchCart()
+      } catch (error) {
+        console.error(CONSOLE_MESSAGES.CART_UPDATE_ERROR, error)
+        Toast.show({
+          type: "error",
+          text1: ERROR_MESSAGES.CART_UPDATE_ERROR,
+        })
+        throw error // Re-throw so caller can handle
+      }
+    },
+    [
+      selectedWholesaler,
+      quantityInput,
+      retailerId,
+      productId,
+      getFileId,
+      updateCartMutation,
+      refetchCart,
+    ],
+  )
 
   // Sort select
   const handleSortSelect = useCallback(async (sortId: string) => {
