@@ -84,7 +84,9 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
         if (response?.data?.status) {
           const isSubscribed = response?.data?.data?.isSubscribed.toString()
           const peerGroup = response?.data?.data?.peerGroup.toString()
-          save(STORAGE_KEYS.PREMIUM_USER, isSubscribed)
+          // save(STORAGE_KEYS.PREMIUM_USER, isSubscribed)
+          console.log("isSubscribed =>", isSubscribed)
+          save(STORAGE_KEYS.PREMIUM_USER, JSON.stringify(true))
           save(STORAGE_KEYS.PEER_GROUP, peerGroup)
           save(STORAGE_KEYS.LOGIN_TIME, new Date().getTime())
 

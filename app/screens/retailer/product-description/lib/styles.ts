@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.palette.neutral100,
   },
   blurredContainer: {
-    opacity: 0.5,
+    opacity: 0.6,
   },
   cartControls: {
     alignItems: "center",
@@ -144,7 +144,7 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
   section: {
-    marginBottom: spacing.lg,
+    marginBottom: responsiveHeight(10),
   },
   sectionHeader: {
     alignItems: "center",

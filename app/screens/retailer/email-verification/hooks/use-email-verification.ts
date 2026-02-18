@@ -63,7 +63,9 @@ export function useEmailVerification(navigation: any): UseEmailVerificationRetur
         // Store subscription and peer group in storage
         const isSubscribed = response.data.isSubscribed.toString()
         const peerGroup = response.data.peerGroup.toString()
-        saveString(STORAGE_KEYS.PREMIUM_USER, isSubscribed)
+        // saveString(STORAGE_KEYS.PREMIUM_USER, isSubscribed)
+        console.log("isSubscribed =>", isSubscribed)
+        save(STORAGE_KEYS.PREMIUM_USER, JSON.stringify(true))
         saveString(STORAGE_KEYS.PEER_GROUP, peerGroup)
 
         // Store user info in storage

@@ -87,8 +87,13 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
   // Update wholesaler data when product or sorted data changes
   useEffect(() => {
     if (sortedData?.data && sortOption) {
+      console.log("222222 sortedData.data after sorting api response data =>", sortedData.data)
       setWholesalerData(sortedData.data)
     } else if (productResponse?.data?.wholesalerData) {
+      console.log(
+        "333333 productResponse.data.wholesalerData after product api response data =>",
+        productResponse.data.wholesalerData,
+      )
       setWholesalerData(productResponse.data.wholesalerData)
     }
   }, [productResponse?.data?.wholesalerData, sortedData?.data, sortOption])
