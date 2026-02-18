@@ -10,7 +10,7 @@ interface SortButtonProps {
 export function SortButton({ onPress }: SortButtonProps) {
   return (
     <TouchableOpacity style={styles.button} onPress={onPress} activeOpacity={0.8}>
-      <Image source={Icon.FUNNEL} style={styles.icon} resizeMode="contain" />
+      <Image source={Icon.SORTING} style={styles.icon} resizeMode="contain" />
       <Text style={styles.text}>Sort</Text>
     </TouchableOpacity>
   )

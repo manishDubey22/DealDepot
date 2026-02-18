@@ -23,6 +23,7 @@ import { useEffect, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import { useFonts } from "expo-font"
 // import * as Linking from "expo-linking"
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
@@ -122,23 +123,25 @@ export function App() {
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={styles.gestureHandlerRoot}>
-        <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            <RetailerAuthProvider>
-              <NavigationContainer>
-                <RoleProvider>
-                  <KeyboardProviderWrapper>
-                    {/* <VersionProvider> */}
-                    <View style={styles.mainContainer}>
-                      <AppNavigator />
-                    </View>
-                    {/* </VersionProvider> */}
-                  </KeyboardProviderWrapper>
-                </RoleProvider>
-              </NavigationContainer>
-            </RetailerAuthProvider>
-          </QueryClientProvider>
-        </Provider>
+        <BottomSheetModalProvider>
+          <Provider store={store}>
+            <QueryClientProvider client={queryClient}>
+              <RetailerAuthProvider>
+                <NavigationContainer>
+                  <RoleProvider>
+                    <KeyboardProviderWrapper>
+                      {/* <VersionProvider> */}
+                      <View style={styles.mainContainer}>
+                        <AppNavigator />
+                      </View>
+                      {/* </VersionProvider> */}
+                    </KeyboardProviderWrapper>
+                  </RoleProvider>
+                </NavigationContainer>
+              </RetailerAuthProvider>
+            </QueryClientProvider>
+          </Provider>
+        </BottomSheetModalProvider>
       </GestureHandlerRootView>
     </SafeAreaProvider>
   )

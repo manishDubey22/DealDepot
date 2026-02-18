@@ -44,4 +44,5 @@ export const Icon = {
   VERIFIED_EMAIL: require("./verification.png"),
   UPLOAD_FILES: require("./uploadFile.png"),
   SEARCH_ICON: require("./SearchIcon.png"),
+  SORTING: require("./Sorting.png"),
 }

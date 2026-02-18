@@ -8,8 +8,9 @@ interface PriceBoxProps {
 }
 
 export function PriceBox({ label, value }: PriceBoxProps) {
+  const priceNumber = Number(value)
   const displayValue =
-    typeof value === "number" && !isNaN(value) ? `$${value.toFixed(2)}` : `$${value || "0.00"}`
+    !isNaN(priceNumber) && isFinite(priceNumber) ? `$${priceNumber.toFixed(2)}` : "--"
 
   return (
     <View style={styles.container}>

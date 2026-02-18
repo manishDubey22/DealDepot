@@ -1,5 +1,7 @@
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
+import type { ComponentRef } from "react"
 import { ActivityIndicator, FlatList, ScrollView, Text, View } from "react-native"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import Toast from "react-native-toast-message"
 
@@ -7,18 +9,14 @@ import type { CartItem } from "@/api/retailer/order"
 import { productQueryOptions } from "@/api/retailer/product"
 import { WholesalerData } from "@/api/retailer/product/types"
 import { colors } from "@/theme/colors"
-// import { spacing } from "@/theme/spacing"
-// import { commonStyles } from "@/theme/styles"
 
-// import { AddToCartButton } from "./components/add-to-cart-button"
 import { PeerGroupModal } from "./components/peer-group-modal"
 import { PeerGroupPriceCard } from "./components/peer-group-price-card"
 import { PeerGroupSelector } from "./components/peer-group-selector"
-// import { PriceBox } from "./components/price-box"
 import { ProductHeaderCard } from "./components/product-header-card"
 import { QuantityModal } from "./components/quantity-modal"
+import { SortBottomSheet } from "./components/sort-bottom-sheet"
 import { SortButton } from "./components/sort-button"
-import { SortModal } from "./components/sort-modal"
 import { WholesalerCard } from "./components/wholesaler-card"
 import { useProductDescription } from "./hooks/use-product-description"
 import { UI_TEXT } from "./lib/constants"
@@ -37,11 +35,9 @@ export default function ProductDescription() {
     selectedPeerGroup,
     isSubscribed,
     showQuantityModal,
-    showSortModal,
     showPeerGroupModal,
     selectedWholesaler,
     quantityInput,
-    // sortOption,
     handleToggleFavorite,
     handleAddToCart,
     handleIncrement,
@@ -50,13 +46,14 @@ export default function ProductDescription() {
     handleSortSelect,
     handlePeerGroupSelect,
     handleNavigateToPriceHistory,
-    handleNavigateToSalesGraph,
+    // handleNavigateToSalesGraph,
     setShowQuantityModal,
-    setShowSortModal,
     setShowPeerGroupModal,
     setQuantityInput,
     setSelectedWholesaler,
   } = useProductDescription(navigation)
+
+  const sortBottomSheetRef = useRef<ComponentRef<typeof BottomSheetModal>>(null)
 
   // Get peer groups for selector
   const { data: staticPeersData } = productQueryOptions.useStaticPeersQuery()
@@ -134,14 +131,9 @@ export default function ProductDescription() {
     const isInCart = !!cartItem
     const showBlur = !isSubscribed && index >= 2
     const unitPrice = getPeerGroupPrice(wholesaler)
-    const displayUnitPrice = unitPrice > 0 && !isNaN(unitPrice) ? unitPrice : 0
-    const casePrice = wholesaler.casePrice ?? displayUnitPrice
-    // Calculate per unit price from case price if available (assuming case has multiple units)
-    // If casePrice exists and is different from unitPrice, calculate per unit; otherwise use unitPrice
-    const perUnitPrice =
-      wholesaler.casePrice && wholesaler.casePrice > 0 && wholesaler.casePrice !== displayUnitPrice
-        ? wholesaler.casePrice / 12
-        : displayUnitPrice
+    const displayUnitPrice =
+      (unitPrice === 0 || unitPrice > 0) && !isNaN(unitPrice) ? unitPrice : "--"
+    const casePrice = wholesaler.casePrice ?? "--"
 
     return (
       <View style={showBlur ? styles.blurredContainer : undefined}>
@@ -150,8 +142,8 @@ export default function ProductDescription() {
           updatedDate={wholesaler.date}
           unitPrice={displayUnitPrice}
           casePrice={casePrice}
-          perUnitPrice={perUnitPrice}
-          onPress={() => handleNavigateToSalesGraph(wholesaler)}
+          // onPress={() => handleNavigateToSalesGraph(wholesaler)}
+          onPress={() => {}}
           onAddToCart={() => handleAddToCart(wholesaler)}
           disabled={showBlur}
           isLoading={false}
@@ -188,6 +180,8 @@ export default function ProductDescription() {
       </View>
     )
   }
+
+  console.log("11111111111 wholesalerData =>", wholesalerData)
 
   return (
     <View style={styles.mainContainer}>
@@ -229,7 +223,7 @@ export default function ProductDescription() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Wholesaler Prices</Text>
-            {isSubscribed && <SortButton onPress={() => setShowSortModal(true)} />}
+            <SortButton onPress={() => sortBottomSheetRef.current?.present()} />
           </View>
 
           <FlatList
@@ -246,12 +240,8 @@ export default function ProductDescription() {
         </View>
       </ScrollView>
 
-      {/* Modals */}
-      <SortModal
-        visible={showSortModal}
-        onSelect={handleSortSelect}
-        onClose={() => setShowSortModal(false)}
-      />
+      {/* Modals & Bottom Sheets */}
+      <SortBottomSheet ref={sortBottomSheetRef} onSelect={handleSortSelect} />
       <PeerGroupModal
         visible={showPeerGroupModal}
         peerGroups={peerGroups}

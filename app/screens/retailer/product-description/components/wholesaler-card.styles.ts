@@ -67,16 +67,16 @@ export const styles = StyleSheet.create({
   updatedDateLine: {
     marginTop: spacing.xxs,
   },
-  updatedLabel: {
-    color: commonStyles.colors.textSecondary,
-    fontFamily: commonStyles.fontFamily.regular,
-    fontSize: commonStyles.fontSize.small,
-  },
   updatedDateValue: {
     color: commonStyles.colors.textSecondary,
     fontFamily: commonStyles.fontFamily.bold,
     fontSize: commonStyles.fontSize.small,
     fontWeight: commonStyles.fontWeight.bold,
+  },
+  updatedLabel: {
+    color: commonStyles.colors.textSecondary,
+    fontFamily: commonStyles.fontFamily.regular,
+    fontSize: commonStyles.fontSize.small,
   },
   wholesalerName: {
     color: commonStyles.colors.primaryColor,

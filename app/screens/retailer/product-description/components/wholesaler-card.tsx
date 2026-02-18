@@ -7,9 +7,8 @@ import { styles } from "./wholesaler-card.styles"
 interface WholesalerCardProps {
   wholesalerName: string
   updatedDate?: string
-  unitPrice: number
-  casePrice?: number
-  perUnitPrice?: number
+  unitPrice: number | string
+  casePrice?: number | string
   onPress: () => void
   onAddToCart: () => void
   disabled?: boolean
@@ -26,7 +25,6 @@ export function WholesalerCard({
   updatedDate,
   unitPrice,
   casePrice,
-  perUnitPrice,
   onPress,
   onAddToCart,
   disabled,
@@ -61,9 +59,8 @@ export function WholesalerCard({
       </View>
 
       <View style={styles.priceBoxesRow}>
-        <PriceBox label="Unit Price" value={unitPrice} />
-        <PriceBox label="Case Price" value={casePrice !== undefined ? casePrice : unitPrice} />
-        <PriceBox label="Per Unit" value={perUnitPrice !== undefined ? perUnitPrice : unitPrice} />
+        <PriceBox label="Unit Price" value={unitPrice !== undefined ? unitPrice : "--"} />
+        <PriceBox label="Case Price" value={casePrice !== undefined ? casePrice : "--"} />
       </View>
 
       {isInCart ? (
