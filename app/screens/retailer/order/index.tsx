@@ -1,13 +1,17 @@
-import { useCallback } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
+import type { ComponentRef } from "react"
 import { View, Text, Image, TouchableOpacity, FlatList, ActivityIndicator } from "react-native"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import type { CartItem } from "@/api/retailer/order"
 import ButtonField from "@/components/common-components/button/button"
 import { HeaderComponent } from "@/components/common-components/header/header"
+import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { colors } from "@/theme/colors"
 
 import QuantityModal from "./components/quantity-modal"
+import { RemoveItemBottomSheet } from "./components/remove-item-bottom-sheet"
 import { useOrder } from "./hooks/use-order"
 import { UI_TEXT } from "./lib/constants"
 import { styles } from "./lib/styles"
@@ -36,16 +40,54 @@ export default function Order({ navigation }: any) {
     handlePlaceOrder,
   } = useOrder(navigation)
 
+  const [selectedItemForRemoval, setSelectedItemForRemoval] = useState<CartItem | null>(null)
+  const removeSheetRef = useRef<ComponentRef<typeof BottomSheetModal>>(null)
+
+  useEffect(() => {
+    if (selectedItemForRemoval) {
+      removeSheetRef.current?.present()
+    }
+  }, [selectedItemForRemoval])
+
+  const handleRemovePress = useCallback((item: CartItem) => {
+    setSelectedItemForRemoval(item)
+  }, [])
+
+  const handleRemoveCancel = useCallback(() => {
+    removeSheetRef.current?.dismiss()
+    setSelectedItemForRemoval(null)
+  }, [])
+
+  const handleRemoveDismiss = useCallback(() => {
+    setSelectedItemForRemoval(null)
+  }, [])
+
+  const handleRemoveProceed = useCallback(async () => {
+    if (!selectedItemForRemoval) return
+    await handleRemoveItem(selectedItemForRemoval)
+    removeSheetRef.current?.dismiss()
+    setSelectedItemForRemoval(null)
+  }, [selectedItemForRemoval, handleRemoveItem])
+
   const renderCartItem = useCallback(
     ({ item }: { item: CartItem }) => (
-      <View style={styles.cardBox}>
+      <TouchableOpacity
+        style={styles.cardBox}
+        onPress={() =>
+          navigation.navigate(RetailerRoutes.PRODUCT_DESCRIPTION, {
+            productDetails: item,
+            singleProductId: item?.product_id,
+          })
+        }
+      >
         <TouchableOpacity
           style={styles.removeIconWrapper}
-          onPress={() => handleRemoveItem(item)}
+          onPress={() => handleRemovePress(item)}
           disabled={isLoading}
           activeOpacity={0.7}
           accessibilityLabel="Remove item"
           accessibilityRole="button"
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Image source={Icon.CROSS} style={styles.removeIcon} resizeMode="contain" />
         </TouchableOpacity>
@@ -96,9 +138,9 @@ export default function Order({ navigation }: any) {
             <Text style={styles.quantityButtonText}>+</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </TouchableOpacity>
     ),
-    [handleIncrement, handleDecrement, handleQuantityPress, handleRemoveItem, isLoading],
+    [handleIncrement, handleDecrement, handleQuantityPress, handleRemovePress, isLoading],
   )
 
   const renderContent = () => {
@@ -173,6 +215,15 @@ export default function Order({ navigation }: any) {
           setSelectedItem(null)
           setQuantityInput("")
         }}
+        isLoading={isLoading}
+      />
+
+      <RemoveItemBottomSheet
+        ref={removeSheetRef}
+        item={selectedItemForRemoval}
+        onCancel={handleRemoveCancel}
+        onProceed={handleRemoveProceed}
+        onDismiss={handleRemoveDismiss}
         isLoading={isLoading}
       />
     </View>
