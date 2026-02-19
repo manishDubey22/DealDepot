@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 
 import type { CartItem } from "@/api/retailer/order"
 import ButtonField from "@/components/common-components/button/button"
+import { HeaderComponent } from "@/components/common-components/header/header"
 import { colors } from "@/theme/colors"
 
 import QuantityModal from "./components/quantity-modal"
@@ -124,6 +125,8 @@ export default function Order({ navigation }: any) {
 
   return (
     <View style={styles.mainContainer}>
+      <HeaderComponent value="My Cart" />
+
       <SafeAreaView style={styles.container} edges={["top"]}>
         <View style={styles.content}>{renderContent()}</View>
 

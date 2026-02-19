@@ -39,7 +39,6 @@ export const styles = StyleSheet.create({
   contentContainer: {
     paddingBottom: spacing.xxl,
     paddingHorizontal: spacing.md,
-    paddingTop: spacing.md,
   },
   emptyContainer: {
     alignItems: "center",
