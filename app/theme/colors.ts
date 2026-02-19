@@ -163,6 +163,7 @@ export const colors = {
    * A helper for making something see-thru.
    */
   transparent: "rgba(0, 0, 0, 0)",
+  overlay: "rgba(0, 0, 0, 0.4)",
   /**
    * The default text color in many components.
    */

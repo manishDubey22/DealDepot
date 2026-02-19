@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
   addToCartButton: {
     alignItems: "center",
     backgroundColor: commonStyles.colors.primaryColor,
-    borderRadius: 14,
+    borderRadius: commonStyles.borderRadius.medium,
     flex: 1,
     paddingVertical: 14,
   },
@@ -19,8 +19,15 @@ export const styles = StyleSheet.create({
   addToCartButtonText: {
     color: colors.palette.neutral100,
     fontFamily: commonStyles.fontFamily.bold,
-    fontSize: 16,
+    fontSize: commonStyles.fontSize.medium,
     fontWeight: commonStyles.fontWeight.semiBold,
+  },
+  backdrop: {
+    alignItems: "center",
+    backgroundColor: colors.overlay,
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: spacing.lg,
   },
   buttonsRow: {
     flexDirection: "row",
@@ -37,14 +44,19 @@ export const styles = StyleSheet.create({
   cancelButtonText: {
     color: colors.palette.neutral900,
     fontFamily: commonStyles.fontFamily.regular,
-    fontSize: 16,
+    fontSize: commonStyles.fontSize.medium,
     fontWeight: commonStyles.fontWeight.medium,
   },
-  contentContainer: {
-    flex: 1,
-    paddingBottom: spacing.xl,
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
+  card: {
+    backgroundColor: colors.palette.neutral100,
+    borderRadius: commonStyles.borderRadius.xLarge,
+    elevation: 5,
+    padding: spacing.md,
+    shadowColor: colors.palette.neutral900,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: commonStyles.boxShadow.small.shadowRadius,
+    width: "90%",
   },
   divider: {
     backgroundColor: colors.palette.grey200,
@@ -52,13 +64,16 @@ export const styles = StyleSheet.create({
     marginBottom: spacing.lg,
     width: "100%",
   },
+  keyboardAvoid: {
+    flex: 1,
+  },
   pricingSection: {
-    marginBottom: spacing.xl,
+    marginBottom: spacing.lg,
   },
   quantityInput: {
     color: colors.customColors.BLACK,
     fontFamily: commonStyles.fontFamily.bold,
-    fontSize: 24,
+    fontSize: commonStyles.fontSize.large,
     fontWeight: commonStyles.fontWeight.semiBold,
     textAlign: "center",
     width: "100%",
@@ -67,8 +82,8 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     borderColor: commonStyles.colors.primaryColor,
-    borderRadius: 14,
-    borderWidth: 2,
+    borderRadius: commonStyles.borderRadius.medium,
+    borderWidth: commonStyles.borderWidth.medium,
     height: 60,
     justifyContent: "center",
     marginBottom: spacing.lg,
@@ -77,7 +92,7 @@ export const styles = StyleSheet.create({
   title: {
     color: colors.customColors.BLACK,
     fontFamily: commonStyles.fontFamily.bold,
-    fontSize: 18,
+    fontSize: commonStyles.fontSize.large,
     fontWeight: commonStyles.fontWeight.semiBold,
     marginBottom: spacing.xs,
     textAlign: "center",
@@ -85,7 +100,7 @@ export const styles = StyleSheet.create({
   totalPriceText: {
     color: commonStyles.colors.primaryColor,
     fontFamily: commonStyles.fontFamily.bold,
-    fontSize: 16,
+    fontSize: commonStyles.fontSize.medium,
     fontWeight: commonStyles.fontWeight.semiBold,
   },
   unitPriceText: {

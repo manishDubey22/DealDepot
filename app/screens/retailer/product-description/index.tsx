@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react"
 import type { ComponentRef } from "react"
 import { ActivityIndicator, FlatList, ScrollView, Text, View } from "react-native"
-import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import Toast from "react-native-toast-message"
 
@@ -14,7 +13,7 @@ import { PeerGroupModal } from "./components/peer-group-modal"
 import { PeerGroupPriceCard } from "./components/peer-group-price-card"
 import { PeerGroupSelector } from "./components/peer-group-selector"
 import { ProductHeaderCard } from "./components/product-header-card"
-import { QuantityBottomSheet } from "./components/quantity-bottom-sheet"
+import { QuantityModal } from "./components/quantity-modal"
 import { SortBottomSheet } from "./components/sort-bottom-sheet"
 import { SortButton } from "./components/sort-button"
 import { WholesalerCard } from "./components/wholesaler-card"
@@ -48,8 +47,8 @@ export default function ProductDescription() {
     setSelectedWholesaler,
   } = useProductDescription(navigation)
 
-  const sortBottomSheetRef = useRef<ComponentRef<typeof BottomSheetModal>>(null)
-  const quantityBottomSheetRef = useRef<ComponentRef<typeof BottomSheetModal>>(null)
+  const sortBottomSheetRef =
+    useRef<ComponentRef<typeof import("@gorhom/bottom-sheet").BottomSheetModal>>(null)
 
   // Get peer groups for selector
   const { data: staticPeersData } = productQueryOptions.useStaticPeersQuery()
@@ -115,26 +114,22 @@ export default function ProductDescription() {
     }
   }, [adminPrice, uiSelectedPeerGroup])
 
-  // Handle add to cart with bottom sheet
-  const handleAddToCartWithSheet = useCallback(
+  // Handle add to cart - opens modal
+  const handleAddToCartWithModal = useCallback(
     (wholesaler: WholesalerData) => {
       setSelectedWholesaler(wholesaler)
-      quantityBottomSheetRef.current?.present()
     },
     [setSelectedWholesaler],
   )
 
-  // Handle quantity confirm from bottom sheet
+  // Handle quantity confirm from modal
   const handleQuantityConfirm = useCallback(
     async (quantity: number) => {
       if (!selectedWholesaler) return
       try {
         await (handleQuantitySubmit as (overrideQuantity?: number) => Promise<void>)(quantity)
-        // Close bottom sheet after successful submission
-        quantityBottomSheetRef.current?.dismiss()
         setSelectedWholesaler(null)
       } catch (error) {
-        // Error is handled in handleQuantitySubmit
         console.log("error =>", error)
         Toast.show({
           type: "error",
@@ -170,16 +165,14 @@ export default function ProductDescription() {
           casePrice={casePrice}
           // onPress={() => handleNavigateToSalesGraph(wholesaler)}
           onPress={() => {}}
-          onAddToCart={() => handleAddToCartWithSheet(wholesaler)}
+          onAddToCart={() => handleAddToCartWithModal(wholesaler)}
           disabled={showBlur}
           isLoading={false}
           isInCart={isInCart}
           quantity={cartItem?.items || 0}
           onIncrement={() => handleIncrement(wholesaler)}
           onDecrement={() => handleDecrement(wholesaler)}
-          onQuantityPress={() => {
-            handleAddToCartWithSheet(wholesaler)
-          }}
+          onQuantityPress={() => handleAddToCartWithModal(wholesaler)}
         />
       </View>
     )
@@ -264,19 +257,20 @@ export default function ProductDescription() {
 
       {/* Modals & Bottom Sheets */}
       <SortBottomSheet ref={sortBottomSheetRef} onSelect={handleSortSelect} />
-      {selectedWholesaler && (
-        <QuantityBottomSheet
-          ref={quantityBottomSheetRef}
-          wholesalerName={selectedWholesaler.name}
-          unitPrice={
-            typeof getPeerGroupPrice(selectedWholesaler) === "number" &&
-            !isNaN(getPeerGroupPrice(selectedWholesaler))
+      <QuantityModal
+        visible={!!selectedWholesaler}
+        wholesalerName={selectedWholesaler?.name ?? ""}
+        unitPrice={
+          selectedWholesaler
+            ? typeof getPeerGroupPrice(selectedWholesaler) === "number" &&
+              !isNaN(getPeerGroupPrice(selectedWholesaler))
               ? getPeerGroupPrice(selectedWholesaler)
               : selectedWholesaler.price
-          }
-          onConfirm={handleQuantityConfirm}
-        />
-      )}
+            : 0
+        }
+        onClose={() => setSelectedWholesaler(null)}
+        onConfirm={handleQuantityConfirm}
+      />
       <PeerGroupModal
         visible={showPeerGroupModal}
         peerGroups={peerGroups}
