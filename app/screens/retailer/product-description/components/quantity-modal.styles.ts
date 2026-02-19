@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
   },
   addToCartButtonDisabled: {
     backgroundColor: colors.palette.grey300,
+    elevation: 0,
     opacity: 0.6,
   },
   addToCartButtonText: {

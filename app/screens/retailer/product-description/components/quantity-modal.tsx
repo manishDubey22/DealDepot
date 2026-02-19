@@ -36,12 +36,6 @@ export function QuantityModal({
     if (visible) setQuantity("1")
   }, [visible])
 
-  const numericQuantity = useMemo(() => {
-    const parsed = parseInt(quantity, 10)
-    if (isNaN(parsed) || parsed < 1) return 1
-    return parsed
-  }, [quantity])
-
   const numericUnitPrice = useMemo(() => {
     if (typeof unitPrice === "number" && !isNaN(unitPrice)) return unitPrice
     if (typeof unitPrice === "string") {
@@ -51,27 +45,35 @@ export function QuantityModal({
     return 0
   }, [unitPrice])
 
-  const totalPrice = useMemo(
-    () => numericQuantity * numericUnitPrice,
-    [numericQuantity, numericUnitPrice],
-  )
+  // Valid when quantity is a positive integer (for button and submit)
+  const isValidQuantity = useMemo(() => {
+    const q = Number(quantity)
+    return !Number.isNaN(q) && q >= 1 && quantity !== ""
+  }, [quantity])
+
+  // Total: 0 when invalid, otherwise quantity * unitPrice (useMemo)
+  const totalPrice = useMemo(() => {
+    const q = Number(quantity)
+    if (quantity === "" || Number.isNaN(q) || q <= 0) return 0
+    return Math.floor(q) * numericUnitPrice
+  }, [quantity, numericUnitPrice])
+
+  // For submit: use positive integer only
+  const numericQuantityForSubmit = useMemo(() => {
+    if (!isValidQuantity) return 1
+    return Math.max(1, Math.floor(Number(quantity)))
+  }, [quantity, isValidQuantity])
 
   const handleQuantityChange = useCallback((text: string) => {
-    const numericValue = text.replace(/[^0-9]/g, "")
-    if (numericValue === "") {
-      setQuantity("1")
-      return
-    }
-    const parsed = parseInt(numericValue, 10)
-    if (!isNaN(parsed) && parsed >= 1) setQuantity(numericValue)
-    else if (numericValue === "0") setQuantity("1")
+    const cleaned = text.replace(/[^0-9]/g, "")
+    setQuantity(cleaned)
   }, [])
 
   const handleConfirm = useCallback(async () => {
-    if (numericQuantity <= 0 || isLoading) return
+    if (!isValidQuantity || isLoading) return
     setIsLoading(true)
     try {
-      await onConfirm(numericQuantity)
+      await onConfirm(numericQuantityForSubmit)
       setQuantity("1")
       onClose()
     } catch (error) {
@@ -79,7 +81,7 @@ export function QuantityModal({
     } finally {
       setIsLoading(false)
     }
-  }, [numericQuantity, onConfirm, isLoading, onClose])
+  }, [isValidQuantity, numericQuantityForSubmit, onConfirm, isLoading, onClose])
 
   const handleCancel = useCallback(() => {
     Keyboard.dismiss()
@@ -152,10 +154,10 @@ export function QuantityModal({
                   <TouchableOpacity
                     style={[
                       styles.addToCartButton,
-                      (numericQuantity <= 0 || isLoading) && styles.addToCartButtonDisabled,
+                      (!isValidQuantity || isLoading) && styles.addToCartButtonDisabled,
                     ]}
                     onPress={handleConfirm}
-                    disabled={numericQuantity <= 0 || isLoading}
+                    disabled={!isValidQuantity || isLoading}
                     activeOpacity={0.7}
                   >
                     <Text style={styles.addToCartButtonText}>Add to Cart</Text>
