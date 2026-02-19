@@ -11,6 +11,7 @@ import QuantityModal from "./components/quantity-modal"
 import { useOrder } from "./hooks/use-order"
 import { UI_TEXT } from "./lib/constants"
 import { styles } from "./lib/styles"
+import { Icon } from "../../../../assets/icons/wholeSeller"
 import { Images } from "../../../../assets/Images/wholeSeller"
 
 function cartItemKey(item: CartItem) {
@@ -31,12 +32,23 @@ export default function Order({ navigation }: any) {
     handleDecrement,
     handleQuantityPress,
     handleQuantitySubmit,
+    handleRemoveItem,
     handlePlaceOrder,
   } = useOrder(navigation)
 
   const renderCartItem = useCallback(
     ({ item }: { item: CartItem }) => (
       <View style={styles.cardBox}>
+        <TouchableOpacity
+          style={styles.removeIconWrapper}
+          onPress={() => handleRemoveItem(item)}
+          disabled={isLoading}
+          activeOpacity={0.7}
+          accessibilityLabel="Remove item"
+          accessibilityRole="button"
+        >
+          <Image source={Icon.CROSS} style={styles.removeIcon} resizeMode="contain" />
+        </TouchableOpacity>
         <View style={styles.cardBoxLeft}>
           <View style={styles.imageContainer}>
             <Image
@@ -86,7 +98,7 @@ export default function Order({ navigation }: any) {
         </View>
       </View>
     ),
-    [handleIncrement, handleDecrement, handleQuantityPress, isLoading],
+    [handleIncrement, handleDecrement, handleQuantityPress, handleRemoveItem, isLoading],
   )
 
   const renderContent = () => {

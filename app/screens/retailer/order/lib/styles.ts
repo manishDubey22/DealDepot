@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 14,
     padding: spacing.sm,
+    position: "relative",
     ...Platform.select({
       ios: {
         shadowColor: colors.palette.neutral900,
@@ -166,6 +167,16 @@ export const styles = StyleSheet.create({
     fontFamily: commonStyles.fontFamily.bold,
     fontSize: commonStyles.fontSize.medium,
     fontWeight: commonStyles.fontWeight.bold,
+  },
+  removeIcon: {
+    height: 20,
+    width: 20,
+  },
+  removeIconWrapper: {
+    position: "absolute",
+    right: 8,
+    top: 8,
+    zIndex: 10,
   },
   saveOrderButton: {
     borderRadius: commonStyles.borderRadius.large,
