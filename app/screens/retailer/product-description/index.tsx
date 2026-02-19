@@ -7,6 +7,7 @@ import Toast from "react-native-toast-message"
 import type { CartItem } from "@/api/retailer/order"
 import { productQueryOptions } from "@/api/retailer/product"
 import { WholesalerData } from "@/api/retailer/product/types"
+import { HeaderComponent } from "@/components/common-components/header/header"
 import { colors } from "@/theme/colors"
 
 import { PeerGroupModal } from "./components/peer-group-modal"
@@ -200,6 +201,8 @@ export default function ProductDescription() {
 
   return (
     <View style={styles.mainContainer}>
+      <HeaderComponent value="Product Description" />
+
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {/* 1. Product Header Card */}
         <ProductHeaderCard

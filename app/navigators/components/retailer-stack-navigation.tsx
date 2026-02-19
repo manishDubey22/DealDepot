@@ -329,18 +329,7 @@ export const RetailerStackNavigation = ({
         name={RetailerRoutes.PRODUCT_DESCRIPTION}
         component={ProductDescription}
         options={{
-          headerShown: true,
-          headerTitleStyle: {
-            // @ts-expect-error - display property not in type but works at runtime
-            display: "none",
-          },
-          headerStyle: {
-            // @ts-expect-error - display property not in type but works at runtime
-            height: 80,
-            elevation: 5,
-            shadowColor: colors.palette.grey400,
-          },
-          header: () => <HeaderComponent value="Product Description" />,
+          headerShown: false,
         }}
       />
       <Stack.Screen

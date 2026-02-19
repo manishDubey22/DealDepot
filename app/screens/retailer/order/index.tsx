@@ -1,6 +1,8 @@
+import { useCallback } from "react"
 import { View, Text, Image, TouchableOpacity, FlatList, ActivityIndicator } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
+import type { CartItem } from "@/api/retailer/order"
 import ButtonField from "@/components/common-components/button/button"
 import { colors } from "@/theme/colors"
 
@@ -9,6 +11,10 @@ import { useOrder } from "./hooks/use-order"
 import { UI_TEXT } from "./lib/constants"
 import { styles } from "./lib/styles"
 import { Images } from "../../../../assets/Images/wholeSeller"
+
+function cartItemKey(item: CartItem) {
+  return `${item.product_id}-${item.wholesaler_id}`
+}
 
 export default function Order({ navigation }: any) {
   const {
@@ -27,27 +33,30 @@ export default function Order({ navigation }: any) {
     handlePlaceOrder,
   } = useOrder(navigation)
 
-  const renderCartItem = ({ item }: { item: any }) => {
-    return (
+  const renderCartItem = useCallback(
+    ({ item }: { item: CartItem }) => (
       <View style={styles.cardBox}>
         <View style={styles.cardBoxLeft}>
           <View style={styles.imageContainer}>
             <Image
               source={item?.image_url ? { uri: item.image_url } : Images.SoyaMilk}
               style={styles.productImage}
-              resizeMode="contain"
+              resizeMode="cover"
             />
           </View>
           <View style={styles.productInfo}>
-            <Text style={styles.productDesc}>{item.product_desc}</Text>
+            <Text style={styles.productDesc} numberOfLines={2}>
+              {item.product_desc}
+            </Text>
             {item.subCategory_desc != null && item.subCategory_desc !== "" && (
-              <Text style={styles.productCategory}>{item.subCategory_desc}</Text>
+              <Text style={styles.productCategory} numberOfLines={1}>
+                {item.subCategory_desc}
+              </Text>
             )}
-            <Text style={styles.wholesalerText}>{item.wholesaler_id}</Text>
-            <Text style={styles.productId}>ID: {item.product_id}</Text>
-          </View>
-          <View style={styles.priceContainer}>
-            <Text style={styles.priceText}>${item.price}</Text>
+            <Text style={styles.wholesalerText} numberOfLines={1}>
+              {item.wholesaler_id}
+            </Text>
+            <Text style={styles.priceText}>${Number(item.price).toFixed(2)}</Text>
           </View>
         </View>
 
@@ -60,9 +69,9 @@ export default function Order({ navigation }: any) {
             <Text style={[styles.quantityButtonText, styles.quantityButtonTextMinus]}>-</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.quantityPill}
             onPress={() => handleQuantityPress(item)}
             disabled={isLoading}
+            style={styles.quantityPillTouchable}
           >
             <Text style={styles.quantityText}>{item.items}</Text>
           </TouchableOpacity>
@@ -75,8 +84,9 @@ export default function Order({ navigation }: any) {
           </TouchableOpacity>
         </View>
       </View>
-    )
-  }
+    ),
+    [handleIncrement, handleDecrement, handleQuantityPress, isLoading],
+  )
 
   const renderContent = () => {
     if (isLoading) {
@@ -95,43 +105,47 @@ export default function Order({ navigation }: any) {
       )
     }
 
-    const totalItemCount = cartData.reduce((sum, i) => sum + i.items, 0)
-    const totalPrice = cartData.reduce((sum, i) => sum + i.price * i.items, 0)
-
     return (
-      <>
-        <FlatList
-          data={cartData}
-          keyExtractor={(item, index) => `${item.product_id}-${item.wholesaler_id}-${index}`}
-          renderItem={renderCartItem}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.contentContainer}
-          ListFooterComponent={
-            <View style={styles.footerSummary}>
-              <View style={styles.footerSummaryLeft}>
-                <Text style={styles.footerSummaryTotalLabel}>
-                  {totalItemCount} {totalItemCount === 1 ? "item" : "items"}
-                </Text>
-                <Text style={styles.footerSummaryTotalPrice}>${totalPrice.toFixed(2)}</Text>
-              </View>
-              <View style={styles.saveOrderButton}>
-                <ButtonField
-                  value={UI_TEXT.SAVE_ORDER}
-                  onPress={handlePlaceOrder}
-                  isDisabled={isLoading || !cartData || cartData.length === 0}
-                  isLoading={isLoading}
-                />
-              </View>
-            </View>
-          }
-        />
-      </>
+      <FlatList
+        data={cartData}
+        keyExtractor={cartItemKey}
+        renderItem={renderCartItem}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.contentContainer}
+      />
     )
   }
 
+  const totalItemCount =
+    (cartData?.length ?? 0) ? (cartData ?? []).reduce((sum, i) => sum + i.items, 0) : 0
+  const totalPrice =
+    (cartData?.length ?? 0) ? (cartData ?? []).reduce((sum, i) => sum + i.price * i.items, 0) : 0
+  const showFooter = !isLoading && cartData && cartData.length > 0
+
   return (
     <View style={styles.mainContainer}>
-      <SafeAreaView style={styles.container}>{renderContent()}</SafeAreaView>
+      <SafeAreaView style={styles.container} edges={["top"]}>
+        <View style={styles.content}>{renderContent()}</View>
+
+        {showFooter && (
+          <View style={styles.footer}>
+            <View style={styles.footerSummaryLeft}>
+              <Text style={styles.footerSummaryTotalLabel}>
+                {totalItemCount} {totalItemCount === 1 ? "item" : "items"}
+              </Text>
+              <Text style={styles.footerSummaryTotalPrice}>${totalPrice.toFixed(2)}</Text>
+            </View>
+            <View style={styles.saveOrderButton}>
+              <ButtonField
+                value={UI_TEXT.SAVE_ORDER}
+                onPress={handlePlaceOrder}
+                isDisabled={isLoading}
+                isLoading={isLoading}
+              />
+            </View>
+          </View>
+        )}
+      </SafeAreaView>
 
       <QuantityModal
         visible={showQuantityModal}
