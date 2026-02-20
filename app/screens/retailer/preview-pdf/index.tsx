@@ -1,12 +1,5 @@
 import { useCallback } from "react"
-import {
-  View,
-  Text,
-  ActivityIndicator,
-  TouchableOpacity,
-  ScrollView,
-  useWindowDimensions,
-} from "react-native"
+import { View, Text, ActivityIndicator, TouchableOpacity, ScrollView } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { WebView } from "react-native-webview"
 
@@ -19,7 +12,6 @@ import { styles } from "./lib/styles"
 
 export default function PreviewPDF({ route, navigation }: any) {
   const { order, vendorData } = route.params ?? {}
-  const { width } = useWindowDimensions()
   const { isLoading, pdfPath, error, htmlContent, generatePDF, sharePDF, downloadPDF } =
     usePreviewPDF(order ?? null, vendorData ?? null)
 
@@ -49,7 +41,7 @@ export default function PreviewPDF({ route, navigation }: any) {
           {htmlContent ? (
             <WebView
               source={{ html: htmlContent }}
-              style={[styles.webView, { width: width - 32, height: 700 }]}
+              style={styles.webView}
               scrollEnabled
               originWhitelist={["*"]}
             />

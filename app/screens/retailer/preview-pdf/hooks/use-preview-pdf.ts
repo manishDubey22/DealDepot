@@ -161,7 +161,7 @@ export function usePreviewPDF(
   vendorData: VendorData | null,
 ): UsePreviewPDFReturn {
   const [isLoading, setIsLoading] = useState(false)
-  const [pdfPath, setPdfPath] = useState<string | null>(null)
+  const [pdfPath, _setPdfPath] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   // Same HTML used for file generation and in-app preview
@@ -179,7 +179,7 @@ export function usePreviewPDF(
     try {
       console.log(CONSOLE_MESSAGES.GENERATING_PDF)
 
-      const html = generateHTMLContent(order, vendorData)
+      // const html = generateHTMLContent(order, vendorData)
       const fileName = `Order_${order.orderId}_${Date.now()}.pdf`
 
       console.log(fileName)
@@ -191,7 +191,7 @@ export function usePreviewPDF(
       //     : `${RNFS.DownloadDirectoryPath}/${fileName}`
 
       // const options = {
-      //   html: html,
+      //   html: htmlContent,
       //   fileName: fileName,
       //   directory: (Platform.OS === "ios" ? "Documents" : "Downloads") as "Documents" | "Downloads",
       //   base64: false,

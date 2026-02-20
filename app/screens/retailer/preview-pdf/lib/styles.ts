@@ -88,6 +88,7 @@ export const styles = StyleSheet.create({
   },
   webView: {
     backgroundColor: colors.palette.neutral100,
-    minHeight: 800,
+    height: 700,
+    width: "100%",
   },
 })
