@@ -12,7 +12,7 @@ import { styles } from "./lib/styles"
 
 export default function PreviewPDF({ route, navigation }: any) {
   const { order, vendorData } = route.params ?? {}
-  const { isLoading, pdfPath, error, htmlContent, generatePDF, sharePDF, downloadPDF } =
+  const { isLoading, isDownloading, error, htmlContent, generatePDF, sharePDF, downloadPDF } =
     usePreviewPDF(order ?? null, vendorData ?? null)
 
   const goBackToOrders = useCallback(() => {
@@ -55,16 +55,21 @@ export default function PreviewPDF({ route, navigation }: any) {
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            style={[styles.button, !pdfPath && styles.buttonDisabled]}
+            style={[styles.button, (isLoading || isDownloading) && styles.buttonDisabled]}
             onPress={downloadPDF}
-            disabled={isLoading}
+            disabled={isLoading || isDownloading}
           >
-            <Text style={styles.buttonText}>{UI_TEXT.DOWNLOAD_PDF}</Text>
+            {isDownloading && (
+              <ActivityIndicator size="small" color="#fff" style={styles.buttonLoader} />
+            )}
+            <Text style={styles.buttonText}>
+              {isDownloading ? UI_TEXT.DOWNLOADING : UI_TEXT.DOWNLOAD_PDF}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.button, styles.buttonSecondary]}
+            style={[styles.button, styles.buttonShare]}
             onPress={sharePDF}
-            disabled={isLoading}
+            disabled={isLoading || isDownloading}
           >
             <Text style={[styles.buttonText, styles.buttonTextSecondary]}>{UI_TEXT.SHARE_PDF}</Text>
           </TouchableOpacity>

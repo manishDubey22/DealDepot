@@ -6,6 +6,12 @@ export const UI_TEXT = {
   GENERATING: "Generating PDF...",
   ERROR: "Failed to generate PDF",
   SUCCESS: "PDF generated successfully",
+  DOWNLOAD_SUCCESS: "PDF downloaded successfully",
+  DOWNLOAD_SUCCESS_IOS: "Saved to app documents",
+  DOWNLOAD_SUCCESS_ANDROID: "Saved to app storage",
+  DOWNLOADING: "Downloading...",
+  PERMISSION_DENIED_TITLE: "Permission required",
+  PERMISSION_DENIED_MESSAGE: "Storage permission is needed to save the PDF to your device.",
 } as const
 
 export const CONSOLE_MESSAGES = {

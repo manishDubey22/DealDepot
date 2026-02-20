@@ -12,6 +12,7 @@ export interface PreviewPDFScreenProps {
 
 export interface UsePreviewPDFReturn {
   isLoading: boolean
+  isDownloading: boolean
   pdfPath: string | null
   error: string | null
   htmlContent: string

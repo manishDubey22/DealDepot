@@ -1,9 +1,9 @@
 import { useState, useCallback, useMemo, useEffect } from "react"
-import { Platform } from "react-native"
+import { Alert, Platform } from "react-native"
 // eslint-disable-next-line react-native/split-platform-components
 import { PermissionsAndroid } from "react-native"
-// import RNFS from "react-native-fs"
-// import RNHTMLtoPDF from "react-native-html-to-pdf"
+import * as Print from "expo-print"
+import * as FileSystem from "expo-file-system/legacy"
 import Share from "react-native-share"
 import Toast from "react-native-toast-message"
 
@@ -161,7 +161,8 @@ export function usePreviewPDF(
   vendorData: VendorData | null,
 ): UsePreviewPDFReturn {
   const [isLoading, setIsLoading] = useState(false)
-  const [pdfPath, _setPdfPath] = useState<string | null>(null)
+  const [isDownloading, setIsDownloading] = useState(false)
+  const [pdfPath, setPdfPath] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   // Same HTML used for file generation and in-app preview
@@ -250,11 +251,12 @@ export function usePreviewPDF(
     }
   }, [])
 
-  // Share PDF
+  // Share PDF (uses saved file path from download)
   const sharePDF = useCallback(async () => {
     if (!pdfPath) {
       Toast.show({
         text1: ERROR_MESSAGES.NO_PDF,
+        text2: "Download the PDF first, then you can share it.",
         type: "error",
       })
       return
@@ -262,8 +264,9 @@ export function usePreviewPDF(
 
     try {
       console.log(CONSOLE_MESSAGES.SHARING_PDF)
+      const shareUrl = pdfPath.startsWith("file://") ? pdfPath : `file://${pdfPath}`
       await Share.open({
-        url: `file://${pdfPath}`,
+        url: shareUrl,
         type: "application/pdf",
         title: `Order ${order?.orderId ?? ""}`,
       })
@@ -279,9 +282,9 @@ export function usePreviewPDF(
     }
   }, [pdfPath, order?.orderId])
 
-  // Download PDF (for Android, already saved to Downloads)
+  // Download PDF: generate from HTML with expo-print, save to app storage
   const downloadPDF = useCallback(async () => {
-    if (!pdfPath) {
+    if (!order || !vendorData || !htmlContent) {
       Toast.show({
         text1: ERROR_MESSAGES.NO_PDF,
         type: "error",
@@ -289,35 +292,56 @@ export function usePreviewPDF(
       return
     }
 
-    const hasPermission = await requestStoragePermission()
-    if (!hasPermission) {
-      Toast.show({
-        text1: "Permission Denied",
-        text2: "Storage permission is required to download PDF",
-        type: "error",
-      })
-      return
+    if (Platform.OS === "android") {
+      const hasPermission = await requestStoragePermission()
+      if (!hasPermission) {
+        Alert.alert(UI_TEXT.PERMISSION_DENIED_TITLE, UI_TEXT.PERMISSION_DENIED_MESSAGE, [
+          { text: "OK" },
+        ])
+        return
+      }
     }
 
+    setIsDownloading(true)
     try {
       console.log(CONSOLE_MESSAGES.DOWNLOADING_PDF)
+
+      const { uri: tempUri } = await Print.printToFileAsync({
+        html: htmlContent,
+      })
+
+      const fileName = `Order_${order.orderId}.pdf`
+      const dir = FileSystem.documentDirectory ?? ""
+      const destUri = `${dir}${fileName}`
+
+      await FileSystem.copyAsync({
+        from: tempUri,
+        to: destUri,
+      })
+
+      setPdfPath(destUri)
       Toast.show({
-        text1: "PDF Downloaded",
-        text2: Platform.OS === "ios" ? "Saved to Documents" : "Saved to Downloads",
+        text1: UI_TEXT.DOWNLOAD_SUCCESS,
+        text2:
+          Platform.OS === "ios" ? UI_TEXT.DOWNLOAD_SUCCESS_IOS : UI_TEXT.DOWNLOAD_SUCCESS_ANDROID,
         type: "success",
       })
     } catch (err: any) {
+      const errorMessage = err?.message ?? ERROR_MESSAGES.DOWNLOAD_FAILED
       console.error("Download error:", err)
       Toast.show({
         text1: ERROR_MESSAGES.DOWNLOAD_FAILED,
-        text2: err?.message,
+        text2: errorMessage,
         type: "error",
       })
+    } finally {
+      setIsDownloading(false)
     }
-  }, [pdfPath, requestStoragePermission])
+  }, [order, vendorData, htmlContent, requestStoragePermission])
 
   return {
     isLoading,
+    isDownloading,
     pdfPath,
     error,
     htmlContent,

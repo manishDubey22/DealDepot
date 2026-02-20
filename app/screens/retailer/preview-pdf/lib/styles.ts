@@ -2,12 +2,15 @@ import { StyleSheet } from "react-native"
 
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
+import { commonStyles } from "@/theme/styles"
 
 export const styles = StyleSheet.create({
   button: {
     alignItems: "center",
-    backgroundColor: colors.customColors.GREEN,
+    backgroundColor: commonStyles.colors.primaryColor,
     borderRadius: 8,
+    flexDirection: "row",
+    justifyContent: "center",
     paddingHorizontal: 16,
     paddingVertical: 14,
   },
@@ -21,10 +24,18 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.palette.neutral300,
     opacity: 0.6,
   },
+  buttonLoader: {
+    marginRight: 8,
+  },
   buttonSecondary: {
-    backgroundColor: colors.palette.neutral100,
+    backgroundColor: commonStyles.colors.backgroundSecondary,
     borderColor: colors.palette.neutral300,
     borderWidth: 1,
+  },
+  buttonShare: {
+    backgroundColor: commonStyles.colors.primaryLight,
+    borderColor: commonStyles.colors.primaryDark,
+    borderWidth: commonStyles.borderWidth.small,
   },
   buttonText: {
     color: colors.palette.neutral100,
