@@ -1,7 +1,5 @@
 import { StyleSheet } from "react-native"
 
-import { colors } from "@/theme/colors"
-import { CommonStyles } from "@/theme/common-styles"
 import { spacing } from "@/theme/spacing"
 import { commonStyles } from "@/theme/styles"
 
@@ -11,30 +9,31 @@ export const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: spacing.md,
+    paddingBottom: spacing.lg,
   },
   emptyContainer: {
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
-    padding: 20,
+    padding: spacing.lg,
   },
   emptyText: {
-    color: colors.palette.neutral550,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 16,
-    textAlign: "center",
+    color: commonStyles.colors.textSecondary,
+    fontFamily: commonStyles.fontFamily.regular,
+    fontSize: commonStyles.fontSize.medium,
+    textAlign: commonStyles.textAlign.center,
   },
   header: {
     alignItems: "center",
     backgroundColor: commonStyles.colors.backgroundQuinary,
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   headerTitle: {
     color: commonStyles.colors.text,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
+    fontFamily: commonStyles.fontFamily.bold,
     fontSize: commonStyles.fontSize.large,
     fontWeight: commonStyles.fontWeight.bold,
   },
@@ -52,7 +51,7 @@ export const styles = StyleSheet.create({
   },
   refreshButtonText: {
     color: commonStyles.colors.primary,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
+    fontFamily: commonStyles.fontFamily.regular,
     fontSize: commonStyles.fontSize.small,
     fontWeight: commonStyles.fontWeight.medium,
   },

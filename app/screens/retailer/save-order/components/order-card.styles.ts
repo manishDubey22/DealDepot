@@ -1,14 +1,13 @@
 import { StyleSheet } from "react-native"
 
 import { colors } from "@/theme/colors"
-import { CommonStyles } from "@/theme/common-styles"
-import { spacing } from "@/theme/spacingDark"
+import { spacing } from "@/theme/spacing"
 import { commonStyles } from "@/theme/styles"
 
 export const orderCardStyles = StyleSheet.create({
   card: {
     backgroundColor: colors.palette.neutral100,
-    borderRadius: commonStyles.borderRadius.large,
+    borderRadius: commonStyles.borderRadius.xLarge,
     elevation: 3,
     marginBottom: spacing.lg,
     padding: spacing.md,
@@ -42,7 +41,9 @@ export const orderCardStyles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "flex-start",
     backgroundColor: commonStyles.colors.primaryLight,
-    borderRadius: commonStyles.borderRadius.large,
+    borderColor: commonStyles.colors.primaryDark,
+    borderRadius: 20,
+    borderWidth: commonStyles.borderWidth.small,
     flexDirection: "row",
     gap: spacing.xxs,
     paddingHorizontal: spacing.sm,
@@ -52,7 +53,7 @@ export const orderCardStyles = StyleSheet.create({
     color: commonStyles.colors.primaryColor,
     fontFamily: commonStyles.fontFamily.regular,
     fontSize: commonStyles.fontSize.xSmall,
-    fontWeight: commonStyles.fontWeight.bold,
+    fontWeight: commonStyles.fontWeight.medium,
   },
   pdfIcon: {
     height: 14,
@@ -64,7 +65,7 @@ export const orderCardStyles = StyleSheet.create({
   },
   totalLabel: {
     color: commonStyles.colors.text,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
+    fontFamily: commonStyles.fontFamily.regular,
     fontSize: commonStyles.fontSize.medium,
     fontWeight: commonStyles.fontWeight.regular,
   },
@@ -79,7 +80,7 @@ export const orderCardStyles = StyleSheet.create({
   },
   totalValue: {
     color: commonStyles.colors.primaryColor,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
+    fontFamily: commonStyles.fontFamily.bold,
     fontSize: commonStyles.fontSize.xMedium,
     fontWeight: commonStyles.fontWeight.bold,
   },

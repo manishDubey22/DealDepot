@@ -114,9 +114,17 @@ export function useSaveOrder(navigation: any): UseSaveOrderReturn {
     }
   }, [])
 
-  // Handle PDF share
+  // Handle PDF share (guard: only navigate if pdfData has at least one entry per API doc)
   const handleSharePDF = useCallback(
     (order: Order) => {
+      if (!order.pdfData?.length || !order.pdfData[0]) {
+        Toast.show({
+          text1: UI_TEXT.ERROR,
+          text2: "No PDF data for this order",
+          type: "error",
+        })
+        return
+      }
       console.log(CONSOLE_MESSAGES.SHARING_PDF, order.orderId)
       navigation.navigate(RetailerRoutes.PREVIEW_PDF, {
         order,

@@ -17,9 +17,9 @@ export const orderItemRowStyles = StyleSheet.create({
   },
   productName: {
     color: colors.palette.neutral900,
-    fontFamily: commonStyles.fontFamily.bold,
+    fontFamily: commonStyles.fontFamily.regular,
     fontSize: commonStyles.fontSize.small,
-    fontWeight: commonStyles.fontWeight.semiBold,
+    fontWeight: commonStyles.fontWeight.medium,
   },
   quantityLine: {
     color: commonStyles.colors.textSecondary,

@@ -1,5 +1,5 @@
 import { memo } from "react"
-import { View, Text, TouchableOpacity, Image } from "react-native"
+import { View, Text, Pressable, Image } from "react-native"
 
 import { Icon } from "@assets/icons/wholeSeller"
 
@@ -34,10 +34,10 @@ export const OrderCard = memo(function OrderCard({
           <Text style={styles.dateText}>{formattedDate}</Text>
           <Text style={styles.orderId}>{order.orderId}</Text>
         </View>
-        <TouchableOpacity style={styles.pdfButton} onPress={onPDFPress} activeOpacity={0.7}>
+        <Pressable style={styles.pdfButton} onPress={onPDFPress} accessibilityRole="button">
           <Image source={Icon.FILE_PDF} style={styles.pdfIcon} resizeMode="contain" />
           <Text style={styles.pdfButtonText}>PDF</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <View style={styles.itemsSection}>
