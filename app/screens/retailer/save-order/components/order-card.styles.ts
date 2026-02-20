@@ -2,39 +2,41 @@ import { StyleSheet } from "react-native"
 
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
+import { spacing } from "@/theme/spacingDark"
 import { commonStyles } from "@/theme/styles"
 
 export const orderCardStyles = StyleSheet.create({
   card: {
     backgroundColor: colors.palette.neutral100,
-    borderRadius: 16,
+    borderRadius: commonStyles.borderRadius.large,
     elevation: 3,
-    marginBottom: 16,
-    padding: 16,
+    marginBottom: spacing.lg,
+    padding: spacing.md,
     shadowColor: colors.palette.black500,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: commonStyles.boxShadow.small.shadowOpacity,
+    shadowRadius: commonStyles.boxShadow.small.shadowRadius,
   },
   dateText: {
-    color: colors.palette.neutral550,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 13,
+    color: commonStyles.colors.textSecondary,
+    fontFamily: commonStyles.fontFamily.regular,
+    fontSize: commonStyles.fontSize.xSmall,
+    fontWeight: commonStyles.fontWeight.regular,
   },
   header: {
     alignItems: "flex-start",
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 12,
+    marginBottom: spacing.sm,
   },
   headerLeft: {},
   itemsSection: {},
   orderId: {
     color: colors.palette.neutral900,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 16,
-    fontWeight: "700",
-    marginTop: 4,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: commonStyles.fontSize.medium,
+    fontWeight: commonStyles.fontWeight.bold,
+    marginTop: spacing.xs,
   },
   pdfButton: {
     alignItems: "center",
@@ -42,15 +44,15 @@ export const orderCardStyles = StyleSheet.create({
     backgroundColor: commonStyles.colors.primaryLight,
     borderRadius: commonStyles.borderRadius.large,
     flexDirection: "row",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    gap: spacing.xxs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   pdfButtonText: {
-    color: colors.customColors.GREEN,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 12,
-    fontWeight: "500",
-    marginLeft: 6,
+    color: commonStyles.colors.primaryColor,
+    fontFamily: commonStyles.fontFamily.regular,
+    fontSize: commonStyles.fontSize.xSmall,
+    fontWeight: commonStyles.fontWeight.bold,
   },
   pdfIcon: {
     height: 14,
@@ -61,9 +63,10 @@ export const orderCardStyles = StyleSheet.create({
     height: 1,
   },
   totalLabel: {
-    color: colors.palette.neutral900,
+    color: commonStyles.colors.text,
     fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 16,
+    fontSize: commonStyles.fontSize.medium,
+    fontWeight: commonStyles.fontWeight.regular,
   },
   totalRow: {
     alignItems: "center",
@@ -71,13 +74,13 @@ export const orderCardStyles = StyleSheet.create({
     borderTopWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 8,
-    paddingTop: 8,
+    marginTop: spacing.xs,
+    paddingTop: spacing.xs,
   },
   totalValue: {
-    color: colors.customColors.GREEN,
+    color: commonStyles.colors.primaryColor,
     fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 18,
-    fontWeight: "700",
+    fontSize: commonStyles.fontSize.xMedium,
+    fontWeight: commonStyles.fontWeight.bold,
   },
 })

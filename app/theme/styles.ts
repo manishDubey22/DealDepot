@@ -85,6 +85,7 @@ export const commonStyles = {
   },
   fontSize: {
     large: 20,
+    xMedium: 18,
     medium: 16,
     small: 14,
     xSmall: 12,

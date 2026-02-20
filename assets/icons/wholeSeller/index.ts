@@ -46,4 +46,5 @@ export const Icon = {
   SEARCH_ICON: require("./SearchIcon.png"),
   SORTING: require("./Sorting.png"),
   CROSS: require("./Cross.png"),
+  FILE_PDF: require("./FilePdf.png"),
 }

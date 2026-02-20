@@ -11,7 +11,6 @@ export const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: spacing.md,
-    paddingBottom: spacing.lg,
   },
   emptyContainer: {
     alignItems: "center",

@@ -35,7 +35,7 @@ export const OrderCard = memo(function OrderCard({
           <Text style={styles.orderId}>{order.orderId}</Text>
         </View>
         <TouchableOpacity style={styles.pdfButton} onPress={onPDFPress} activeOpacity={0.7}>
-          <Image source={Icon.SHAREPDF} style={styles.pdfIcon} resizeMode="contain" />
+          <Image source={Icon.FILE_PDF} style={styles.pdfIcon} resizeMode="contain" />
           <Text style={styles.pdfButtonText}>PDF</Text>
         </TouchableOpacity>
       </View>
