@@ -16,15 +16,35 @@ export const ordersQueryKeys = createQueryKeys([...ORDERS_KEYS], {
 
 // Get Orders Query Options
 export const getOrdersQueryOptions = (params: GetOrdersParams, options?: { enabled?: boolean }) => {
+  // Ensure retailerId is valid before enabling query
+  const isValidParams = Boolean(params.retailerId && params.retailerId.trim() !== "")
+  const isEnabled = Boolean((options?.enabled ?? true) && isValidParams)
+
   return queryOptions({
-    queryKey: ordersQueryKeys.getOrders(params).queryKey,
-    queryFn: () => getOrders(params).then((response) => response.data),
-    enabled: options?.enabled !== false && !!params.retailerId,
+    queryKey: ordersQueryKeys.getOrders(params).key,
+    async queryFn() {
+      if (!isValidParams) {
+        throw new Error("Invalid retailerId")
+      }
+      const response = await getOrders(params)
+      return response.data
+    },
+    enabled: isEnabled,
     staleTime: 30 * 1000, // 30 seconds
     gcTime: 5 * 60 * 1000, // 5 minutes
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
     refetchOnReconnect: true,
+    retry: (failureCount, error: any) => {
+      // Don't retry on network errors or 4xx errors
+      if (
+        error?.message === "Network Error" ||
+        (error?.response?.status >= 400 && error?.response?.status < 500)
+      ) {
+        return false
+      }
+      return failureCount < 2
+    },
   })
 }
 
