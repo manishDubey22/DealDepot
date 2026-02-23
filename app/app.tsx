@@ -20,9 +20,10 @@ import "./utils/gestureHandler"
 
 import type { ReactNode } from "react"
 import { useEffect, useState } from "react"
-import { StyleSheet, View } from "react-native"
+import { Linking, StyleSheet, View } from "react-native"
 import { useFonts } from "expo-font"
-// import * as Linking from "expo-linking"
+import * as Notifications from "expo-notifications"
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
@@ -38,7 +39,9 @@ try {
   KeyboardProviderWrapper = ({ children }: { children: ReactNode }) => children
 }
 
+import { useInAppUpdates } from "@/hooks/useInAppUpdate"
 import { queryClient } from "@/lib/react-query/queryClient"
+import { checkForAppUpdate } from "@/services/updateService"
 
 // import { AuthProvider } from "./context/AuthContext" // @demo remove-current-line
 import { RetailerAuthProvider } from "./context/RetailerAuthContext"
@@ -80,6 +83,36 @@ import * as storage from "./utils/storage"
  * @returns {JSX.Element} The rendered `App` component.
  */
 export function App() {
+  useInAppUpdates()
+
+  useEffect(() => {
+    checkForAppUpdate()
+  }, [])
+
+  // Show notifications when app is in foreground (e.g. "Download Complete")
+  useEffect(() => {
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldShowBanner: true,
+        shouldShowList: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+      }),
+    })
+  }, [])
+
+  // When user taps "Download Complete" notification, open the PDF
+  useEffect(() => {
+    const sub = Notifications.addNotificationResponseReceivedListener((response) => {
+      const data = response.notification.request.content.data as { fileUri?: string }
+      if (data?.fileUri) {
+        Linking.openURL(data.fileUri)
+      }
+    })
+    return () => sub.remove()
+  }, [])
+
   const {
     // initialNavigationState,
     // onNavigationStateChange,
@@ -114,23 +147,25 @@ export function App() {
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={styles.gestureHandlerRoot}>
-        <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            <RetailerAuthProvider>
-              <NavigationContainer>
-                <RoleProvider>
-                  <KeyboardProviderWrapper>
-                    {/* <VersionProvider> */}
-                    <View style={styles.mainContainer}>
-                      <AppNavigator />
-                    </View>
-                    {/* </VersionProvider> */}
-                  </KeyboardProviderWrapper>
-                </RoleProvider>
-              </NavigationContainer>
-            </RetailerAuthProvider>
-          </QueryClientProvider>
-        </Provider>
+        <BottomSheetModalProvider>
+          <Provider store={store}>
+            <QueryClientProvider client={queryClient}>
+              <RetailerAuthProvider>
+                <NavigationContainer>
+                  <RoleProvider>
+                    <KeyboardProviderWrapper>
+                      {/* <VersionProvider> */}
+                      <View style={styles.mainContainer}>
+                        <AppNavigator />
+                      </View>
+                      {/* </VersionProvider> */}
+                    </KeyboardProviderWrapper>
+                  </RoleProvider>
+                </NavigationContainer>
+              </RetailerAuthProvider>
+            </QueryClientProvider>
+          </Provider>
+        </BottomSheetModalProvider>
       </GestureHandlerRootView>
     </SafeAreaProvider>
   )

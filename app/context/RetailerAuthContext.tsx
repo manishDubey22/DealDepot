@@ -29,27 +29,49 @@ export const RetailerAuthContext = createContext<RetailerAuthContextType | null>
 
 export interface RetailerAuthProviderProps {}
 
+function loadStoredUserInfo(): {
+  userAuth: UserAuth | null
+  userRole: string | null
+} {
+  try {
+    const stored = load<{
+      role?: string
+      authToken?: string
+      accessToken?: string
+      userId?: string
+      retailer_id?: string
+      refreshToken?: string
+    }>(STORAGE_KEY.USER_INFO)
+    if (!stored) return { userAuth: null, userRole: null }
+
+    const accessToken = stored.authToken ?? stored.accessToken
+    const userId = stored.userId ?? stored.retailer_id
+    if (!accessToken || !userId) return { userAuth: null, userRole: stored.role ?? null }
+
+    if (!stored.refreshToken) {
+      console.warn("[RetailerAuth] userInfo missing refreshToken; session restored without it.")
+    }
+    return {
+      userAuth: {
+        accessToken,
+        userId,
+        refreshToken: stored.refreshToken ?? "",
+      },
+      userRole: stored.role ?? null,
+    }
+  } catch {
+    remove(STORAGE_KEY.USER_INFO)
+    return { userAuth: null, userRole: null }
+  }
+}
+
 export const RetailerAuthProvider: FC<PropsWithChildren<RetailerAuthProviderProps>> = ({
   children,
 }) => {
-  const storedUserInfo = load<{
-    role?: string
-    authToken?: string
-    userId?: string
-    refreshToken?: string
-  }>(STORAGE_KEY.USER_INFO)
+  const { userAuth: initialAuth, userRole: initialRole } = loadStoredUserInfo()
 
-  const [userAuth, setUserAuthState] = useState<UserAuth | null>(
-    storedUserInfo?.authToken && storedUserInfo?.userId && storedUserInfo?.refreshToken
-      ? {
-          accessToken: storedUserInfo.authToken,
-          userId: storedUserInfo.userId,
-          refreshToken: storedUserInfo.refreshToken,
-        }
-      : null,
-  )
-
-  const [userRole, setUserRoleState] = useState<string | null>(storedUserInfo?.role ?? null)
+  const [userAuth, setUserAuthState] = useState<UserAuth | null>(initialAuth)
+  const [userRole, setUserRoleState] = useState<string | null>(initialRole)
 
   useEffect(() => {
     if (userAuth && userRole) {
@@ -57,7 +79,7 @@ export const RetailerAuthProvider: FC<PropsWithChildren<RetailerAuthProviderProp
         role: userRole,
         authToken: userAuth.accessToken,
         userId: userAuth.userId,
-        refreshToken: userAuth.refreshToken,
+        refreshToken: userAuth.refreshToken || "",
       })
     } else if (!userAuth && !userRole) {
       remove(STORAGE_KEY.USER_INFO)

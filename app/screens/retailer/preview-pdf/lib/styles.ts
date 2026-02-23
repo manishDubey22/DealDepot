@@ -2,23 +2,40 @@ import { StyleSheet } from "react-native"
 
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
+import { commonStyles } from "@/theme/styles"
 
 export const styles = StyleSheet.create({
   button: {
     alignItems: "center",
-    backgroundColor: colors.customColors.GREEN,
+    backgroundColor: commonStyles.colors.primaryColor,
     borderRadius: 8,
-    flex: 1,
-    padding: 16,
+    flexDirection: "row",
+    justifyContent: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 14,
   },
   buttonContainer: {
-    flexDirection: "row",
     gap: 12,
     marginTop: 20,
+    paddingBottom: 24,
+    paddingHorizontal: 16,
   },
   buttonDisabled: {
     backgroundColor: colors.palette.neutral300,
     opacity: 0.6,
+  },
+  buttonLoader: {
+    marginRight: 8,
+  },
+  buttonSecondary: {
+    backgroundColor: commonStyles.colors.backgroundSecondary,
+    borderColor: colors.palette.neutral300,
+    borderWidth: 1,
+  },
+  buttonShare: {
+    backgroundColor: colors.palette.neutral100,
+    borderColor: commonStyles.colors.backgroundQuinary,
+    borderWidth: commonStyles.borderWidth.small,
   },
   buttonText: {
     color: colors.palette.neutral100,
@@ -26,9 +43,11 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
+  buttonTextSecondary: {
+    color: colors.palette.neutral900,
+  },
   container: {
     flex: 1,
-    padding: 16,
   },
   errorButton: {
     marginTop: 20,
@@ -57,7 +76,30 @@ export const styles = StyleSheet.create({
     marginTop: 12,
   },
   mainContainer: {
-    backgroundColor: colors.palette.neutral100,
+    backgroundColor: colors.palette.neutral200,
     flex: 1,
+  },
+  previewCard: {
+    backgroundColor: colors.palette.neutral100,
+    borderRadius: 12,
+    elevation: 3,
+    marginHorizontal: 16,
+    marginTop: 16,
+    overflow: "hidden",
+    shadowColor: colors.palette.neutral900,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  scrollContent: {
+    paddingBottom: 24,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  webView: {
+    backgroundColor: colors.palette.neutral100,
+    height: 700,
+    width: "100%",
   },
 })

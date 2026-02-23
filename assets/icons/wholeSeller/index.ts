@@ -1,6 +1,6 @@
 export const Icon = {
-  HOME: require("./Home.png"),
-  ORDER: require("./Order.png"),
+  HOME: require("./HomeChimney.png"),
+  ORDER: require("./Orders.png"),
   SCAN: require("./Scan.png"),
   SETTING: require("./Setting.png"),
   PROFILE: require("./Profile.png"),
@@ -43,4 +43,8 @@ export const Icon = {
   EMAIL: require("./email.png"),
   VERIFIED_EMAIL: require("./verification.png"),
   UPLOAD_FILES: require("./uploadFile.png"),
+  SEARCH_ICON: require("./SearchIcon.png"),
+  SORTING: require("./Sorting.png"),
+  CROSS: require("./Cross.png"),
+  FILE_PDF: require("./FilePdf.png"),
 }

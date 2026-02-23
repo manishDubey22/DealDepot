@@ -246,6 +246,46 @@ export function useOrder(navigation: any): UseOrderReturn {
     }
   }, [selectedItem, quantityInput, retailerId, getFileId, updateCartMutation])
 
+  const handleRemoveItem = useCallback(
+    async (item: CartItem) => {
+      if (!retailerId) return
+
+      const fileId = getFileId()
+      if (!fileId) {
+        Toast.show({
+          type: "error",
+          text1: ERROR_MESSAGES.FAILED_TO_UPDATE_CART,
+          text2: "File ID not found",
+        })
+        return
+      }
+
+      try {
+        await updateCartMutation.mutateAsync({
+          retailerId,
+          data: {
+            wholesaler_id: item.wholesaler_id,
+            product_id: item.product_id,
+            items: 0,
+            fileId,
+          },
+        })
+        Toast.show({
+          type: "success",
+          text1: UI_TEXT.ITEM_REMOVED_SUCCESS,
+        })
+        console.log(CONSOLE_MESSAGES.CART_UPDATE_SUCCESS)
+      } catch (error) {
+        console.log(CONSOLE_MESSAGES.UPDATE_ERROR, error)
+        Toast.show({
+          type: "error",
+          text1: ERROR_MESSAGES.FAILED_TO_UPDATE_CART,
+        })
+      }
+    },
+    [retailerId, getFileId, updateCartMutation],
+  )
+
   const handlePlaceOrder = useCallback(async () => {
     if (!retailerId) return
 
@@ -310,6 +350,7 @@ export function useOrder(navigation: any): UseOrderReturn {
     handleDecrement,
     handleQuantityPress,
     handleQuantitySubmit,
+    handleRemoveItem,
     handlePlaceOrder,
     refetchCart,
   }

@@ -6,7 +6,18 @@ export const UI_TEXT = {
   GENERATING: "Generating PDF...",
   ERROR: "Failed to generate PDF",
   SUCCESS: "PDF generated successfully",
+  DOWNLOAD_SUCCESS: "PDF downloaded successfully",
+  DOWNLOAD_SUCCESS_IOS: "Saved to app documents",
+  DOWNLOAD_SUCCESS_ANDROID: "Saved to Downloads",
+  DOWNLOADING: "Downloading...",
+  PERMISSION_DENIED_TITLE: "Permission required",
+  PERMISSION_DENIED_MESSAGE: "Storage permission is needed to save the PDF to your device.",
+  NOTIFICATION_TITLE: "Download Complete",
+  NOTIFICATION_BODY: "Your PDF has been downloaded",
 } as const
+
+/** Storage key for caching SAF directory URI (Android) so we don't ask every time */
+export const PREVIEW_PDF_SAF_DOWNLOAD_DIR_KEY = "preview_pdf.saf_download_dir_uri"
 
 export const CONSOLE_MESSAGES = {
   GENERATING_PDF: "Generating PDF...",

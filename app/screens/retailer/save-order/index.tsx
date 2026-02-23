@@ -1,18 +1,13 @@
-import { useEffect } from "react"
-import {
-  View,
-  Text,
-  FlatList,
-  RefreshControl,
-  ActivityIndicator,
-  TouchableOpacity,
-} from "react-native"
+import { useCallback, useEffect } from "react"
+import { View, Text, FlatList, RefreshControl, ActivityIndicator } from "react-native"
 import { BackHandler } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
+import type { Order } from "@/api/retailer/orders/types"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { colors } from "@/theme/colors"
 
+import { OrderCard } from "./components/order-card"
 import { useSaveOrder } from "./hooks/use-save-order"
 import { UI_TEXT } from "./lib/constants"
 import { styles } from "./lib/styles"
@@ -31,46 +26,19 @@ export default function SaveOrder({ navigation }: any) {
     return () => backHandler.remove()
   }, [navigation])
 
-  // Render order card
-  const renderOrderCard = ({ item: order }: { item: (typeof orders)[0] }) => {
-    return (
-      <View style={styles.orderCard}>
-        <View style={styles.orderHeader}>
-          <View>
-            <Text style={styles.orderId}>
-              {UI_TEXT.ORDER_ID}: {order.orderId}
-            </Text>
-            <Text style={styles.orderDate}>
-              {UI_TEXT.DATE}: {formatDate(order.date)}
-            </Text>
-          </View>
-        </View>
+  const renderOrderCard = useCallback(
+    ({ item: order }: { item: Order }) => (
+      <OrderCard
+        order={order}
+        formattedDate={formatDate(order.date)}
+        onPDFPress={() => handleSharePDF(order)}
+      />
+    ),
+    [formatDate, handleSharePDF],
+  )
 
-        <View style={styles.orderItems}>
-          {order.items.map((item, index) => (
-            <View key={index} style={styles.itemRow}>
-              <Text style={styles.itemQuantity}>{item.quantity}x</Text>
-              <Text style={styles.itemText} numberOfLines={2}>
-                {item.product_desc}
-              </Text>
-              <Text style={styles.itemPrice}>${item.productTotalPrice.toFixed(2)}</Text>
-            </View>
-          ))}
-        </View>
+  const keyExtractor = useCallback((item: Order) => item.orderId, [])
 
-        <View style={styles.orderTotal}>
-          <Text style={styles.totalLabel}>{UI_TEXT.TOTAL}:</Text>
-          <Text style={styles.totalValue}>${order.totalOrderPrice.toFixed(2)}</Text>
-        </View>
-
-        <TouchableOpacity style={styles.shareButton} onPress={() => handleSharePDF(order)}>
-          <Text style={styles.shareButtonText}>{UI_TEXT.SHARE_PDF}</Text>
-        </TouchableOpacity>
-      </View>
-    )
-  }
-
-  // Render content based on state
   const renderContent = () => {
     if (isLoading && !refreshing) {
       return (
@@ -92,7 +60,7 @@ export default function SaveOrder({ navigation }: any) {
     return (
       <FlatList
         data={orders}
-        keyExtractor={(item, index) => `${item.orderId}-${index}`}
+        keyExtractor={keyExtractor}
         renderItem={renderOrderCard}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         showsVerticalScrollIndicator={false}

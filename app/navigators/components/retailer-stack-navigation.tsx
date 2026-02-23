@@ -90,10 +90,11 @@ const BottomTabNavigator = () => {
         name={RetailerRoutes.OPTIONS}
         component={HomeOptionList}
         options={{
-          headerShown: true,
+          headerShown: false,
           headerTitleStyle: {
             display: "none",
           },
+          tabBarLabel: "Home",
           tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.HOME} focused={focused} />,
 
           headerStyle: {
@@ -101,7 +102,7 @@ const BottomTabNavigator = () => {
             elevation: 5,
             shadowColor: colors.palette.grey400,
           },
-          header: () => <HeaderComponent value="Home" />,
+          // header: () => <HeaderComponent value="Home" />,
         }}
       />
       <Tab.Screen
@@ -121,7 +122,8 @@ const BottomTabNavigator = () => {
             shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Search" />,
-          tabBarButton: () => null, // This hides the tab bar button completely
+          tabBarLabel: "Search",
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.SEARCH_ICON} focused={focused} />,
         }}
       />
 
@@ -129,20 +131,21 @@ const BottomTabNavigator = () => {
         name={RetailerRoutes.CART}
         component={Order}
         options={{
-          headerShown: true,
-          headerTitleStyle: {
-            display: "none" as any,
-          },
+          headerShown: false,
+          // headerTitleStyle: {
+          //   display: "none" as any,
+          // },
+          tabBarLabel: "My Cart",
           tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.SHOPINGCART} focused={focused} />,
-          headerStyle: {
-            backgroundColor: colors.palette.neutral100,
-            borderBottomColor: colors.palette.neutral300,
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            height: 80,
-            elevation: 5,
-            shadowColor: colors.palette.grey400,
-          },
-          header: () => <HeaderComponent value="My Cart" />,
+          // headerStyle: {
+          //   backgroundColor: colors.palette.neutral100,
+          //   borderBottomColor: colors.palette.neutral300,
+          //   borderBottomWidth: StyleSheet.hairlineWidth,
+          //   height: 80,
+          //   elevation: 5,
+          //   shadowColor: colors.palette.grey400,
+          // },
+          // header: () => <HeaderComponent value="My Cart" />,
         }}
       />
       <Tab.Screen
@@ -170,13 +173,14 @@ const BottomTabNavigator = () => {
           headerTitleStyle: {
             display: "none" as any,
           },
+          tabBarLabel: "Orders",
           tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.ORDER} focused={focused} />,
           headerStyle: {
             height: 80,
             elevation: 5,
             shadowColor: colors.palette.grey400,
           },
-          header: () => <HeaderComponent value="SaveOrder" />,
+          header: () => <HeaderComponent value="Orders" />,
         }}
       />
       <Tab.Screen
@@ -318,25 +322,14 @@ export const RetailerStackNavigation = ({
             elevation: 5,
             shadowColor: colors.palette.grey400,
           },
-          header: () => <HeaderComponent value="Saved Order" />,
+          header: () => <HeaderComponent value="Orders" />,
         }}
       />
       <Stack.Screen
         name={RetailerRoutes.PRODUCT_DESCRIPTION}
         component={ProductDescription}
         options={{
-          headerShown: true,
-          headerTitleStyle: {
-            // @ts-expect-error - display property not in type but works at runtime
-            display: "none",
-          },
-          headerStyle: {
-            // @ts-expect-error - display property not in type but works at runtime
-            height: 80,
-            elevation: 5,
-            shadowColor: colors.palette.grey400,
-          },
-          header: () => <HeaderComponent value="Product Description" />,
+          headerShown: false,
         }}
       />
       <Stack.Screen

@@ -36,6 +36,7 @@ export const commonStyles = {
     quinary: colors.palette.grey300,
   },
   borderRadius: {
+    xLarge: 16,
     large: 12,
     medium: 8,
     small: 4,
@@ -47,7 +48,7 @@ export const commonStyles = {
   },
   boxShadow: {
     small: {
-      shadowColor: colors.customColors.GREEN,
+      shadowColor: colors.palette.neutral900,
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
@@ -64,6 +65,7 @@ export const commonStyles = {
     backgroundSecondary: colors.palette.neutral300,
     backgroundTertiary: colors.palette.grey100,
     backgroundQuaternary: colors.palette.grey400,
+    backgroundQuinary: colors.palette.grey300,
 
     text: colors.palette.black500,
     textSecondary: colors.palette.grey500,
@@ -83,6 +85,7 @@ export const commonStyles = {
   },
   fontSize: {
     large: 20,
+    xMedium: 18,
     medium: 16,
     small: 14,
     xSmall: 12,

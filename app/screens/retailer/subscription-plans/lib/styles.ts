@@ -60,12 +60,12 @@ export const styles = StyleSheet.create({
     fontFamily: commonStyles.fontFamily.bold,
     fontSize: commonStyles.fontSize.large,
   },
-  scrollView: {
-    flex: 1,
-  },
   scrollContent: {
     gap: spacing.md,
     padding: spacing.md,
+  },
+  scrollView: {
+    flex: 1,
   },
   subtitle: {
     color: commonStyles.colors.textSecondary,
@@ -92,14 +92,14 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: spacing.md,
   },
-  webViewTitle: {
-    color: commonStyles.colors.text,
-    fontFamily: commonStyles.fontFamily.bold,
-    fontSize: commonStyles.fontSize.medium,
-  },
   webViewLoadingContainer: {
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
+  },
+  webViewTitle: {
+    color: commonStyles.colors.text,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: commonStyles.fontSize.medium,
   },
 })

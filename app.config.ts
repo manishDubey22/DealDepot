@@ -19,6 +19,12 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
 
   return {
     ...config,
+    updates: {
+      fallbackToCacheTimeout: 0,
+    },
+    runtimeVersion: {
+      policy: "appVersion",
+    },
     ios: {
       ...config.ios,
       // This privacyManifests is to get you started.

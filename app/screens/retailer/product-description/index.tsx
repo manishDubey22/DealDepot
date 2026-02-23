@@ -1,24 +1,25 @@
-import {
-  ActivityIndicator,
-  FlatList,
-  Image,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native"
+import { useState, useEffect, useMemo, useRef, useCallback } from "react"
+import type { ComponentRef } from "react"
+import { ActivityIndicator, FlatList, ScrollView, Text, View } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import Toast from "react-native-toast-message"
 
 import type { CartItem } from "@/api/retailer/order"
 import { productQueryOptions } from "@/api/retailer/product"
+import { WholesalerData } from "@/api/retailer/product/types"
+import { HeaderComponent } from "@/components/common-components/header/header"
 import { colors } from "@/theme/colors"
 
 import { PeerGroupModal } from "./components/peer-group-modal"
+import { PeerGroupPriceCard } from "./components/peer-group-price-card"
+import { PeerGroupSelector } from "./components/peer-group-selector"
+import { ProductHeaderCard } from "./components/product-header-card"
 import { QuantityModal } from "./components/quantity-modal"
-import { SortModal } from "./components/sort-modal"
+import { SortBottomSheet } from "./components/sort-bottom-sheet"
+import { SortButton } from "./components/sort-button"
+import { WholesalerCard } from "./components/wholesaler-card"
 import { useProductDescription } from "./hooks/use-product-description"
-import { SORT_OPTIONS_ARRAY, UI_TEXT } from "./lib/constants"
+import { UI_TEXT } from "./lib/constants"
 import { styles } from "./lib/styles"
 
 export default function ProductDescription() {
@@ -31,35 +32,56 @@ export default function ProductDescription() {
     isLoading,
     isError,
     cartItems,
-    // peerGroup,
     selectedPeerGroup,
     isSubscribed,
-    showQuantityModal,
-    showSortModal,
     showPeerGroupModal,
     selectedWholesaler,
-    quantityInput,
-    sortOption,
     handleToggleFavorite,
-    handleAddToCart,
+    // handleAddToCart,
     handleIncrement,
     handleDecrement,
-    // handleQuantityChange,
     handleQuantitySubmit,
     handleSortSelect,
     handlePeerGroupSelect,
     handleNavigateToPriceHistory,
-    handleNavigateToSalesGraph,
-    setShowQuantityModal,
-    setShowSortModal,
     setShowPeerGroupModal,
-    setQuantityInput,
     setSelectedWholesaler,
   } = useProductDescription(navigation)
 
-  // Get peer groups for modal
+  const sortBottomSheetRef =
+    useRef<ComponentRef<typeof import("@gorhom/bottom-sheet").BottomSheetModal>>(null)
+
+  // Get peer groups for selector
   const { data: staticPeersData } = productQueryOptions.useStaticPeersQuery()
   const peerGroups = staticPeersData?.data || []
+
+  // Local UI state for peer group selection (defaults to first peer group when available)
+  const [uiSelectedPeerGroup, setUiSelectedPeerGroup] = useState<string | null>(null)
+
+  // Default to first peer group when peer groups load, or sync with stored value from hook
+  useEffect(() => {
+    if (peerGroups.length === 0) return
+    setUiSelectedPeerGroup((prev) => {
+      const storedInList =
+        selectedPeerGroup && peerGroups.includes(selectedPeerGroup) ? selectedPeerGroup : null
+      const firstGroup = peerGroups[0]
+      // Keep current if it's still in the list
+      if (prev && peerGroups.includes(prev)) return prev
+      // Prefer stored value from hook if it's in the list
+      if (storedInList) return storedInList
+      // Default to first peer group so PeerGroupPriceCard shows
+      return firstGroup
+    })
+  }, [peerGroups, selectedPeerGroup])
+
+  // Handle UI-level peer group selection
+  const handleUiPeerGroupSelect = (peerGroup: string) => {
+    setUiSelectedPeerGroup(peerGroup)
+    // Also update the hook's peer group if subscribed
+    if (isSubscribed) {
+      handlePeerGroupSelect(peerGroup)
+    }
+  }
 
   // Get cart item for wholesaler
   const getCartItem = (wholesalerId: string): CartItem | undefined => {
@@ -70,8 +92,8 @@ export default function ProductDescription() {
 
   // Get price for peer group
   const getPeerGroupPrice = (wholesaler: any) => {
-    if (!adminPrice || !selectedPeerGroup) return wholesaler.price
-    const priceInfo = adminPrice[selectedPeerGroup]
+    if (!adminPrice || !uiSelectedPeerGroup) return wholesaler.price
+    const priceInfo = adminPrice[uiSelectedPeerGroup]
     if (!priceInfo || priceInfo.length === 0) return wholesaler.price
     const sortedPriceInfo = [...priceInfo].sort(
       (a, b) => new Date(b.Date).getTime() - new Date(a.Date).getTime(),
@@ -79,67 +101,81 @@ export default function ProductDescription() {
     return sortedPriceInfo[0]?.price || wholesaler.price
   }
 
+  // Get peer group price for display
+  const peerGroupPrice = useMemo(() => {
+    if (!adminPrice || !uiSelectedPeerGroup) return null
+    const priceInfo = adminPrice[uiSelectedPeerGroup]
+    if (!priceInfo || priceInfo.length === 0) return null
+    const sortedPriceInfo = [...priceInfo].sort(
+      (a, b) => new Date(b.Date).getTime() - new Date(a.Date).getTime(),
+    )
+    return {
+      price: sortedPriceInfo[0]?.price || 0,
+      date: sortedPriceInfo[0]?.Date,
+    }
+  }, [adminPrice, uiSelectedPeerGroup])
+
+  // Handle add to cart - opens modal
+  const handleAddToCartWithModal = useCallback(
+    (wholesaler: WholesalerData) => {
+      setSelectedWholesaler(wholesaler)
+    },
+    [setSelectedWholesaler],
+  )
+
+  // Handle quantity confirm from modal
+  const handleQuantityConfirm = useCallback(
+    async (quantity: number) => {
+      if (!selectedWholesaler) return
+      try {
+        await (handleQuantitySubmit as (overrideQuantity?: number) => Promise<void>)(quantity)
+        setSelectedWholesaler(null)
+      } catch (error) {
+        console.log("error =>", error)
+        Toast.show({
+          type: "error",
+          text1: "Failed to add to cart",
+        })
+      }
+    },
+    [selectedWholesaler, handleQuantitySubmit, setSelectedWholesaler],
+  )
+
   // Render wholesaler item
-  const renderWholesalerItem = ({ item: wholesaler, index }: { item: any; index: number }) => {
+  const renderWholesalerItem = ({
+    item: wholesaler,
+    index,
+  }: {
+    item: WholesalerData
+    index: number
+  }) => {
     const cartItem = getCartItem(wholesaler.wholesaler_id)
     const isInCart = !!cartItem
-    const quantity = cartItem?.items || 0
     const showBlur = !isSubscribed && index >= 2
-    const price = getPeerGroupPrice(wholesaler)
+    const unitPrice = getPeerGroupPrice(wholesaler)
+    const displayUnitPrice =
+      (unitPrice === 0 || unitPrice > 0) && !isNaN(unitPrice) ? unitPrice : "--"
+    const casePrice = wholesaler.casePrice ?? "--"
 
     return (
-      <TouchableOpacity
-        style={styles.wholesalerItem}
-        onPress={() => handleNavigateToSalesGraph(wholesaler)}
-        disabled={showBlur}
-      >
-        {showBlur && <View style={styles.blurOverlay} />}
-        <View style={styles.wholesalerHeader}>
-          <Text style={styles.wholesalerName}>{wholesaler.name}</Text>
-          <Text style={styles.wholesalerPrice}>${price.toFixed(2)}</Text>
-        </View>
-        {wholesaler.date && (
-          <Text style={styles.wholesalerDate}>
-            Updated: {new Date(wholesaler.date).toLocaleDateString()}
-          </Text>
-        )}
-        {isInCart ? (
-          <View style={styles.cartControls}>
-            <TouchableOpacity
-              style={styles.quantityButton}
-              onPress={() => handleDecrement(wholesaler)}
-              disabled={isLoading}
-            >
-              <Text style={styles.quantityButtonText}>-</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setSelectedWholesaler(wholesaler)
-                setQuantityInput(quantity.toString())
-                setShowQuantityModal(true)
-              }}
-              disabled={isLoading}
-            >
-              <Text style={styles.quantityText}>{quantity}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.quantityButton}
-              onPress={() => handleIncrement(wholesaler)}
-              disabled={isLoading}
-            >
-              <Text style={styles.quantityButtonText}>+</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => handleAddToCart(wholesaler)}
-            disabled={showBlur || isLoading}
-          >
-            <Text style={styles.addButtonText}>{UI_TEXT.ADD}</Text>
-          </TouchableOpacity>
-        )}
-      </TouchableOpacity>
+      <View style={showBlur ? styles.blurredContainer : undefined}>
+        <WholesalerCard
+          wholesalerName={wholesaler.name}
+          updatedDate={wholesaler.date}
+          unitPrice={displayUnitPrice}
+          casePrice={casePrice}
+          // onPress={() => handleNavigateToSalesGraph(wholesaler)}
+          onPress={() => {}}
+          onAddToCart={() => handleAddToCartWithModal(wholesaler)}
+          disabled={showBlur}
+          isLoading={false}
+          isInCart={isInCart}
+          quantity={cartItem?.items || 0}
+          onIncrement={() => handleIncrement(wholesaler)}
+          onDecrement={() => handleDecrement(wholesaler)}
+          onQuantityPress={() => handleAddToCartWithModal(wholesaler)}
+        />
+      </View>
     )
   }
 
@@ -163,89 +199,80 @@ export default function ProductDescription() {
     )
   }
 
-  // Get price for display
-  const displayPrice =
-    selectedPeerGroup && adminPrice?.[selectedPeerGroup]
-      ? (() => {
-          const priceInfo = adminPrice[selectedPeerGroup]
-          const sortedPriceInfo = [...priceInfo].sort(
-            (a, b) => new Date(b.Date).getTime() - new Date(a.Date).getTime(),
-          )
-          return sortedPriceInfo[0]?.price || 0
-        })()
-      : null
-
   return (
     <View style={styles.mainContainer}>
+      <HeaderComponent value="Product Description" />
+
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        {/* Product Header */}
-        <View style={styles.productHeader}>
-          {productData.image_url && (
-            <Image source={{ uri: productData.image_url }} style={styles.productImage} />
-          )}
-          <View style={styles.productInfo}>
-            <Text style={styles.productName}>{productData.product_desc}</Text>
-            {productData.category_desc && (
-              <Text style={styles.productCategory}>{productData.category_desc}</Text>
+        {/* 1. Product Header Card */}
+        <ProductHeaderCard
+          imageUrl={productData.image_url}
+          productName={productData.product_desc}
+          productId={productData.product_id}
+          category={productData.category_desc}
+          subCategory={productData.subCategory_desc}
+          onPriceHistoryPress={handleNavigateToPriceHistory}
+          onFavoritePress={handleToggleFavorite}
+          isFavorite={isFavorite}
+        />
+
+        {/* 2. Peer Group Price Section */}
+        {peerGroups.length > 0 && (
+          <View style={styles.sectionPeerGroupPrice}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Peer Group Price</Text>
+              <PeerGroupSelector
+                peerGroups={peerGroups}
+                selectedPeerGroup={uiSelectedPeerGroup}
+                onSelect={handleUiPeerGroupSelect}
+              />
+            </View>
+            {peerGroupPrice && uiSelectedPeerGroup && (
+              <PeerGroupPriceCard
+                peerGroupName={uiSelectedPeerGroup}
+                price={peerGroupPrice.price}
+                updatedDate={peerGroupPrice.date}
+              />
             )}
-            {productData.subCategory_desc && (
-              <Text style={styles.productCategory}>{productData.subCategory_desc}</Text>
-            )}
-            <Text style={styles.productId}>ID: {productData.product_id}</Text>
-            {displayPrice && <Text style={styles.wholesalerPrice}>${displayPrice.toFixed(2)}</Text>}
           </View>
-        </View>
-
-        {/* Controls */}
-        <View style={styles.controlsContainer}>
-          {isSubscribed && (
-            <TouchableOpacity style={styles.controlButton} onPress={() => setShowSortModal(true)}>
-              <Text style={styles.controlButtonText}>
-                {sortOption
-                  ? SORT_OPTIONS_ARRAY.find((opt) => opt.id === sortOption)?.label ||
-                    UI_TEXT.SORT_BY
-                  : UI_TEXT.SORT_BY}
-              </Text>
-            </TouchableOpacity>
-          )}
-          <TouchableOpacity
-            style={styles.controlButton}
-            onPress={() => setShowPeerGroupModal(true)}
-            disabled={!isSubscribed}
-          >
-            <Text style={styles.controlButtonText}>{selectedPeerGroup || UI_TEXT.PEER_GROUP}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.favoriteButton} onPress={handleToggleFavorite}>
-            <Text style={styles.quantityButtonText}>{isFavorite ? "❤️" : "🤍"}</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Price History Button */}
-        {adminPrice && selectedPeerGroup && (
-          <TouchableOpacity style={styles.controlButton} onPress={handleNavigateToPriceHistory}>
-            <Text style={styles.controlButtonText}>{UI_TEXT.SHOW_PRICE_HISTORY}</Text>
-          </TouchableOpacity>
         )}
 
-        {/* Wholesaler List */}
-        <FlatList
-          data={wholesalerData}
-          keyExtractor={(item) => item.wholesaler_id}
-          renderItem={renderWholesalerItem}
-          scrollEnabled={false}
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>No wholesalers available</Text>
-            </View>
-          }
-        />
+        {/* 3. Wholesaler Prices Section */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Wholesaler Prices</Text>
+            <SortButton onPress={() => sortBottomSheetRef.current?.present()} />
+          </View>
+
+          <FlatList
+            data={wholesalerData}
+            keyExtractor={(item) => item.wholesaler_id}
+            renderItem={renderWholesalerItem}
+            scrollEnabled={false}
+            ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}>No wholesalers available</Text>
+              </View>
+            }
+          />
+        </View>
       </ScrollView>
 
-      {/* Modals */}
-      <SortModal
-        visible={showSortModal}
-        onSelect={handleSortSelect}
-        onClose={() => setShowSortModal(false)}
+      {/* Modals & Bottom Sheets */}
+      <SortBottomSheet ref={sortBottomSheetRef} onSelect={handleSortSelect} />
+      <QuantityModal
+        visible={!!selectedWholesaler}
+        wholesalerName={selectedWholesaler?.name ?? ""}
+        unitPrice={
+          selectedWholesaler
+            ? typeof getPeerGroupPrice(selectedWholesaler) === "number" &&
+              !isNaN(getPeerGroupPrice(selectedWholesaler))
+              ? getPeerGroupPrice(selectedWholesaler)
+              : selectedWholesaler.price
+            : 0
+        }
+        onClose={() => setSelectedWholesaler(null)}
+        onConfirm={handleQuantityConfirm}
       />
       <PeerGroupModal
         visible={showPeerGroupModal}
@@ -253,18 +280,6 @@ export default function ProductDescription() {
         selectedPeerGroup={selectedPeerGroup}
         onSelect={handlePeerGroupSelect}
         onClose={() => setShowPeerGroupModal(false)}
-      />
-      <QuantityModal
-        visible={showQuantityModal}
-        wholesaler={selectedWholesaler}
-        quantity={quantityInput}
-        onQuantityChange={setQuantityInput}
-        onSubmit={handleQuantitySubmit}
-        onClose={() => {
-          setShowQuantityModal(false)
-          setSelectedWholesaler(null)
-        }}
-        isLoading={false}
       />
 
       <Toast />

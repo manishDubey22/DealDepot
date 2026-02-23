@@ -16,6 +16,7 @@ export interface UseOrderReturn {
   handleDecrement: (item: CartItem) => void
   handleQuantityPress: (item: CartItem) => void
   handleQuantitySubmit: () => void
+  handleRemoveItem: (item: CartItem) => void
   handlePlaceOrder: () => void
   refetchCart: () => void
 }

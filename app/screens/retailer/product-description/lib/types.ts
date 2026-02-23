@@ -42,7 +42,7 @@ export interface UseProductDescriptionReturn {
   handleIncrement: (wholesaler: productTypes.WholesalerData) => void
   handleDecrement: (wholesaler: productTypes.WholesalerData) => void
   handleQuantityChange: (value: string) => void
-  handleQuantitySubmit: () => void
+  handleQuantitySubmit: (overrideQuantity?: number) => Promise<void>
   handleSortSelect: (sortId: string) => void
   handlePeerGroupSelect: (peerGroup: string) => void
   handleNavigateToPriceHistory: () => void

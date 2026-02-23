@@ -51,7 +51,6 @@ import { commonStyles } from "@/theme/styles"
 
 // Correct – use spacing from theme
 import { spacing } from "@/theme/spacing"
-
 ;<View style={{ padding: spacing.md, gap: spacing.sm }}>
   <Text>First</Text>
   <Text>Second</Text>
@@ -63,7 +62,6 @@ import { spacing } from "@/theme/spacing"
 ```tsx
 // Incorrect – margin on children
 import { spacing } from "@/theme/spacing"
-
 ;<View>
   <Text style={{ marginBottom: spacing.xs }}>Title</Text>
   <Text style={{ marginBottom: spacing.xs }}>Subtitle</Text>
@@ -71,7 +69,6 @@ import { spacing } from "@/theme/spacing"
 
 // Correct – gap on parent
 import { spacing } from "@/theme/spacing"
-
 ;<View style={{ gap: spacing.xs }}>
   <Text>Title</Text>
   <Text>Subtitle</Text>
@@ -128,7 +125,6 @@ import { commonStyles } from "@/theme/styles"
 
 // Correct – use commonStyles
 import { commonStyles } from "@/theme/styles"
-
 ;<View
   style={{
     borderRadius: commonStyles.borderRadius.medium,
@@ -146,7 +142,6 @@ import { commonStyles } from "@/theme/styles"
 
 // Correct – native CSS gradient syntax with theme colors
 import { colors } from "@/theme/colors"
-
 ;<View
   style={{
     experimental_backgroundImage: `linear-gradient(to bottom, ${colors.palette.neutral900}, ${colors.palette.neutral100})`,
@@ -206,7 +201,6 @@ import { typography } from "@/theme/typography"
 import { spacing } from "@/theme/spacing" // Light theme
 // or
 import { spacing } from "@/theme/spacingDark" // Dark theme
-
 ;<View style={{ padding: spacing.lg, gap: spacing.md }}>
   <Text>Content</Text>
 </View>

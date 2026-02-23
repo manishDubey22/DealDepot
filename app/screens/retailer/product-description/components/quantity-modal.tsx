@@ -1,80 +1,173 @@
-import { useEffect, useState } from "react"
-import { Modal, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native"
 
-import type { productTypes } from "@/api/retailer/product"
-
-import { UI_TEXT } from "../lib/constants"
-import { modalStyles } from "../lib/styles"
+import { styles } from "./quantity-modal.styles"
 
 interface QuantityModalProps {
   visible: boolean
-  wholesaler: productTypes.WholesalerData | null
-  quantity: string
-  onQuantityChange: (value: string) => void
-  onSubmit: () => void
+  wholesalerName: string
+  unitPrice: number | string
   onClose: () => void
-  isLoading: boolean
+  onConfirm: (quantity: number) => Promise<void>
 }
 
-export const QuantityModal: React.FC<QuantityModalProps> = ({
+export function QuantityModal({
   visible,
-  wholesaler,
-  quantity,
-  onQuantityChange,
-  onSubmit,
+  wholesalerName,
+  unitPrice,
   onClose,
-  isLoading,
-}) => {
-  const [localQuantity, setLocalQuantity] = useState(quantity)
+  onConfirm,
+}: QuantityModalProps) {
+  const [quantity, setQuantity] = useState("1")
+  const [isLoading, setIsLoading] = useState(false)
 
+  // Reset quantity when modal opens
   useEffect(() => {
-    if (visible) {
-      setLocalQuantity(quantity || "1")
-    }
-  }, [visible, quantity])
+    if (visible) setQuantity("1")
+  }, [visible])
 
-  const handleSubmit = () => {
-    onQuantityChange(localQuantity)
-    onSubmit()
-  }
+  const numericUnitPrice = useMemo(() => {
+    if (typeof unitPrice === "number" && !isNaN(unitPrice)) return unitPrice
+    if (typeof unitPrice === "string") {
+      const parsed = parseFloat(unitPrice)
+      return isNaN(parsed) ? 0 : parsed
+    }
+    return 0
+  }, [unitPrice])
+
+  // Valid when quantity is a positive integer (for button and submit)
+  const isValidQuantity = useMemo(() => {
+    const q = Number(quantity)
+    return !Number.isNaN(q) && q >= 1 && quantity !== ""
+  }, [quantity])
+
+  // Total: 0 when invalid, otherwise quantity * unitPrice (useMemo)
+  const totalPrice = useMemo(() => {
+    const q = Number(quantity)
+    if (quantity === "" || Number.isNaN(q) || q <= 0) return 0
+    return Math.floor(q) * numericUnitPrice
+  }, [quantity, numericUnitPrice])
+
+  // For submit: use positive integer only
+  const numericQuantityForSubmit = useMemo(() => {
+    if (!isValidQuantity) return 1
+    return Math.max(1, Math.floor(Number(quantity)))
+  }, [quantity, isValidQuantity])
+
+  const handleQuantityChange = useCallback((text: string) => {
+    const cleaned = text.replace(/[^0-9]/g, "")
+    setQuantity(cleaned)
+  }, [])
+
+  const handleConfirm = useCallback(async () => {
+    if (!isValidQuantity || isLoading) return
+    setIsLoading(true)
+    try {
+      await onConfirm(numericQuantityForSubmit)
+      setQuantity("1")
+      onClose()
+    } catch (error) {
+      console.log("error =>", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [isValidQuantity, numericQuantityForSubmit, onConfirm, isLoading, onClose])
+
+  const handleCancel = useCallback(() => {
+    Keyboard.dismiss()
+    setQuantity("1")
+    onClose()
+  }, [onClose])
+
+  const handleBackdropPress = useCallback(() => {
+    Keyboard.dismiss()
+    handleCancel()
+  }, [handleCancel])
+
+  const handleSubmitEditing = useCallback(() => {
+    Keyboard.dismiss()
+  }, [])
+
+  if (!visible) return null
 
   return (
-    <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
-      <View style={modalStyles.overlay}>
-        <View style={modalStyles.container}>
-          <Text style={modalStyles.title}>{UI_TEXT.QUANTITY_MODAL_TITLE}</Text>
-          {wholesaler && (
-            <View style={modalStyles.itemInfo}>
-              <Text style={modalStyles.itemName}>{wholesaler.name}</Text>
-              <Text style={modalStyles.itemId}>Price: ${wholesaler.price}</Text>
-            </View>
-          )}
-          <TextInput
-            style={modalStyles.input}
-            value={localQuantity}
-            onChangeText={setLocalQuantity}
-            keyboardType="numeric"
-            placeholder="Enter quantity"
-            editable={!isLoading}
-          />
-          <View style={modalStyles.buttonContainer}>
-            <TouchableOpacity
-              style={[modalStyles.button, modalStyles.cancelButton]}
-              onPress={onClose}
-              disabled={isLoading}
-            >
-              <Text style={modalStyles.cancelButtonText}>{UI_TEXT.QUANTITY_MODAL_CANCEL}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[modalStyles.button, modalStyles.submitButton]}
-              onPress={handleSubmit}
-              disabled={isLoading || !localQuantity || parseInt(localQuantity) < 0}
-            >
-              <Text style={modalStyles.submitButtonText}>{UI_TEXT.QUANTITY_MODAL_SUBMIT}</Text>
-            </TouchableOpacity>
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={handleCancel}
+      statusBarTranslucent
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.keyboardAvoid}
+      >
+        <TouchableWithoutFeedback onPress={handleBackdropPress}>
+          <View style={styles.backdrop}>
+            <TouchableWithoutFeedback onPress={() => {}}>
+              <View style={styles.card}>
+                <Text style={styles.title}>Enter Quantity</Text>
+                <Text style={styles.wholesalerName}>{wholesalerName}</Text>
+                <View style={styles.divider} />
+
+                <View style={styles.quantityInputContainer}>
+                  <TextInput
+                    style={styles.quantityInput}
+                    value={quantity}
+                    onChangeText={handleQuantityChange}
+                    keyboardType="numeric"
+                    returnKeyType="done"
+                    textAlign="center"
+                    editable={!isLoading}
+                    onSubmitEditing={handleSubmitEditing}
+                  />
+                </View>
+
+                <View style={styles.pricingSection}>
+                  <Text style={styles.unitPriceText}>
+                    Unit Price: ${numericUnitPrice.toFixed(2)}
+                  </Text>
+                  <Text style={styles.totalPriceText}>Total: ${totalPrice.toFixed(2)}</Text>
+                </View>
+
+                <View style={styles.divider} />
+
+                <View style={styles.buttonsRow}>
+                  <TouchableOpacity
+                    style={styles.cancelButton}
+                    onPress={handleCancel}
+                    disabled={isLoading}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.addToCartButton,
+                      (!isValidQuantity || isLoading) && styles.addToCartButtonDisabled,
+                    ]}
+                    onPress={handleConfirm}
+                    disabled={!isValidQuantity || isLoading}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={styles.addToCartButtonText}>Add to Cart</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-        </View>
-      </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </Modal>
   )
 }

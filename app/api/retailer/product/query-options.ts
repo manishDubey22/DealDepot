@@ -123,7 +123,6 @@ export function useSearchProductsQuery(
   options?: { enabled?: boolean },
 ) {
   const query = useQuery(getSearchProductsQueryOptions(params, options))
-  console.log("77777 query => ", query)
 
   const status = query.isPending ? "pending" : query.isError ? "rejected" : "fulfilled"
 
@@ -292,6 +291,11 @@ export const getProductQueryOptions = (
 export function useProductQuery(params: GetProductParams, options?: { enabled?: boolean }) {
   const query = useQuery(getProductQueryOptions(params, options))
 
+  console.log("11111111111 query.data =>", query.data)
+  console.log("11111111111 query.isLoading =>", query.isLoading)
+  console.log("11111111111 query.isError =>", query.isError)
+  console.log("11111111111 query.isSuccess =>", query.isSuccess)
+
   return {
     data: query.data,
     error: query.error,
@@ -323,6 +327,10 @@ export function useSortedProductQuery(
   options?: { enabled?: boolean },
 ) {
   const query = useQuery(getSortedProductQueryOptions(params, options))
+  console.log("444444 query.data after sorted product api response data =>", query.data)
+  console.log("444444 query.isLoading after sorted product api response data =>", query.isLoading)
+  console.log("444444 query.isError after sorted product api response data =>", query.isError)
+  console.log("444444 query.isSuccess after sorted product api response data =>", query.isSuccess)
 
   return {
     data: query.data,

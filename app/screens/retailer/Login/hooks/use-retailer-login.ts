@@ -21,6 +21,7 @@ import {
   ERROR_MESSAGES,
   MODAL_INITIAL_STATE,
   STORAGE_KEYS,
+  USER_ROLE,
 } from "../lib/constants"
 import type { IFormInput, IShowModalType } from "../lib/types"
 
@@ -65,7 +66,13 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<IFormInput>({ resolver: yupResolver(loginSchema) })
+  } = useForm<IFormInput>({
+    resolver: yupResolver(loginSchema),
+    defaultValues: {
+      email: "7z47vigy9y@elatter.com",
+      password: "Java@123",
+    },
+  })
 
   const handleTogglePassword = useCallback(() => {
     setIsShowPassword((prev) => !prev)
@@ -78,7 +85,9 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
         if (response?.data?.status) {
           const isSubscribed = response?.data?.data?.isSubscribed.toString()
           const peerGroup = response?.data?.data?.peerGroup.toString()
-          save(STORAGE_KEYS.PREMIUM_USER, isSubscribed)
+          // save(STORAGE_KEYS.PREMIUM_USER, isSubscribed)
+          console.log("isSubscribed =>", isSubscribed)
+          save(STORAGE_KEYS.PREMIUM_USER, JSON.stringify(true))
           save(STORAGE_KEYS.PEER_GROUP, peerGroup)
           save(STORAGE_KEYS.LOGIN_TIME, new Date().getTime())
 
@@ -87,32 +96,26 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
             text1: response?.data?.message?.toUpperCase(),
           })
           const result = response?.data?.data
-          save(STORAGE_KEYS.USER_INFO, result)
+          save(STORAGE_KEYS.PREMIUM_USER, JSON.stringify(true))
+          save(STORAGE_KEYS.PEER_GROUP, peerGroup)
+          save(STORAGE_KEYS.LOGIN_TIME, new Date().getTime())
           save(STORAGE_KEYS.USER_ID, result?.retailer_id)
           save(STORAGE_KEYS.ACCESS_TOKEN, result?.accessToken)
           save(STORAGE_KEYS.REFRESH_TOKEN, result?.refreshToken)
+
+          const userInfo = {
+            role: USER_ROLE.RETAILER,
+            authToken: result?.accessToken,
+            userId: result?.retailer_id,
+            refreshToken: result?.refreshToken,
+          }
+          save(STORAGE_KEYS.USER_INFO, userInfo)
+
           const payload = {
             accessToken: result?.accessToken,
             userId: result?.retailer_id,
             refreshToken: result?.refreshToken,
           }
-          console.log(payload)
-
-          // Store user info in AsyncStorage immediately after login
-          // try {
-          //   const userInfo = {
-          //     role: USER_ROLE.RETAILER,
-          //     authToken: result?.accessToken,
-          //     userId: result?.retailer_id,
-          //     refreshToken: result?.refreshToken,
-          //   }
-          //   const jsonValue = JSON.stringify(userInfo)
-          //   await AsyncStorage.setItem(STORAGE_KEYS.USER_INFO, jsonValue)
-          //   console.log(CONSOLE_MESSAGES.STORAGE_SUCCESS)
-          // } catch (error) {
-          //   console.error(CONSOLE_MESSAGES.STORAGE_ERROR, error)
-          // }
-
           setUserAuth(payload)
           navigation.navigate(RetailerRoutes.TAB_CONTAINER)
           reset()

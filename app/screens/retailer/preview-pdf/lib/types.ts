@@ -12,8 +12,10 @@ export interface PreviewPDFScreenProps {
 
 export interface UsePreviewPDFReturn {
   isLoading: boolean
+  isDownloading: boolean
   pdfPath: string | null
   error: string | null
+  htmlContent: string
   generatePDF: () => Promise<void>
   sharePDF: () => Promise<void>
   downloadPDF: () => Promise<void>
