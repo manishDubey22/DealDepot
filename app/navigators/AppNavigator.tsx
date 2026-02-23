@@ -19,9 +19,9 @@ import Toast from "react-native-toast-message"
 import toastConfig from "@/components/common-components/custom-toast/custom-toast"
 import { Text } from "@/components/Text"
 import { UpgradeModal } from "@/components/upgradeVersion"
+import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { useRole } from "@/context/RoleContext"
 import { OptionScreen } from "@/screens/common-screens/option-screen"
-import { useAppSelector } from "@/store"
 import { ThemeProvider } from "@/theme/context"
 import { role } from "@/utils/role"
 import { useVersionCheck } from "@/utils/VersionContext"
@@ -233,12 +233,10 @@ import { RetailerStackNavigation } from "./components/retailer-stack-navigation"
 // };
 
 const MainStack = () => {
-  const userDetails = useAppSelector(
-    (state: any) => state?.rootReducer?.auth?.userVerification?.data,
-  )
+  const { userAuth } = useRetailerAuth()
   const { userRole: selectedRole, isLoading: isRoleLoading } = useRole()
-  // const dispatch = useAppDispatch();
   const [loading] = useState(false)
+  const authToken = userAuth?.accessToken
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -275,9 +273,7 @@ const MainStack = () => {
       )
       break
     case selectedRole === role.RETAILER:
-      componentToRender = (
-        <RetailerStackNavigation role={selectedRole} authToken={userDetails?.accessToken} />
-      )
+      componentToRender = <RetailerStackNavigation role={selectedRole} authToken={authToken} />
       break
     default:
       componentToRender = <OptionScreen />

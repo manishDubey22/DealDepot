@@ -33,8 +33,8 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
   },
   buttonShare: {
-    backgroundColor: commonStyles.colors.primaryLight,
-    borderColor: commonStyles.colors.primaryDark,
+    backgroundColor: colors.palette.neutral100,
+    borderColor: commonStyles.colors.backgroundQuinary,
     borderWidth: commonStyles.borderWidth.small,
   },
   buttonText: {
