@@ -2,15 +2,24 @@ import { useState, useCallback, useMemo, useEffect } from "react"
 import { Alert, Platform } from "react-native"
 // eslint-disable-next-line react-native/split-platform-components
 import { PermissionsAndroid } from "react-native"
+import * as Notifications from "expo-notifications"
 import * as Print from "expo-print"
 import * as FileSystem from "expo-file-system/legacy"
 import Share from "react-native-share"
 import Toast from "react-native-toast-message"
 
 import type { Order, VendorData, PDFData } from "@/api/retailer/orders/types"
+import { loadString, saveString } from "@/utils/storage"
 
-import { CONSOLE_MESSAGES, ERROR_MESSAGES, UI_TEXT } from "../lib/constants"
+import {
+  CONSOLE_MESSAGES,
+  ERROR_MESSAGES,
+  PREVIEW_PDF_SAF_DOWNLOAD_DIR_KEY,
+  UI_TEXT,
+} from "../lib/constants"
 import type { UsePreviewPDFReturn } from "../lib/types"
+
+const { StorageAccessFramework } = FileSystem
 
 // Safe number for PDF display (handles undefined, null, string from API)
 const toPdfNumber = (v: unknown): number => {
@@ -264,7 +273,10 @@ export function usePreviewPDF(
 
     try {
       console.log(CONSOLE_MESSAGES.SHARING_PDF)
-      const shareUrl = pdfPath.startsWith("file://") ? pdfPath : `file://${pdfPath}`
+      const shareUrl =
+        pdfPath.startsWith("file://") || pdfPath.startsWith("content://")
+          ? pdfPath
+          : `file://${pdfPath}`
       await Share.open({
         url: shareUrl,
         type: "application/pdf",
@@ -282,13 +294,69 @@ export function usePreviewPDF(
     }
   }, [pdfPath, order?.orderId])
 
-  // Download PDF: generate from HTML with expo-print, save to app storage
+  // Save PDF to device: Android = SAF (Downloads), iOS = documentDirectory
+  const savePDFToDevice = useCallback(async (): Promise<string | null> => {
+    if (!order || !vendorData || !htmlContent) return null
+
+    const { uri: tempUri } = await Print.printToFileAsync({ html: htmlContent })
+    const base64 = await FileSystem.readAsStringAsync(tempUri, {
+      encoding: FileSystem.EncodingType.Base64,
+    })
+
+    if (Platform.OS === "android") {
+      let directoryUri = loadString(PREVIEW_PDF_SAF_DOWNLOAD_DIR_KEY)
+      if (!directoryUri) {
+        const downloadUri = StorageAccessFramework.getUriForDirectoryInRoot("Download")
+        const permissions =
+          await StorageAccessFramework.requestDirectoryPermissionsAsync(downloadUri)
+        if (!permissions.granted || !permissions.directoryUri) {
+          return null
+        }
+        directoryUri = permissions.directoryUri
+        saveString(PREVIEW_PDF_SAF_DOWNLOAD_DIR_KEY, directoryUri)
+      }
+
+      const safFileUri = await StorageAccessFramework.createFileAsync(
+        directoryUri,
+        `Order_${order.orderId}`,
+        "application/pdf",
+      )
+      await FileSystem.writeAsStringAsync(safFileUri, base64, {
+        encoding: FileSystem.EncodingType.Base64,
+      })
+      return safFileUri
+    }
+
+    const fileName = `Order_${order.orderId}.pdf`
+    const dir = FileSystem.documentDirectory ?? ""
+    const destUri = `${dir}${fileName}`
+    await FileSystem.copyAsync({ from: tempUri, to: destUri })
+    return destUri
+  }, [order, vendorData, htmlContent])
+
+  // Show system notification after successful save (Android: tap opens PDF)
+  const showDownloadNotification = useCallback(async (fileUri: string) => {
+    try {
+      const { status } = await Notifications.requestPermissionsAsync()
+      if (status !== "granted") return
+
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: UI_TEXT.NOTIFICATION_TITLE,
+          body: UI_TEXT.NOTIFICATION_BODY,
+          data: { fileUri },
+        },
+        trigger: null,
+      })
+    } catch (e) {
+      console.warn("Could not show download notification:", e)
+    }
+  }, [])
+
+  // Download PDF: real save, then notification + toast only on success
   const downloadPDF = useCallback(async () => {
     if (!order || !vendorData || !htmlContent) {
-      Toast.show({
-        text1: ERROR_MESSAGES.NO_PDF,
-        type: "error",
-      })
+      Toast.show({ text1: ERROR_MESSAGES.NO_PDF, type: "error" })
       return
     }
 
@@ -306,20 +374,22 @@ export function usePreviewPDF(
     try {
       console.log(CONSOLE_MESSAGES.DOWNLOADING_PDF)
 
-      const { uri: tempUri } = await Print.printToFileAsync({
-        html: htmlContent,
-      })
+      const savedUri = await savePDFToDevice()
 
-      const fileName = `Order_${order.orderId}.pdf`
-      const dir = FileSystem.documentDirectory ?? ""
-      const destUri = `${dir}${fileName}`
+      if (!savedUri) {
+        if (Platform.OS === "android") {
+          Alert.alert(
+            UI_TEXT.PERMISSION_DENIED_TITLE,
+            "Please select a folder (e.g. Download) to save the PDF.",
+            [{ text: "OK" }],
+          )
+        }
+        Toast.show({ text1: ERROR_MESSAGES.DOWNLOAD_FAILED, type: "error" })
+        return
+      }
 
-      await FileSystem.copyAsync({
-        from: tempUri,
-        to: destUri,
-      })
-
-      setPdfPath(destUri)
+      setPdfPath(savedUri)
+      await showDownloadNotification(savedUri)
       Toast.show({
         text1: UI_TEXT.DOWNLOAD_SUCCESS,
         text2:
@@ -337,7 +407,14 @@ export function usePreviewPDF(
     } finally {
       setIsDownloading(false)
     }
-  }, [order, vendorData, htmlContent, requestStoragePermission])
+  }, [
+    order,
+    vendorData,
+    htmlContent,
+    requestStoragePermission,
+    savePDFToDevice,
+    showDownloadNotification,
+  ])
 
   return {
     isLoading,

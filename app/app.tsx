@@ -20,9 +20,9 @@ import "./utils/gestureHandler"
 
 import type { ReactNode } from "react"
 import { useEffect, useState } from "react"
-import { StyleSheet, View } from "react-native"
+import { Linking, StyleSheet, View } from "react-native"
 import { useFonts } from "expo-font"
-// import * as Linking from "expo-linking"
+import * as Notifications from "expo-notifications"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
 import { QueryClientProvider } from "@tanstack/react-query"
@@ -87,6 +87,28 @@ export function App() {
 
   useEffect(() => {
     checkForAppUpdate()
+  }, [])
+
+  // Show notifications when app is in foreground (e.g. "Download Complete")
+  useEffect(() => {
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+      }),
+    })
+  }, [])
+
+  // When user taps "Download Complete" notification, open the PDF
+  useEffect(() => {
+    const sub = Notifications.addNotificationResponseReceivedListener((response) => {
+      const data = response.notification.request.content.data as { fileUri?: string }
+      if (data?.fileUri) {
+        Linking.openURL(data.fileUri)
+      }
+    })
+    return () => sub.remove()
   }, [])
 
   const {
