@@ -9,6 +9,14 @@ import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { MADRFILEURL, UI_TEXT } from "../lib/constants"
 
 const BANNER_AUTO_HIDE_MS = 2500
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024
+
+type SelectedFile = {
+  group: string
+  name: string
+  uri: string
+  mimeType: string
+}
 
 export function useUploadFiles() {
   const { userAuth } = useRetailerAuth()
@@ -16,7 +24,7 @@ export function useUploadFiles() {
   const bannerTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const [selectedPeerGroup, setSelectedPeerGroup] = useState<string | null>(null)
-  const [filesByPeerGroup, setFilesByPeerGroup] = useState<Record<string, { name: string }>>({})
+  const [selectedFile, setSelectedFile] = useState<SelectedFile | null>(null)
   const [banner, setBanner] = useState<{ visible: boolean; message: string }>({
     visible: false,
     message: "",
@@ -65,22 +73,23 @@ export function useUploadFiles() {
   }, [])
 
   const selectPeerGroup = useCallback((group: string) => {
-    setSelectedPeerGroup(group)
+    setSelectedPeerGroup((prev) => {
+      if (prev && prev !== group) {
+        setSelectedFile(null)
+      }
+      return group
+    })
   }, [])
 
   const removeFileForGroup = useCallback(
     (peerGroup: string) => {
-      setFilesByPeerGroup((prev) => {
-        const next = { ...prev }
-        delete next[peerGroup]
-        return next
-      })
+      setSelectedFile((prev) => (prev?.group === peerGroup ? null : prev))
       showBanner(UI_TEXT.FILE_REMOVED)
     },
     [showBanner],
   )
 
-  const handleDocumentUpload = useCallback(async () => {
+  const handlePickDocumentForGroup = useCallback(async () => {
     if (!selectedPeerGroup) {
       Toast.show({
         type: "error",
@@ -88,34 +97,79 @@ export function useUploadFiles() {
       })
       return
     }
-    if (!retailerId) {
-      return
-    }
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: "application/pdf",
         copyToCacheDirectory: true,
       })
-      if (result.canceled) {
-        return
-      }
+      if (result.canceled) return
+
       const file = result.assets[0]
       const fileName = file.name ?? "document.pdf"
+      const mimeType = file.mimeType ?? ""
+      const size = file.size ?? 0
+      const isPdf = mimeType === "application/pdf" || fileName.toLowerCase().endsWith(".pdf")
+
+      if (!isPdf) {
+        Toast.show({
+          type: "error",
+          text1: UI_TEXT.INVALID_FILE_TYPE,
+        })
+        return
+      }
+
+      if (size > MAX_FILE_SIZE_BYTES) {
+        Toast.show({
+          type: "error",
+          text1: UI_TEXT.FILE_TOO_LARGE,
+        })
+        return
+      }
+
+      setSelectedFile({
+        group: selectedPeerGroup,
+        name: fileName,
+        uri: file.uri,
+        mimeType: mimeType || "application/pdf",
+      })
+    } catch (err: any) {
+      const msg = err?.message ?? "Unable to pick file. Please try again."
+      Toast.show({
+        type: "error",
+        text1: (msg as string).toUpperCase(),
+      })
+    }
+  }, [selectedPeerGroup])
+
+  const handleUploadFile = useCallback(async () => {
+    if (!selectedPeerGroup) {
+      Toast.show({
+        type: "error",
+        text1: UI_TEXT.SELECT_PEER_TOAST,
+      })
+      return
+    }
+    if (!selectedFile || selectedFile.group !== selectedPeerGroup) {
+      Toast.show({
+        type: "error",
+        text1: UI_TEXT.SELECT_FILE_TOAST,
+      })
+      return
+    }
+    if (!retailerId) return
+
+    try {
       const formData = new FormData()
       formData.append("file", {
-        uri: file.uri,
-        name: fileName,
-        type: file.mimeType ?? "application/pdf",
+        uri: selectedFile.uri,
+        name: selectedFile.name,
+        type: selectedFile.mimeType,
       } as any)
       await uploadFileAsync({
         formData,
         retailerId,
         peer_group: selectedPeerGroup,
       })
-      setFilesByPeerGroup((prev) => ({
-        ...prev,
-        [selectedPeerGroup]: { name: fileName },
-      }))
       showBanner(UI_TEXT.FILE_UPLOADED_FOR(selectedPeerGroup))
     } catch (err: any) {
       const msg =
@@ -125,16 +179,20 @@ export function useUploadFiles() {
         text1: (msg as string).toUpperCase(),
       })
     }
-  }, [selectedPeerGroup, retailerId, uploadFileAsync, showBanner])
+  }, [selectedPeerGroup, selectedFile, retailerId, uploadFileAsync, showBanner])
+
+  const hasValidSelectedFile = !!selectedPeerGroup && selectedFile?.group === selectedPeerGroup
 
   return {
     selectedPeerGroup,
-    filesByPeerGroup,
+    selectedFile,
+    hasValidSelectedFile,
     banner,
     dismissBanner,
     openMADRLink,
     selectPeerGroup,
-    handleDocumentUpload,
+    handlePickDocumentForGroup,
+    handleUploadFile,
     removeFileForGroup,
     peerGroups,
     isUploading,

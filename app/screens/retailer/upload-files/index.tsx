@@ -12,12 +12,13 @@ import { Icon } from "../../../../assets/icons/wholeSeller"
 export default function UploadFiles() {
   const {
     selectedPeerGroup,
-    filesByPeerGroup,
+    selectedFile,
+    hasValidSelectedFile,
     banner,
     dismissBanner,
-    openMADRLink,
     selectPeerGroup,
-    handleDocumentUpload,
+    handlePickDocumentForGroup,
+    handleUploadFile,
     removeFileForGroup,
     peerGroups,
     isUploading,
@@ -58,77 +59,69 @@ export default function UploadFiles() {
           <Text style={styles.title}>{UI_TEXT.TITLE}</Text>
           <Text style={styles.subtitle}>{UI_TEXT.SUBTITLE}</Text>
 
-          <View style={styles.downloadSection}>
-            <Text style={styles.stepTitle}>{UI_TEXT.STEP_DOWNLOAD}</Text>
-            <View style={styles.stepButton}>
-              <ButtonField value={UI_TEXT.STEP_DOWNLOAD} onPress={openMADRLink} />
-            </View>
-          </View>
-
           <View style={styles.peerGroupSection}>
             <Text style={styles.peerGroupSectionLabel}>{UI_TEXT.STEP_SELECT_PEER}</Text>
             {peerGroups.map((group) => {
               const isSelected = selectedPeerGroup === group
-              const fileInfo = filesByPeerGroup[group]
-              const hasFile = !!fileInfo
+              const hasFile = !!selectedFile && selectedFile.group === group
               return (
                 <TouchableOpacity
                   key={group}
                   activeOpacity={0.8}
-                  style={[
-                    styles.peerGroupCard,
-                    (isSelected || hasFile) && styles.peerGroupSelected,
-                  ]}
+                  style={[styles.peerGroupCard, isSelected && styles.peerGroupSelected]}
                   onPress={() => selectPeerGroup(group)}
                 >
-                  <View style={styles.peerGroupCardMain}>
+                  <View style={styles.peerGroupCardHeader}>
                     <View style={styles.peerGroupCardContent}>
-                      <View
-                        style={[
-                          styles.radioOuter,
-                          (isSelected || hasFile) && styles.radioOuterSelected,
-                        ]}
-                      >
-                        {(isSelected || hasFile) && <View style={styles.radioInner} />}
+                      <View style={[styles.radioOuter, isSelected && styles.radioOuterSelected]}>
+                        {isSelected && <View style={styles.radioInner} />}
                       </View>
                       <Text style={styles.peerGroupName}>{UI_TEXT.PEER_GROUP_LABEL(group)}</Text>
                     </View>
-                    {hasFile && fileInfo && (
-                      <View style={styles.fileContainer}>
-                        <View style={styles.fileContainerLeft}>
-                          <Image source={Icon.File} style={styles.fileIcon} resizeMode="contain" />
-                          <Text style={styles.fileName} numberOfLines={1}>
-                            {fileInfo.name}
-                          </Text>
-                        </View>
-                        <TouchableOpacity
-                          style={styles.removeButton}
-                          onPress={(e) => {
-                            e.stopPropagation()
-                            removeFileForGroup(group)
-                          }}
-                          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                        >
-                          <Image
-                            source={Icon.CLOSE}
-                            style={styles.removeIcon}
-                            resizeMode="contain"
-                          />
-                        </TouchableOpacity>
-                      </View>
+
+                    {isSelected && !hasFile && (
+                      <TouchableOpacity
+                        onPress={(e) => {
+                          e.stopPropagation()
+                          handlePickDocumentForGroup()
+                        }}
+                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                      >
+                        <Text style={styles.uploadActionLabel}>{UI_TEXT.UPLOAD}</Text>
+                      </TouchableOpacity>
                     )}
+                    {hasFile && <Text style={styles.uploadedLabel}>{UI_TEXT.UPLOADED}</Text>}
                   </View>
-                  {hasFile && <Text style={styles.uploadedLabel}>{UI_TEXT.UPLOADED}</Text>}
+
+                  {hasFile && selectedFile && (
+                    <View style={styles.fileContainer}>
+                      <View style={styles.fileContainerLeft}>
+                        <Image source={Icon.File} style={styles.fileIcon} resizeMode="contain" />
+                        <Text style={styles.fileName} numberOfLines={1}>
+                          {selectedFile.name}
+                        </Text>
+                      </View>
+                      <TouchableOpacity
+                        style={styles.removeButton}
+                        onPress={(e) => {
+                          e.stopPropagation()
+                          removeFileForGroup(group)
+                        }}
+                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                      >
+                        <Image source={Icon.CLOSE} style={styles.removeIcon} resizeMode="contain" />
+                      </TouchableOpacity>
+                    </View>
+                  )}
                 </TouchableOpacity>
               )
             })}
           </View>
 
-          {/* <View style={styles.stepButton}> */}
           <ButtonField
             value={isUploading ? UI_TEXT.UPLOADING : UI_TEXT.UPLOAD_PDF_FILE}
-            onPress={handleDocumentUpload}
-            isDisabled={!selectedPeerGroup || isUploading}
+            onPress={handleUploadFile}
+            isDisabled={!hasValidSelectedFile || isUploading}
             isLoading={isUploading}
             icon={
               <Image
@@ -138,7 +131,6 @@ export default function UploadFiles() {
               />
             }
           />
-          {/* </View> */}
 
           <View style={styles.fileTypeInfo}>
             <Text style={styles.fileTypeInfoText}>{UI_TEXT.FILE_TYPE_INFO}</Text>
