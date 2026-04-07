@@ -1,6 +1,7 @@
 {
   "expo": {
     "jsEngine": "hermes",
+    "userInterfaceStyle": "light",
     "experiments": {
       "newArchEnabled": true
     },

@@ -6,5 +6,6 @@ export const BASE_URL = {
   // BASE: "https://inapprehensively-fabulous-erminia.ngrok-free.dev/api",
   // BASE: "https://petite-carrots-follow.loca.lt/api",
   // BASE: "http://192.168.0.131:3002/api",
+  // BASE: "https://pantomimic-twirly-berniece.ngrok-free.dev/api",
   BASE: "https://pantomimic-twirly-berniece.ngrok-free.dev/api",
 }

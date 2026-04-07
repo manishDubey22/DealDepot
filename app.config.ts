@@ -19,6 +19,7 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
 
   return {
     ...config,
+    userInterfaceStyle: "light",
     updates: {
       fallbackToCacheTimeout: 0,
     },
