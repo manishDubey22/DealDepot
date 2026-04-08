@@ -420,6 +420,7 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
     navigation.navigate(RetailerRoutes.PRICEHISTORY, {
       adminPrices: productResponse.data.adminPrice,
       selectedGroup: selectedPeerGroup,
+      productId: productResponse.data.product_id,
     })
   }, [navigation, productResponse?.data?.adminPrice, selectedPeerGroup])
 

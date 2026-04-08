@@ -16,6 +16,7 @@ import {
   PaymentFailure,
   PaymentLoading,
   PaymentSuccess,
+  PriceHistory,
   PreviewPDF,
   ProductDescription,
   Profile,
@@ -477,22 +478,13 @@ export const RetailerStackNavigation = ({
           header: () => <HeaderComponent value="Favourites" />,
         }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name={RetailerRoutes.PRICEHISTORY}
         component={PriceHistory}
         options={{
-          headerShown: true,
-          headerTitleStyle: {
-            display: 'none',
-          },
-          headerStyle: {
-            height: 80,
-            elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
-          },
-          header: () => <HeaderComponent value="Price History" />,
+          headerShown: false,
         }}
-      /> */}
+      />
     </Stack.Navigator>
   )
 }
