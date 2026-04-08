@@ -1,6 +1,7 @@
 export const MADRFILEURL = "https://wicvendor.wic.ca.gov"
 
 export const UI_TEXT = {
+  STEP_DOWNLOAD: "Download up to date MADR file",
   STEP_SELECT_PEER: "Select Peer Group",
   PEER_GROUP_LABEL: (group: string) => `Peer Group ${group}`,
   UPLOAD: "Upload",

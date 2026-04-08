@@ -22,6 +22,7 @@ export default function UploadFiles() {
     removeFileForGroup,
     peerGroups,
     isUploading,
+    openMADRLink,
   } = useUploadFiles()
 
   return (
@@ -58,6 +59,13 @@ export default function UploadFiles() {
 
           <Text style={styles.title}>{UI_TEXT.TITLE}</Text>
           <Text style={styles.subtitle}>{UI_TEXT.SUBTITLE}</Text>
+
+          <View style={styles.downloadSection}>
+            <Text style={styles.stepTitle}>{UI_TEXT.STEP_DOWNLOAD}</Text>
+            <View style={styles.stepButton}>
+              <ButtonField value={UI_TEXT.STEP_DOWNLOAD} onPress={openMADRLink} />
+            </View>
+          </View>
 
           <View style={styles.peerGroupSection}>
             <Text style={styles.peerGroupSectionLabel}>{UI_TEXT.STEP_SELECT_PEER}</Text>

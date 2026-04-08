@@ -38,6 +38,9 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.customColors.WHITE,
     flex: 1,
   },
+  downloadSection: {
+    marginTop: sectionSpacing,
+  },
   fileContainer: {
     alignItems: "center",
     backgroundColor: colors.palette.grey100,
@@ -107,14 +110,14 @@ export const styles = StyleSheet.create({
     marginBottom: cardSpacing,
     padding: 16,
   },
+  peerGroupCardContent: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
   peerGroupCardHeader: {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
-  },
-  peerGroupCardContent: {
-    alignItems: "center",
-    flexDirection: "row",
   },
   peerGroupName: {
     color: colors.palette.charcoal500,
@@ -164,6 +167,15 @@ export const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: responsiveHeight(4),
   },
+  stepButton: {
+    marginTop: responsiveHeight(1.5),
+  },
+  stepTitle: {
+    color: colors.customColors.BLACK,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: 16,
+    fontWeight: "500",
+  },
   subtitle: {
     color: commonStyles.colors.textSecondary,
     fontFamily: commonStyles.fontFamily.bold,
@@ -190,6 +202,12 @@ export const styles = StyleSheet.create({
     fontSize: 19,
     fontWeight: "600",
     textAlign: "center",
+  },
+  uploadActionLabel: {
+    color: themeGreen,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: 15,
+    fontWeight: "600",
   },
   uploadButton: {
     alignItems: "center",
@@ -225,12 +243,6 @@ export const styles = StyleSheet.create({
   },
   uploadButtonTextDisabled: {
     color: commonStyles.colors.textSecondary,
-  },
-  uploadActionLabel: {
-    color: themeGreen,
-    fontFamily: commonStyles.fontFamily.bold,
-    fontSize: 15,
-    fontWeight: "600",
   },
   uploadedLabel: {
     color: themeGreen,
