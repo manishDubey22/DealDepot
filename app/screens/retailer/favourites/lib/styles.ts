@@ -16,12 +16,12 @@ export const styles = StyleSheet.create({
     color: commonStyles.colors.text,
     fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: commonStyles.fontSize.medium,
-    fontWeight: "500",
+    fontWeight: commonStyles.fontWeight.bold,
   },
   categoryHeaderValue: {
     color: commonStyles.colors.primaryColor,
     fontFamily: commonStyles.fontFamily.bold,
-    fontWeight: "600",
+    fontWeight: commonStyles.fontWeight.bold,
   },
   changeButton: {
     alignItems: "center",
@@ -105,7 +105,7 @@ export const styles = StyleSheet.create({
   },
   peerGroupCard: {
     alignItems: "center",
-    backgroundColor: commonStyles.colors.backgroundTertiary,
+    backgroundColor: commonStyles.colors.primaryLight,
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 8,
@@ -121,7 +121,7 @@ export const styles = StyleSheet.create({
     color: commonStyles.colors.text,
     fontFamily: commonStyles.fontFamily.bold,
     fontSize: commonStyles.fontSize.medium,
-    fontWeight: "600",
+    fontWeight: commonStyles.fontWeight.bold,
   },
   subscribeButton: {
     alignItems: "center",

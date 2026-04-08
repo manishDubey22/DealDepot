@@ -1,11 +1,10 @@
 import { StyleSheet } from "react-native"
 
-import { colors } from "@/theme/colors"
 import { commonStyles } from "@/theme/styles"
 
 export const styles = StyleSheet.create({
   card: {
-    alignItems: "center",
+    alignItems: "flex-end",
     backgroundColor: commonStyles.colors.background,
     borderColor: commonStyles.borderColor.quinary,
     borderRadius: commonStyles.borderRadius.large,
@@ -55,10 +54,10 @@ export const styles = StyleSheet.create({
     color: commonStyles.colors.textSecondary,
     fontFamily: commonStyles.fontFamily.bold,
     fontSize: commonStyles.fontSize.small,
-    marginTop: 10,
+    marginTop: "10%",
   },
   price: {
-    color: colors.customColors.GREEN,
+    color: commonStyles.colors.primaryColor,
     fontFamily: commonStyles.fontFamily.bold,
     fontSize: commonStyles.fontSize.xMedium,
     fontWeight: "700",
