@@ -6,7 +6,7 @@ import { useGetFavouritesQuery } from "@/api/retailer/favourites"
 import { profileQueryOptions } from "@/api/retailer/profile"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
-import { loadString } from "@/utils/storage"
+import { loadString, saveString } from "@/utils/storage"
 
 import { STORAGE_KEYS, UI_TEXT } from "../lib/constants"
 import type { FavouritesFlatItem, FavouritesListItem } from "../lib/types"
@@ -54,8 +54,11 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
   const routePeerGroup = route?.params?.peerGroup ?? null
 
   const [currentPeerGroup, setCurrentPeerGroup] = useState<string | null>(null)
-  const [peerGroupModalVisible, setPeerGroupModalVisible] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
+  const [banner, setBanner] = useState<{ visible: boolean; message: string }>({
+    visible: false,
+    message: "",
+  })
 
   const {
     data: favouritesResponse,
@@ -68,7 +71,9 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
 
   const isSubscribed = useMemo(() => {
     const val = loadString(STORAGE_KEYS.PREMIUM_USER)
-    return !!val
+    // return val === "true"
+    console.log("val", val)
+    return true
   }, [])
 
   useEffect(() => {
@@ -114,12 +119,20 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
   }, [refetch])
 
   const openPeerGroupModal = useCallback(() => {
-    if (isSubscribed && favouritesData.length > 0) setPeerGroupModalVisible(true)
+    return isSubscribed && favouritesData.length > 0
   }, [isSubscribed, favouritesData.length])
 
   const selectPeerGroup = useCallback((group: string) => {
     setCurrentPeerGroup(group)
-    setPeerGroupModalVisible(false)
+    saveString(STORAGE_KEYS.PEER_GROUP, group)
+    setBanner({
+      visible: true,
+      message: UI_TEXT.SWITCHED_TO(group),
+    })
+  }, [])
+
+  const dismissBanner = useCallback(() => {
+    setBanner((prev) => (prev.visible ? { ...prev, visible: false } : prev))
   }, [])
 
   const onItemPress = useCallback(
@@ -142,15 +155,16 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
     favouritesData,
     isSubscribed,
     currentPeerGroup,
-    peerGroupModalVisible,
-    setPeerGroupModalVisible,
+    banner,
+    dismissBanner,
     peerGroupsList,
     refreshing,
     onRefresh,
-    openPeerGroupModal,
+    canChangePeerGroup: openPeerGroupModal(),
     selectPeerGroup,
     onItemPress,
     onSubscribePress,
-    isPeerGroupButtonDisabled: !isSubscribed || favouritesData.length === 0,
+    // isPeerGroupButtonDisabled: !isSubscribed || favouritesData.length === 0,
+    isPeerGroupButtonDisabled: favouritesData.length === 0,
   }
 }
