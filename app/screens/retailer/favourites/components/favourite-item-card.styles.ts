@@ -49,9 +49,8 @@ export const styles = StyleSheet.create({
   likeBadgeLoading: {
     opacity: 0.6,
   },
-  likeIcon: {
-    height: 15,
-    width: 15,
+  likeText: {
+    fontSize: 16,
   },
   madrLabel: {
     color: commonStyles.colors.textSecondary,

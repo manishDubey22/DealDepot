@@ -1,7 +1,6 @@
 import { Image, Pressable, Text, View } from "react-native"
 
 import { styles } from "./favourite-item-card.styles"
-import { Icon } from "../../../../../assets/icons/wholeSeller"
 import { Images } from "../../../../../assets/Images/wholeSeller"
 import { UI_TEXT } from "../lib/constants"
 
@@ -42,7 +41,7 @@ export function FavouriteItemCard({
             disabled={isUnlikeLoading}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Image source={Icon.LIKEBUTTON} style={styles.likeIcon} resizeMode="contain" />
+            <Text style={styles.likeText}>❤️</Text>
           </Pressable>
         </View>
         <View style={styles.infoWrap}>

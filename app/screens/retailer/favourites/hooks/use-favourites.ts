@@ -169,6 +169,10 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
           retailerId,
           productId,
         })
+        Toast.show({
+          type: "success",
+          text1: "Item removed from favorites",
+        })
       } catch {
         setOptimisticallyRemovedIds((prev) => {
           const next = { ...prev }
