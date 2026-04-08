@@ -464,18 +464,7 @@ export const RetailerStackNavigation = ({
         name={RetailerRoutes.FAVOURITES}
         component={Favourites}
         options={{
-          headerShown: true,
-          headerTitleStyle: {
-            // @ts-expect-error - display property not in type but works at runtime
-            display: "none",
-          },
-          headerStyle: {
-            // @ts-expect-error - height property not in type but works at runtime
-            height: 80,
-            elevation: 5,
-            shadowColor: colors.palette.grey400,
-          },
-          header: () => <HeaderComponent value="Favourites" />,
+          headerShown: false,
         }}
       />
       <Stack.Screen

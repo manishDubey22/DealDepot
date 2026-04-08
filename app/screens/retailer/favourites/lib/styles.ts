@@ -1,52 +1,26 @@
 import { StyleSheet } from "react-native"
-import {
-  responsiveFontSize,
-  responsiveHeight,
-  responsiveWidth,
-} from "react-native-responsive-dimensions"
+import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions"
 
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
 import { commonStyles } from "@/theme/styles"
 
-// const { width } = Dimensions.get("window")
-
 export const styles = StyleSheet.create({
-  cardBox: {
-    alignItems: "center",
-    backgroundColor: colors.palette.neutral100,
-    borderColor: colors.palette.grey300,
-    borderRadius: 12,
-    borderWidth: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 14,
-    marginHorizontal: 2,
-    paddingHorizontal: responsiveWidth(4),
-    paddingVertical: 14,
-  },
-  cardBoxLeft: {
-    alignItems: "flex-start",
-    flex: 1,
-    flexDirection: "row",
-    gap: 12,
-    justifyContent: "flex-start",
-  },
   categoryHeader: {
     backgroundColor: colors.palette.neutral200,
-    marginTop: responsiveHeight(1.2),
-    paddingHorizontal: responsiveWidth(4),
-    paddingVertical: responsiveHeight(1.2),
+    marginTop: 10,
+    paddingHorizontal: responsiveWidth(3.5),
+    paddingVertical: 10,
   },
   categoryHeaderText: {
-    color: colors.customColors.BLACK,
+    color: commonStyles.colors.text,
     fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: responsiveFontSize(1.8),
-    fontWeight: "600",
+    fontSize: commonStyles.fontSize.medium,
+    fontWeight: "500",
   },
   categoryHeaderValue: {
-    color: colors.customColors.GREEN,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
+    color: commonStyles.colors.primaryColor,
+    fontFamily: commonStyles.fontFamily.bold,
     fontWeight: "600",
   },
   changeButton: {
@@ -68,15 +42,14 @@ export const styles = StyleSheet.create({
   },
   changeButtonText: {
     color: colors.palette.neutral100,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 16,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: commonStyles.fontSize.medium,
     fontWeight: "600",
   },
   container: {
     flex: 1,
-    paddingBottom: responsiveHeight(4),
-    paddingHorizontal: responsiveWidth(1),
-    paddingTop: responsiveHeight(0.5),
+    paddingBottom: responsiveHeight(3),
+    paddingTop: 0,
   },
   emptyContainer: {
     flex: 1,
@@ -84,111 +57,76 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   emptyText: {
-    color: colors.palette.neutral600,
-    fontSize: 16,
+    color: commonStyles.colors.textSecondary,
+    fontSize: commonStyles.fontSize.medium,
     fontWeight: "500",
     textAlign: "center",
-  },
-  hintText: {
-    color: colors.palette.neutral600,
-    fontSize: 13,
-    marginBottom: 8,
-    textAlign: "center",
-  },
-  image: {
-    borderRadius: 12,
-    height: 88,
-    width: 88,
-  },
-  imageContainer: {
-    borderRadius: 12,
-    overflow: "hidden",
-    position: "relative",
-  },
-  infoContainer: {
-    flex: 1,
-    gap: 2,
-    justifyContent: "center",
-  },
-  likeBadge: {
-    alignItems: "center",
-    backgroundColor: colors.palette.neutral100,
-    borderRadius: 999,
-    height: 28,
-    justifyContent: "center",
-    position: "absolute",
-    right: 4,
-    top: 4,
-    width: 28,
-  },
-  likeIcon: {
-    height: 16,
-    width: 16,
   },
   loaderContainer: {
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
   },
-  madrPriceLabel: {
-    color: colors.palette.grey700,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 14,
-    marginTop: 10,
-  },
   mainContainer: {
     backgroundColor: colors.palette.neutral200,
     flex: 1,
   },
-  peerGroupCard: {
+  pageHeader: {
     alignItems: "center",
-    backgroundColor: colors.palette.green50,
-    borderColor: colors.palette.green100,
-    borderWidth: 1,
+    backgroundColor: commonStyles.colors.background,
+    borderBottomColor: commonStyles.borderColor.quinary,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 10,
-    paddingHorizontal: responsiveWidth(3),
-    paddingVertical: 12,
+    paddingBottom: 14,
+    paddingHorizontal: responsiveWidth(4),
+    paddingTop: responsiveHeight(1.2),
   },
-  peerGroupCurrentText: {
-    color: colors.palette.grey700,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 20,
+  pageHeaderAction: {
+    alignItems: "center",
+    height: 28,
+    justifyContent: "center",
+    width: 28,
   },
-  peerGroupTitle: {
-    color: colors.customColors.BLACK,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: responsiveFontSize(2.2),
-    fontWeight: "600",
+  pageHeaderIcon: {
+    height: 18,
+    width: 18,
   },
-  priceContainer: {
-    alignItems: "flex-end",
-    justifyContent: "flex-end",
-    minWidth: 90,
+  pageHeaderRefresh: {
+    color: commonStyles.colors.textSecondary,
+    fontSize: 22,
+    fontWeight: "500",
   },
-  priceText: {
-    color: colors.customColors.GREEN,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 35,
-    fontWeight: "600",
-  },
-  productDesc: {
-    color: colors.customColors.BLACK,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 25,
+  pageHeaderTitle: {
+    color: commonStyles.colors.text,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: commonStyles.fontSize.large,
     fontWeight: "700",
   },
-  productId: {
-    color: colors.palette.neutral600,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 20,
-    marginTop: 2,
+  peerGroupCard: {
+    alignItems: "center",
+    backgroundColor: commonStyles.colors.backgroundTertiary,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 8,
+    paddingHorizontal: responsiveWidth(3),
+    paddingVertical: 14,
+  },
+  peerGroupCurrentText: {
+    color: commonStyles.colors.textSecondary,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: commonStyles.fontSize.small,
+  },
+  peerGroupTitle: {
+    color: commonStyles.colors.text,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: commonStyles.fontSize.medium,
+    fontWeight: "600",
   },
   subscribeButton: {
     alignItems: "center",
     alignSelf: "center",
-    backgroundColor: colors.customColors.GREEN,
+    backgroundColor: commonStyles.colors.primaryColor,
     borderRadius: 10,
     marginTop: 16,
     paddingHorizontal: 20,
@@ -196,18 +134,18 @@ export const styles = StyleSheet.create({
   },
   subscribeButtonText: {
     color: colors.palette.neutral100,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 14,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: commonStyles.fontSize.small,
     fontWeight: "600",
   },
   successBanner: {
     alignItems: "center",
-    backgroundColor: colors.customColors.GREEN,
+    backgroundColor: commonStyles.colors.primaryColor,
     borderRadius: 14,
     flexDirection: "row",
     justifyContent: "space-between",
     marginHorizontal: responsiveWidth(2),
-    marginTop: responsiveHeight(0.8),
+    marginTop: 8,
     paddingHorizontal: 14,
     paddingVertical: 12,
   },
@@ -218,8 +156,8 @@ export const styles = StyleSheet.create({
   },
   successBannerText: {
     color: colors.palette.neutral100,
-    fontFamily: CommonStyles.fontFamily.fontFamily,
-    fontSize: 17,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: commonStyles.fontSize.small,
     fontWeight: "600",
   },
   successCloseIcon: {
