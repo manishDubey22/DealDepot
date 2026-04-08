@@ -11,6 +11,8 @@ interface FavouriteItemCardProps {
   productId: string
   price: string
   onPress: () => void
+  onUnlikePress: () => void
+  isUnlikeLoading?: boolean
 }
 
 export function FavouriteItemCard({
@@ -19,6 +21,8 @@ export function FavouriteItemCard({
   productId,
   price,
   onPress,
+  onUnlikePress,
+  isUnlikeLoading = false,
 }: FavouriteItemCardProps) {
   return (
     <Pressable style={styles.card} onPress={onPress}>
@@ -29,9 +33,17 @@ export function FavouriteItemCard({
             style={styles.image}
             resizeMode="cover"
           />
-          <View style={styles.likeBadge}>
+          <Pressable
+            style={[styles.likeBadge, isUnlikeLoading ? styles.likeBadgeLoading : null]}
+            onPress={(e) => {
+              e.stopPropagation()
+              onUnlikePress()
+            }}
+            disabled={isUnlikeLoading}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
             <Image source={Icon.LIKEBUTTON} style={styles.likeIcon} resizeMode="contain" />
-          </View>
+          </Pressable>
         </View>
         <View style={styles.infoWrap}>
           <Text style={styles.productName} numberOfLines={2}>

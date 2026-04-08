@@ -46,6 +46,9 @@ export const styles = StyleSheet.create({
     top: 4,
     width: 26,
   },
+  likeBadgeLoading: {
+    opacity: 0.6,
+  },
   likeIcon: {
     height: 15,
     width: 15,

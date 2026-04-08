@@ -43,7 +43,9 @@ export default function Favorites({
     canChangePeerGroup,
     selectPeerGroup,
     onItemPress,
+    handleUnlike,
     onSubscribePress,
+    unlikeLoadingIds,
     isPeerGroupButtonDisabled,
   } = useFavourites(navigation, route)
 
@@ -78,6 +80,8 @@ export default function Favorites({
         productId={row.product_id}
         price={displayPrice}
         onPress={() => onItemPress(row)}
+        onUnlikePress={() => handleUnlike(row.product_id)}
+        isUnlikeLoading={!!unlikeLoadingIds[row.product_id]}
       />
     )
   }

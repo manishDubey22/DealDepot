@@ -3,6 +3,7 @@ import Toast from "react-native-toast-message"
 
 import type { FavouriteProductItem, PriceEntry } from "@/api/retailer/favourites"
 import { useGetFavouritesQuery } from "@/api/retailer/favourites"
+import { useToggleFavoriteMutation } from "@/api/retailer/product/query-options"
 import { profileQueryOptions } from "@/api/retailer/profile"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
@@ -55,6 +56,10 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
 
   const [currentPeerGroup, setCurrentPeerGroup] = useState<string | null>(null)
   const [refreshing, setRefreshing] = useState(false)
+  const [optimisticallyRemovedIds, setOptimisticallyRemovedIds] = useState<Record<string, boolean>>(
+    {},
+  )
+  const [unlikeLoadingIds, setUnlikeLoadingIds] = useState<Record<string, boolean>>({})
   const [banner, setBanner] = useState<{ visible: boolean; message: string }>({
     visible: false,
     message: "",
@@ -67,13 +72,12 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
     error,
     refetch,
   } = useGetFavouritesQuery(retailerId || "")
+  const toggleFavoriteMutation = useToggleFavoriteMutation()
   const { data: peersResponse } = profileQueryOptions.useGetStaticPeerGroupsQuery()
 
   const isSubscribed = useMemo(() => {
     const val = loadString(STORAGE_KEYS.PREMIUM_USER)
-    // return val === "true"
-    console.log("val", val)
-    return true
+    return val === "true"
   }, [])
 
   useEffect(() => {
@@ -96,7 +100,11 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
     }
   }, [isError, error])
 
-  const favouritesData = (favouritesResponse as { data?: FavouriteProductItem[] })?.data ?? []
+  const favouritesDataRaw = (favouritesResponse as { data?: FavouriteProductItem[] })?.data ?? []
+  const favouritesData = useMemo(
+    () => favouritesDataRaw.filter((item) => !optimisticallyRemovedIds[item.product_id]),
+    [favouritesDataRaw, optimisticallyRemovedIds],
+  )
   const flatData = useMemo(
     () => buildFlatListData(favouritesData, currentPeerGroup, routePeerGroup),
     [favouritesData, currentPeerGroup, routePeerGroup],
@@ -149,6 +157,39 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
     navigation.navigate(RetailerRoutes.SUBSCRIPTIONPLAN)
   }, [navigation])
 
+  const handleUnlike = useCallback(
+    async (productId: string) => {
+      if (!retailerId || !productId) return
+
+      setOptimisticallyRemovedIds((prev) => ({ ...prev, [productId]: true }))
+      setUnlikeLoadingIds((prev) => ({ ...prev, [productId]: true }))
+
+      try {
+        await toggleFavoriteMutation.mutateAsync({
+          retailerId,
+          productId,
+        })
+      } catch {
+        setOptimisticallyRemovedIds((prev) => {
+          const next = { ...prev }
+          delete next[productId]
+          return next
+        })
+        Toast.show({
+          type: "error",
+          text1: "FAILED TO UPDATE FAVORITE",
+        })
+      } finally {
+        setUnlikeLoadingIds((prev) => {
+          const next = { ...prev }
+          delete next[productId]
+          return next
+        })
+      }
+    },
+    [retailerId, toggleFavoriteMutation],
+  )
+
   return {
     flatData,
     isLoading,
@@ -163,7 +204,9 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
     canChangePeerGroup: openPeerGroupModal(),
     selectPeerGroup,
     onItemPress,
+    handleUnlike,
     onSubscribePress,
+    unlikeLoadingIds,
     // isPeerGroupButtonDisabled: !isSubscribed || favouritesData.length === 0,
     isPeerGroupButtonDisabled: favouritesData.length === 0,
   }
