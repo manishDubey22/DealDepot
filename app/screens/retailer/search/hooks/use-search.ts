@@ -32,6 +32,7 @@ export function useSearch() {
   const [peerGroup, setPeerGroup] = useState("")
   const [isCategoryAll, setIsCategoryAll] = useState<string>("Category")
   const [refreshing, setRefreshing] = useState<boolean>(false)
+  const isSubCategoryEnabled = !!selectedCategory
 
   const {
     data: filteredData,
@@ -108,11 +109,13 @@ export function useSearch() {
       if (category === "All") {
         handleShowAll()
       } else {
+        // Reset stale subcategory whenever category changes.
+        setSelectedSubCategory((prev) => (prev && selectedCategory !== category ? null : prev))
         setSelectedCategory(category)
         setSubCategoryModalVisible(true)
       }
     },
-    [handleShowAll],
+    [handleShowAll, selectedCategory],
   )
 
   const onSubCategorySelect = useCallback((subcategory: string) => {
@@ -281,6 +284,7 @@ export function useSearch() {
     isSubCategoryModalVisible,
     isLoading,
     isLoadingTrendingData,
+    isSubCategoryEnabled,
     itemsArray,
     onCategorySelect,
     onRefresh,

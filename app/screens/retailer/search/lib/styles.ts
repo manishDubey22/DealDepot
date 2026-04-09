@@ -141,11 +141,17 @@ export const styles = StyleSheet.create({
     paddingHorizontal: responsiveWidth(4),
     paddingVertical: 12,
   },
+  peerGroupButtonDisabled: {
+    opacity: 0.5,
+  },
   peerGroupButtonText: {
     color: colors.palette.neutral700,
     fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: 14,
     fontWeight: "500",
+  },
+  peerGroupButtonTextDisabled: {
+    color: colors.palette.neutral500,
   },
   priceContainer: {
     alignItems: "flex-end",

@@ -32,6 +32,7 @@ export default function Search({ navigation }: any) {
     isSubCategoryModalVisible,
     isLoading,
     isLoadingTrendingData,
+    isSubCategoryEnabled,
     itemsArray,
     onCategorySelect,
     onRefresh,
@@ -106,10 +107,22 @@ export default function Search({ navigation }: any) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.peerGroupButton}
-          onPress={() => selectedCategory && setSubCategoryModalVisible(true)}
+          style={[
+            styles.peerGroupButton,
+            !isSubCategoryEnabled ? styles.peerGroupButtonDisabled : null,
+          ]}
+          onPress={() => isSubCategoryEnabled && setSubCategoryModalVisible(true)}
+          disabled={!isSubCategoryEnabled}
         >
-          <Text style={styles.peerGroupButtonText}>{selectedSubCategory ?? "Subcategory"}</Text>
+          <Text
+            style={[
+              styles.peerGroupButtonText,
+              !isSubCategoryEnabled ? styles.peerGroupButtonTextDisabled : null,
+            ]}
+          >
+            {selectedSubCategory ??
+              (isSubCategoryEnabled ? "Subcategory" : "Select category first")}
+          </Text>
           <Image source={Icon.LeftBackArrow} resizeMode="contain" style={styles.dropdownArrow} />
         </TouchableOpacity>
       </View>

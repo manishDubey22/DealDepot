@@ -9,6 +9,22 @@ type IModalProps = {
   onClose: () => void
 }
 
+const getItemKey = (item: any, index: number): string => {
+  if (typeof item === "string" || typeof item === "number") {
+    return `${String(item)}-${index}`
+  }
+
+  if (item?.id != null) {
+    return `${String(item.id)}-${index}`
+  }
+
+  if (item?.value != null) {
+    return `${String(item.value)}-${index}`
+  }
+
+  return `item-${index}`
+}
+
 const ModalComponent = ({ visible, items, onSelect, onClose }: IModalProps) => {
   return (
     <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
@@ -16,7 +32,7 @@ const ModalComponent = ({ visible, items, onSelect, onClose }: IModalProps) => {
         <View style={modalStyles.modalView}>
           <FlatList
             data={items}
-            keyExtractor={(item) => item.id}
+            keyExtractor={getItemKey}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
               <TouchableOpacity
