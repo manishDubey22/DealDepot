@@ -16,7 +16,3 @@ export const UI_TEXT = {
   CLOSE_BUTTON_TEXT: "Close",
   INVALID_URL_ERROR: `Invalid URL: ${MADRCHECKER_URL}`,
 } as const
-
-export const STORAGE_KEYS = {
-  PEER_GROUP: "peergroup",
-} as const

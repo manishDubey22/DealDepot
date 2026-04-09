@@ -22,7 +22,6 @@ export const ERROR_MESSAGES = {
 
 export const STORAGE_KEYS = {
   FILE_ID: "fileId",
-  PEER_GROUP: "peergroup",
 } as const
 
 export const CONSOLE_MESSAGES = {

@@ -6,7 +6,9 @@ import { useGetFavouritesQuery } from "@/api/retailer/favourites"
 import { useToggleFavoriteMutation } from "@/api/retailer/product/query-options"
 import { profileQueryOptions } from "@/api/retailer/profile"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
+import { STORAGE_KEY } from "@/lib/constants"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
+import { loadNormalizedPeerGroup } from "@/utils/peer-group"
 import { loadString, saveString } from "@/utils/storage"
 
 import { STORAGE_KEYS, UI_TEXT } from "../lib/constants"
@@ -83,7 +85,7 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
   }, [])
 
   useEffect(() => {
-    const saved = loadString(STORAGE_KEYS.PEER_GROUP)
+    const saved = loadNormalizedPeerGroup()
     setCurrentPeerGroup(saved || null)
   }, [])
 
@@ -134,7 +136,7 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
 
   const selectPeerGroup = useCallback((group: string) => {
     setCurrentPeerGroup(group)
-    saveString(STORAGE_KEYS.PEER_GROUP, group)
+    saveString(STORAGE_KEY.PEER_GROUP, group)
     setBanner({
       visible: true,
       message: UI_TEXT.SWITCHED_TO(group),

@@ -12,7 +12,9 @@ import {
 } from "@/api/retailer/product/query-options"
 import type { WholesalerData } from "@/api/retailer/product/types"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
+import { STORAGE_KEY } from "@/lib/constants"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
+import { loadNormalizedPeerGroup } from "@/utils/peer-group"
 import { loadString, saveString } from "@/utils/storage"
 
 import {
@@ -49,7 +51,7 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
   // Load subscription and peer group from storage
   useEffect(() => {
     const premiumUser = loadString(STORAGE_KEYS.PREMIUM_USER)
-    const peerGroupValue = loadString(STORAGE_KEYS.PEER_GROUP)
+    const peerGroupValue = loadNormalizedPeerGroup()
     setIsSubscribed(premiumUser === "true")
     setPeerGroup(peerGroupValue)
     setSelectedPeerGroup(peerGroupValue)
@@ -410,7 +412,7 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
   // Peer group select
   const handlePeerGroupSelect = useCallback((peerGroupValue: string) => {
     setSelectedPeerGroup(peerGroupValue)
-    saveString(STORAGE_KEYS.PEER_GROUP, peerGroupValue)
+    saveString(STORAGE_KEY.PEER_GROUP, peerGroupValue)
     setShowPeerGroupModal(false)
   }, [])
 

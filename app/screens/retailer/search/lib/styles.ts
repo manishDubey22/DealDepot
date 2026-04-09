@@ -149,6 +149,7 @@ export const styles = StyleSheet.create({
   },
   priceContainer: {
     alignItems: "flex-end",
+    display: "flex",
     justifyContent: "center",
     minWidth: 56,
   },

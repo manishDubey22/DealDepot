@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import type { Product } from "@/api/retailer/product/types"
 import SearchField from "@/components/common-components/search-field/search-field"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
-import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 import ModalComponent from "./components/modal-component"
 import { useSearch } from "./hooks/use-search"
@@ -120,7 +120,7 @@ export default function Search({ navigation }: any) {
     if (isLoading || isLoadingTrendingData) {
       return (
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={colors.customColors.ACTIVE_GREEN} />
+          <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
         </View>
       )
     }

@@ -12,9 +12,10 @@ import { Toast } from "react-native-toast-message/lib/src/Toast"
 import { authMutationOptions } from "@/api/retailer/auth"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { useRole } from "@/context/RoleContext"
+import { STORAGE_KEY } from "@/lib/constants"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { loginSchema } from "@/utils/schema/login-schema"
-import { save } from "@/utils/storage"
+import { save, saveString } from "@/utils/storage"
 
 import {
   CONSOLE_MESSAGES,
@@ -88,7 +89,7 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
           // save(STORAGE_KEYS.PREMIUM_USER, isSubscribed)
           console.log("isSubscribed =>", isSubscribed)
           save(STORAGE_KEYS.PREMIUM_USER, JSON.stringify(true))
-          save(STORAGE_KEYS.PEER_GROUP, peerGroup)
+          saveString(STORAGE_KEY.PEER_GROUP, peerGroup)
           save(STORAGE_KEYS.LOGIN_TIME, new Date().getTime())
 
           Toast.show({
@@ -97,7 +98,7 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
           })
           const result = response?.data?.data
           save(STORAGE_KEYS.PREMIUM_USER, JSON.stringify(true))
-          save(STORAGE_KEYS.PEER_GROUP, peerGroup)
+          saveString(STORAGE_KEY.PEER_GROUP, peerGroup)
           save(STORAGE_KEYS.LOGIN_TIME, new Date().getTime())
           save(STORAGE_KEYS.USER_ID, result?.retailer_id)
           save(STORAGE_KEYS.ACCESS_TOKEN, result?.accessToken)

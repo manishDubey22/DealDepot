@@ -14,7 +14,6 @@ export const UI_TEXT = {
 } as const
 
 export const STORAGE_KEYS = {
-  PEER_GROUP: "peergroup",
   /** Typo preserved for compatibility with existing storage */
   PREMIUM_USER: "premuimUser",
 } as const

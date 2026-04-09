@@ -22,7 +22,6 @@ export const FORM_FIELDS = {
 
 export const STORAGE_KEYS = {
   PREMIUM_USER: "premuimUser",
-  PEER_GROUP: "peergroup",
   LOGIN_TIME: "loginTime",
   USER_INFO: "userInfo",
   USER_ID: "userId",

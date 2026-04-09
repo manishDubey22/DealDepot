@@ -7,7 +7,8 @@ import { productQueryOptions } from "@/api/retailer/product"
 import type { Product } from "@/api/retailer/product/types"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { STORAGE_KEY } from "@/lib/constants"
-import { loadString, save } from "@/utils/storage"
+import { loadNormalizedPeerGroup } from "@/utils/peer-group"
+import { save } from "@/utils/storage"
 
 export function useSearch() {
   const { userAuth, userRole } = useRetailerAuth()
@@ -122,8 +123,7 @@ export function useSearch() {
     setRefreshing(true)
     refetchTrendingData()
       .then(() => {
-        const key = loadString("peergroup")
-        setPeerGroup(key || "")
+        setPeerGroup(loadNormalizedPeerGroup())
         setRefreshing(false)
       })
       .catch((refreshError) => {
@@ -203,8 +203,12 @@ export function useSearch() {
   }, [query, isStartSearch, refetch, peerGroup])
 
   useEffect(() => {
-    const key = loadString("peergroup")
-    setPeerGroup(key || "")
+    const fetchPeer = async () => {
+      const peerGroupValue = loadNormalizedPeerGroup()
+      setPeerGroup(peerGroupValue)
+      return peerGroupValue
+    }
+    fetchPeer()
   }, [])
 
   useEffect(() => {

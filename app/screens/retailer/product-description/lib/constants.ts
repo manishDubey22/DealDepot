@@ -26,7 +26,6 @@ export const ERROR_MESSAGES = {
 
 export const STORAGE_KEYS = {
   PREMIUM_USER: "premuimUser",
-  PEER_GROUP: "peergroup",
   FILE_ID: "fileId",
 } as const
 

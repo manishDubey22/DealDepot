@@ -13,7 +13,6 @@ export const ERROR_MESSAGES = {
 
 export const STORAGE_KEYS = {
   PREMIUM_USER: "premuimUser",
-  PEER_GROUP: "peergroup",
   USER_INFO: STORAGE_KEY.USER_INFO,
 } as const
 

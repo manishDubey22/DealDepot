@@ -5,6 +5,7 @@ import { Toast } from "react-native-toast-message/lib/src/Toast"
 
 import { authMutationOptions } from "@/api/retailer/auth"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
+import { STORAGE_KEY } from "@/lib/constants"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { save, saveString } from "@/utils/storage"
 
@@ -66,7 +67,7 @@ export function useEmailVerification(navigation: any): UseEmailVerificationRetur
         // saveString(STORAGE_KEYS.PREMIUM_USER, isSubscribed)
         console.log("isSubscribed =>", isSubscribed)
         save(STORAGE_KEYS.PREMIUM_USER, JSON.stringify(true))
-        saveString(STORAGE_KEYS.PEER_GROUP, peerGroup)
+        saveString(STORAGE_KEY.PEER_GROUP, peerGroup)
 
         // Store user info in storage
         try {

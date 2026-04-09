@@ -6,10 +6,11 @@ import Toast from "react-native-toast-message"
 import { useWhoAmIQuery } from "@/api/retailer/auth/query-options"
 import { profileMutationOptions, profileQueryOptions } from "@/api/retailer/profile"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
+import { STORAGE_KEY } from "@/lib/constants"
 import { editProfileSchema } from "@/utils/schema/edit-profile-schema"
 import { saveString } from "@/utils/storage"
 
-import { STORAGE_KEYS, UI_TEXT } from "../lib/constants"
+import { UI_TEXT } from "../lib/constants"
 import type { EditProfileFormValues } from "../lib/types"
 
 export function useEditProfile(navigation: any) {
@@ -101,7 +102,7 @@ export function useEditProfile(navigation: any) {
     async (data: EditProfileFormValues) => {
       if (!retailerId) return
       try {
-        saveString(STORAGE_KEYS.PEER_GROUP, data.peerGroup ?? "")
+        saveString(STORAGE_KEY.PEER_GROUP, data.peerGroup ?? "")
         const response = await updateProfileMutation.mutateAsync({
           retailerId,
           data: {
