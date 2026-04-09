@@ -12,8 +12,7 @@ import { WebView } from "react-native-webview"
 
 import { HeaderComponent } from "@/components/common-components"
 import ButtonField from "@/components/common-components/button/button"
-import { colors } from "@/theme/colors"
-// import { spacing } from "@/theme/spacing"
+import { commonStyles } from "@/theme/styles"
 
 import { useSubscriptionPlans } from "./hooks/use-subscription-plans"
 import { UI_TEXT } from "./lib/constants"
@@ -44,7 +43,7 @@ export default function SubscriptionPlans() {
           <Text style={styles.subtitle}>{UI_TEXT.SUBTITLE}</Text>
 
           {isLoading ? (
-            <ActivityIndicator size="large" color={colors.customColors.GREEN} />
+            <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
           ) : (
             <>
               {plans.map((plan) => {
@@ -109,7 +108,7 @@ export default function SubscriptionPlans() {
               startInLoadingState={true}
               renderLoading={() => (
                 <View style={styles.webViewLoadingContainer}>
-                  <ActivityIndicator size="large" color={colors.customColors.GREEN} />
+                  <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
                 </View>
               )}
             />

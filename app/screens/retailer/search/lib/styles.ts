@@ -88,7 +88,7 @@ export const styles = StyleSheet.create({
     fontSize: 13,
   },
   helperText3: {
-    color: colors.customColors.GREEN,
+    color: commonStyles.colors.primaryColor,
     fontSize: 16,
     fontWeight: "700",
   },
@@ -101,7 +101,7 @@ export const styles = StyleSheet.create({
     width: 64,
   },
   latestTrendsHeading: {
-    color: colors.customColors.GREEN,
+    color: commonStyles.colors.primaryColor,
     fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: responsiveFontSize(3),
     marginVertical: 10,

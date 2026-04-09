@@ -72,7 +72,7 @@ const TabBarIcon = ({ icon, focused }: { icon: ImageSourcePropType; focused: boo
       source={icon}
       style={[
         styles.tabBarIcon,
-        { tintColor: focused ? colors.customColors.GREEN : colors.palette.grey500 },
+        { tintColor: focused ? commonStyles.colors.primaryColor : colors.palette.grey500 },
       ]}
     />
   )
@@ -84,7 +84,7 @@ const BottomTabNavigator = () => {
     <Tab.Navigator
       screenOptions={{
         tabBarHideOnKeyboard: true,
-        tabBarActiveTintColor: colors.customColors.GREEN,
+        tabBarActiveTintColor: commonStyles.colors.primaryColor,
       }}
     >
       <Tab.Screen
@@ -133,20 +133,8 @@ const BottomTabNavigator = () => {
         component={Order}
         options={{
           headerShown: false,
-          // headerTitleStyle: {
-          //   display: "none" as any,
-          // },
           tabBarLabel: "My Cart",
           tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.SHOPINGCART} focused={focused} />,
-          // headerStyle: {
-          //   backgroundColor: colors.palette.neutral100,
-          //   borderBottomColor: colors.palette.neutral300,
-          //   borderBottomWidth: StyleSheet.hairlineWidth,
-          //   height: 80,
-          //   elevation: 5,
-          //   shadowColor: colors.palette.grey400,
-          // },
-          // header: () => <HeaderComponent value="My Cart" />,
         }}
       />
       <Tab.Screen

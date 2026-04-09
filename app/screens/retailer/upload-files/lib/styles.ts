@@ -6,8 +6,8 @@ import { commonStyles } from "@/theme/styles"
 
 const sectionSpacing = 24
 const cardSpacing = 14
-const themeGreen = colors.customColors.GREEN
-const lightGreenBg = colors.palette.green50
+const themeGreen = commonStyles.colors.primaryColor
+const lightGreenBg = commonStyles.colors.primary
 
 export const styles = StyleSheet.create({
   bannerCheckIcon: {

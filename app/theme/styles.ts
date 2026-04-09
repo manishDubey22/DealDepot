@@ -78,6 +78,12 @@ export const commonStyles = {
     primary: colors.palette.green.soft,
     primaryDark: colors.palette.green.primary,
     primaryLight: colors.palette.green.mint,
+
+    // color used in app
+    // mainColor: primaryColor,
+    // mainLightColor: primaryDark,
+    // mainMediumColor: primary,
+    // mainLightColor: primaryLight,
   },
   fontFamily: {
     bold: "Arial-Rounded-Bold",

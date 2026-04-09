@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
     marginBottom: responsiveHeight(4),
   },
   helperText2: {
-    color: colors.customColors.GREEN,
+    color: commonStyles.colors.primaryColor,
     fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: 16,
     fontWeight: "500",
@@ -70,7 +70,7 @@ export const styles = StyleSheet.create({
     marginVertical: responsiveHeight(3),
   },
   otpSubtitleEmail: {
-    color: colors.customColors.GREEN,
+    color: commonStyles.colors.primaryColor,
     fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: 16,
     fontWeight: "500",

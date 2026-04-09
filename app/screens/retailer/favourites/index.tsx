@@ -12,7 +12,7 @@ import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { SafeAreaView } from "react-native-safe-area-context"
 import Toast from "react-native-toast-message"
 
-import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 import { FavouriteItemCard } from "./components/favourite-item-card"
 import { PeerGroupBottomSheet } from "./components/peer-group-bottom-sheet"
@@ -53,7 +53,7 @@ export default function Favorites({
     return (
       <View style={styles.mainContainer}>
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={colors.customColors.GREEN} />
+          <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
         </View>
       </View>
     )
@@ -164,7 +164,7 @@ export default function Favorites({
                 <RefreshControl
                   refreshing={refreshing}
                   onRefresh={onRefresh}
-                  colors={[colors.customColors.GREEN]}
+                  colors={[commonStyles.colors.primaryColor]}
                 />
               }
               showsVerticalScrollIndicator={false}

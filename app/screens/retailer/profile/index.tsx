@@ -4,6 +4,7 @@ import Toast from "react-native-toast-message"
 
 import { Avatar, PopupModal } from "@/components/common-components"
 import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 import { ProfileField } from "./components/profile-field"
 import { useProfile } from "./hooks/use-profile"
@@ -26,7 +27,7 @@ export default function Profile() {
   if (isLoading) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color={colors.customColors.GREEN} />
+        <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
       </View>
     )
   }

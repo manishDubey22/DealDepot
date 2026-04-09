@@ -3,6 +3,7 @@ import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimen
 
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
+import { commonStyles } from "@/theme/styles"
 
 export const styles = StyleSheet.create({
   checkbox: {
@@ -18,8 +19,8 @@ export const styles = StyleSheet.create({
     width: 20,
   },
   checkboxChecked: {
-    backgroundColor: colors.customColors.GREEN,
-    borderColor: colors.customColors.GREEN,
+    backgroundColor: commonStyles.colors.primaryDark,
+    borderColor: commonStyles.colors.primaryColor,
   },
   checkboxContainer: {
     alignItems: "flex-start",
@@ -42,7 +43,7 @@ export const styles = StyleSheet.create({
     marginTop: 5,
   },
   checkboxLink: {
-    color: colors.customColors.GREEN,
+    color: commonStyles.colors.primaryColor,
     fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: 14,
     textDecorationLine: "underline",
@@ -73,7 +74,7 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   createButton: {
-    backgroundColor: colors.customColors.GREEN,
+    backgroundColor: commonStyles.colors.primaryColor,
     borderRadius: 5,
     marginHorizontal: 18,
     marginTop: "20%",
@@ -105,7 +106,7 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
   helperText2: {
-    color: colors.customColors.GREEN,
+    color: commonStyles.colors.primaryColor,
     fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: 16,
     fontWeight: "500",

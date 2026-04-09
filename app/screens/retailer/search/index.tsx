@@ -85,7 +85,7 @@ export default function Search({ navigation }: any) {
           </View>
           <View style={styles.priceContainer}>
             <Text style={styles.helperText3}>
-              ${sortedPriceInfo ? sortedPriceInfo[0].price : 20}
+              ${sortedPriceInfo ? sortedPriceInfo[0].price : 0.0}
             </Text>
           </View>
         </View>

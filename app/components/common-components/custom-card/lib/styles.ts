@@ -1,6 +1,7 @@
 import { Platform, StyleSheet } from "react-native"
 
 import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 import {
   BORDER_RADIUS,
@@ -55,7 +56,7 @@ export const styles = StyleSheet.create({
     fontSize: HELPER_TEXT2_FONT_SIZE,
   },
   helperText3: {
-    color: colors.customColors.GREEN,
+    color: commonStyles.colors.primaryColor,
     fontSize: HELPER_TEXT3_FONT_SIZE,
   },
   image: {

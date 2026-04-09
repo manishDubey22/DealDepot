@@ -8,7 +8,7 @@ import { commonStyles } from "@/theme/styles"
 
 export const styles = StyleSheet.create({
   addButton: {
-    backgroundColor: colors.customColors.GREEN,
+    backgroundColor: commonStyles.colors.primaryColor,
     borderRadius: 8,
     paddingHorizontal: responsiveWidth(6),
     paddingVertical: responsiveHeight(1),
@@ -123,7 +123,7 @@ export const styles = StyleSheet.create({
   },
   quantityButton: {
     alignItems: "center",
-    backgroundColor: colors.customColors.GREEN,
+    backgroundColor: commonStyles.colors.primaryColor,
     borderRadius: 4,
     height: 32,
     justifyContent: "center",
@@ -271,7 +271,7 @@ export const modalStyles = StyleSheet.create({
     backgroundColor: colors.palette.green50,
   },
   submitButton: {
-    backgroundColor: colors.customColors.GREEN,
+    backgroundColor: commonStyles.colors.primaryColor,
   },
   submitButtonText: {
     color: colors.palette.neutral100,

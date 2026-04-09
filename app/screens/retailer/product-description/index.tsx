@@ -8,7 +8,7 @@ import type { CartItem } from "@/api/retailer/order"
 import { productQueryOptions } from "@/api/retailer/product"
 import { WholesalerData } from "@/api/retailer/product/types"
 import { HeaderComponent } from "@/components/common-components/header/header"
-import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 import { PeerGroupModal } from "./components/peer-group-modal"
 import { PeerGroupPriceCard } from "./components/peer-group-price-card"
@@ -183,7 +183,7 @@ export default function ProductDescription() {
   if (isLoading) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color={colors.customColors.GREEN} />
+        <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
       </View>
     )
   }

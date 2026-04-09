@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { WebView } from "react-native-webview"
 
 import { RetailerRoutes } from "@/navigators/retailer/routes"
-import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 import { usePreviewPDF } from "./hooks/use-preview-pdf"
 import { UI_TEXT } from "./lib/constants"
@@ -47,7 +47,7 @@ export default function PreviewPDF({ route, navigation }: any) {
             />
           ) : (
             <View style={styles.loaderContainer}>
-              <ActivityIndicator size="large" color={colors.customColors.GREEN} />
+              <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
               <Text style={styles.loaderText}>{UI_TEXT.GENERATING}</Text>
             </View>
           )}
@@ -89,7 +89,7 @@ export default function PreviewPDF({ route, navigation }: any) {
       <SafeAreaView style={styles.container}>
         {isLoading && !htmlContent ? (
           <View style={styles.loaderContainer}>
-            <ActivityIndicator size="large" color={colors.customColors.GREEN} />
+            <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
             <Text style={styles.loaderText}>{UI_TEXT.GENERATING}</Text>
           </View>
         ) : (

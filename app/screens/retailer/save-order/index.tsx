@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 
 import type { Order } from "@/api/retailer/orders/types"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
-import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 import { OrderCard } from "./components/order-card"
 import { useSaveOrder } from "./hooks/use-save-order"
@@ -43,7 +43,7 @@ export default function SaveOrder({ navigation }: any) {
     if (isLoading && !refreshing) {
       return (
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={colors.customColors.GREEN} />
+          <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
           <Text style={styles.emptyText}>{UI_TEXT.LOADING}</Text>
         </View>
       )

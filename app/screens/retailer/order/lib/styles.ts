@@ -258,7 +258,7 @@ export const modalStyles = StyleSheet.create({
     justifyContent: "center",
   },
   submitButton: {
-    backgroundColor: colors.customColors.GREEN,
+    backgroundColor: commonStyles.colors.primaryColor,
   },
   submitButtonText: {
     color: colors.palette.neutral100,
