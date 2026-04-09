@@ -123,12 +123,16 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
     }
   }, [isError, error])
 
-  // Get fileId helper
-  const getFileId = useCallback((): string | null => {
-    const storedFileId = loadString(STORAGE_KEYS.FILE_ID)
-    if (storedFileId) return storedFileId
-    return productResponse?.data?.wholesalerData?.[0]?.fileId || null
-  }, [productResponse?.data?.wholesalerData])
+  // Get fileId helper (prefer the current wholesaler to avoid cross-wholesaler mismatch)
+  const getFileId = useCallback(
+    (wholesaler?: WholesalerData | null): string | null => {
+      if (wholesaler?.fileId) return wholesaler.fileId
+      if (selectedWholesaler?.fileId) return selectedWholesaler.fileId
+      if (wholesalerData?.[0]?.fileId) return wholesalerData[0].fileId
+      return productResponse?.data?.wholesalerData?.[0]?.fileId || null
+    },
+    [selectedWholesaler, wholesalerData, productResponse?.data?.wholesalerData],
+  )
 
   // Get cart item for wholesaler
   const getCartItem = useCallback(
@@ -179,7 +183,7 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
       const cartItem = getCartItem(wholesaler)
       const currentQuantity = cartItem?.items || 0
       const newQuantity = currentQuantity + 1
-      const fileId = getFileId()
+      const fileId = getFileId(wholesaler)
 
       if (!fileId) {
         Toast.show({
@@ -225,7 +229,7 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
       const cartItem = getCartItem(wholesaler)
       const currentQuantity = cartItem?.items || 0
       const newQuantity = currentQuantity - 1
-      const fileId = getFileId()
+      const fileId = getFileId(wholesaler)
 
       if (!fileId) {
         Toast.show({
@@ -282,7 +286,7 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
       debounce(async (wholesaler: WholesalerData, quantity: number) => {
         if (!retailerId) return
 
-        const fileId = getFileId()
+        const fileId = getFileId(wholesaler)
         if (!fileId) {
           Toast.show({
             type: "error",
@@ -346,7 +350,7 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
         return
       }
 
-      const fileId = getFileId()
+      const fileId = getFileId(selectedWholesaler)
       if (!fileId) {
         Toast.show({
           type: "error",
