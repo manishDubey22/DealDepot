@@ -104,7 +104,11 @@ export default function UploadFiles() {
                   {hasFile && selectedFile && (
                     <View style={styles.fileContainer}>
                       <View style={styles.fileContainerLeft}>
-                        <Image source={Icon.File} style={styles.fileIcon} resizeMode="contain" />
+                        <Image
+                          source={Icon.FILE_PDF}
+                          style={styles.fileIcon}
+                          resizeMode="contain"
+                        />
                         <Text style={styles.fileName} numberOfLines={1}>
                           {selectedFile.name}
                         </Text>

@@ -145,7 +145,7 @@ export default function Favorites({
               >
                 <Text style={styles.changeButtonText}>{UI_TEXT.CHANGE}</Text>
                 <Image
-                  source={Icon.DOWNARROWICON}
+                  source={Icon.DOWN_ARROW_1}
                   style={styles.changeButtonIcon}
                   resizeMode="contain"
                 />

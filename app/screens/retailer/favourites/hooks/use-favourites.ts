@@ -77,7 +77,9 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
 
   const isSubscribed = useMemo(() => {
     const val = loadString(STORAGE_KEYS.PREMIUM_USER)
-    return val === "true"
+    // return val === "true"
+    console.log("val", val)
+    return true
   }, [])
 
   useEffect(() => {
