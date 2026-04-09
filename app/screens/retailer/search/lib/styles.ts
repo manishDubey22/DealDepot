@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: 0,
-    paddingTop: 12,
+    paddingTop: responsiveHeight(0.2),
   },
   dropdownArrow: {
     height: 10,
@@ -130,7 +130,7 @@ export const styles = StyleSheet.create({
   },
   peerGroupButton: {
     alignItems: "center",
-    backgroundColor: commonStyles.colors.backgroundSecondary,
+    backgroundColor: commonStyles.colors.primaryLight,
     borderColor: commonStyles.colors.border,
     borderRadius: commonStyles.borderRadius.large,
     borderWidth: 1,

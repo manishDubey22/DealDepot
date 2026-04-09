@@ -30,7 +30,7 @@ export function useSearch() {
   const [isSubCategoryModalVisible, setSubCategoryModalVisible] = useState(false)
   const [shouldTrendingDataFetch, setShouldTrendingDataFetch] = useState<boolean>(false)
   const [peerGroup, setPeerGroup] = useState("")
-  const [isCategoryAll, setIsCategoryAll] = useState<string>("Category")
+  const [isCategoryAll, setIsCategoryAll] = useState<string>("Select Category")
   const [refreshing, setRefreshing] = useState<boolean>(false)
   const isSubCategoryEnabled = !!selectedCategory
 
@@ -101,7 +101,7 @@ export function useSearch() {
     setShouldTrendingDataFetch(true)
     setSelectedCategory(null)
     setSelectedSubCategory(null)
-    setIsCategoryAll("All")
+    setIsCategoryAll("Select Category")
   }, [refetchTrendingData])
 
   const onCategorySelect = useCallback(

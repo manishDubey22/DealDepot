@@ -18,6 +18,7 @@ import {
 export const styles = StyleSheet.create({
   container: {
     alignItems: "center",
+    backgroundColor: colors.palette.neutral100,
     borderColor: BORDER_COLOR,
     borderRadius: BORDER_RADIUS,
     borderWidth: BORDER_WIDTH,
