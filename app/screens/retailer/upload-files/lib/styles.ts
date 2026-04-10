@@ -102,6 +102,20 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: responsiveWidth(5),
   },
+  noPeerGroupCard: {
+    backgroundColor: colors.palette.grey100,
+    borderColor: commonStyles.borderColor.quinary,
+    borderRadius: commonStyles.borderRadius.large,
+    borderWidth: 1,
+    marginBottom: cardSpacing,
+    padding: 16,
+  },
+  noPeerGroupText: {
+    color: commonStyles.colors.textSecondary,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: 14,
+    textAlign: "center",
+  },
   peerGroupCard: {
     backgroundColor: commonStyles.colors.background,
     borderColor: commonStyles.borderColor.quinary,

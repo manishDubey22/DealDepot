@@ -18,4 +18,6 @@ export const UI_TEXT = {
   FILE_TYPE_INFO: "Only PDF files are accepted. Maximum file size is 10MB.",
   TITLE: "Upload MADR Peer Group Files",
   SUBTITLE: "Select a peer group and upload the corresponding PDF file",
+  ASSIGNED_PEER_GROUP: "Assigned Peer Group",
+  NO_PEER_GROUP_ASSIGNED: "No PL Group assigned",
 } as const

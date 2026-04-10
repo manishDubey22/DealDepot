@@ -11,6 +11,7 @@ import { Icon } from "../../../../assets/icons/wholeSeller"
 
 export default function UploadFiles() {
   const {
+    userPeerGroup,
     selectedPeerGroup,
     selectedFile,
     hasValidSelectedFile,
@@ -68,7 +69,12 @@ export default function UploadFiles() {
           </View>
 
           <View style={styles.peerGroupSection}>
-            <Text style={styles.peerGroupSectionLabel}>{UI_TEXT.STEP_SELECT_PEER}</Text>
+            <Text style={styles.peerGroupSectionLabel}>{UI_TEXT.ASSIGNED_PEER_GROUP}</Text>
+            {!userPeerGroup ? (
+              <View style={styles.noPeerGroupCard}>
+                <Text style={styles.noPeerGroupText}>{UI_TEXT.NO_PEER_GROUP_ASSIGNED}</Text>
+              </View>
+            ) : null}
             {peerGroups.map((group) => {
               const isSelected = selectedPeerGroup === group
               const hasFile = !!selectedFile && selectedFile.group === group
@@ -78,6 +84,7 @@ export default function UploadFiles() {
                   activeOpacity={0.8}
                   style={[styles.peerGroupCard, isSelected && styles.peerGroupSelected]}
                   onPress={() => selectPeerGroup(group)}
+                  disabled
                 >
                   <View style={styles.peerGroupCardHeader}>
                     <View style={styles.peerGroupCardContent}>

@@ -1,10 +1,11 @@
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Linking } from "react-native"
 import * as DocumentPicker from "expo-document-picker"
 import { Toast } from "react-native-toast-message/lib/src/Toast"
 
 import { productQueryOptions } from "@/api/retailer/product"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
+import { loadNormalizedPeerGroup } from "@/utils/peer-group"
 
 import { MADRFILEURL, UI_TEXT } from "../lib/constants"
 
@@ -30,8 +31,14 @@ export function useUploadFiles() {
     message: "",
   })
 
-  const { data: peerGroupsData } = productQueryOptions.useStaticPeersQuery()
-  const peerGroups = peerGroupsData?.data ?? []
+  const userPeerGroup = loadNormalizedPeerGroup()
+  const allowedPeerGroups = userPeerGroup ? [userPeerGroup] : []
+
+  useEffect(() => {
+    // Auto-select assigned peer group; users can upload only for their own group.
+    setSelectedPeerGroup(userPeerGroup || null)
+    setSelectedFile((prev) => (prev?.group === userPeerGroup ? prev : null))
+  }, [userPeerGroup])
 
   const { mutateAsync: uploadFileAsync, isPending: isUploading } =
     productQueryOptions.useUploadRetailerFileMutation()
@@ -72,22 +79,28 @@ export function useUploadFiles() {
     }
   }, [])
 
-  const selectPeerGroup = useCallback((group: string) => {
-    setSelectedPeerGroup((prev) => {
-      if (prev && prev !== group) {
-        setSelectedFile(null)
-      }
-      return group
+  const selectPeerGroup = useCallback(
+    (group: string) => {
+      if (group !== userPeerGroup) return
+      setSelectedPeerGroup((prev) => {
+        if (prev && prev !== group) {
+          setSelectedFile(null)
+        }
+        return group
+      })
+    },
+    [userPeerGroup],
+  )
+
+  const removeFileForGroup = useCallback((peerGroup: string) => {
+    setSelectedFile((prev) => (prev?.group === peerGroup ? null : prev))
+    Toast.show({
+      type: "success",
+      text1: UI_TEXT.FILE_REMOVED,
+      position: "top",
+      topOffset: 110,
     })
   }, [])
-
-  const removeFileForGroup = useCallback(
-    (peerGroup: string) => {
-      setSelectedFile((prev) => (prev?.group === peerGroup ? null : prev))
-      showBanner(UI_TEXT.FILE_REMOVED)
-    },
-    [showBanner],
-  )
 
   const handlePickDocumentForGroup = useCallback(async () => {
     if (!selectedPeerGroup) {
@@ -184,6 +197,7 @@ export function useUploadFiles() {
   const hasValidSelectedFile = !!selectedPeerGroup && selectedFile?.group === selectedPeerGroup
 
   return {
+    userPeerGroup,
     selectedPeerGroup,
     selectedFile,
     hasValidSelectedFile,
@@ -194,7 +208,7 @@ export function useUploadFiles() {
     handlePickDocumentForGroup,
     handleUploadFile,
     removeFileForGroup,
-    peerGroups,
+    peerGroups: allowedPeerGroups,
     isUploading,
   }
 }
