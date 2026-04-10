@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Linking } from "react-native"
 import * as DocumentPicker from "expo-document-picker"
+import { useNavigation } from "@react-navigation/native"
 import { Toast } from "react-native-toast-message/lib/src/Toast"
 
 import { productQueryOptions } from "@/api/retailer/product"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
+import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { loadNormalizedPeerGroup } from "@/utils/peer-group"
 
 import { MADRFILEURL, UI_TEXT } from "../lib/constants"
 
-const BANNER_AUTO_HIDE_MS = 2500
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024
 
 type SelectedFile = {
@@ -20,6 +21,7 @@ type SelectedFile = {
 }
 
 export function useUploadFiles() {
+  const navigation = useNavigation<any>()
   const { userAuth } = useRetailerAuth()
   const retailerId = userAuth?.userId ?? ""
   const bannerTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -42,15 +44,6 @@ export function useUploadFiles() {
 
   const { mutateAsync: uploadFileAsync, isPending: isUploading } =
     productQueryOptions.useUploadRetailerFileMutation()
-
-  const showBanner = useCallback((message: string) => {
-    if (bannerTimeoutRef.current) clearTimeout(bannerTimeoutRef.current)
-    setBanner({ visible: true, message })
-    bannerTimeoutRef.current = setTimeout(() => {
-      setBanner((b) => (b.visible ? { ...b, visible: false } : b))
-      bannerTimeoutRef.current = null
-    }, BANNER_AUTO_HIDE_MS)
-  }, [])
 
   const dismissBanner = useCallback(() => {
     if (bannerTimeoutRef.current) {
@@ -169,10 +162,14 @@ export function useUploadFiles() {
       })
       return
     }
-    if (!retailerId) return
+    if (!retailerId) {
+      return
+    }
 
     try {
       const formData = new FormData()
+      formData.append("retailerId", retailerId)
+      formData.append("peer_group", selectedPeerGroup)
       formData.append("file", {
         uri: selectedFile.uri,
         name: selectedFile.name,
@@ -183,16 +180,27 @@ export function useUploadFiles() {
         retailerId,
         peer_group: selectedPeerGroup,
       })
-      showBanner(UI_TEXT.FILE_UPLOADED_FOR(selectedPeerGroup))
+      Toast.show({
+        type: "success",
+        text1: "FILE UPLOADED SUCCESSFULLY",
+        position: "top",
+        topOffset: 110,
+      })
+      setSelectedFile(null)
+      navigation.navigate(RetailerRoutes.SEARCH)
     } catch (err: any) {
       const msg =
-        err?.response?.data?.message ?? err?.data?.message ?? "Upload failed. Please try again."
+        err?.response?.data?.message ??
+        err?.data?.message ??
+        (err?.message === "Network Error"
+          ? "Upload failed due to network connection. Please verify API URL/tunnel and try again."
+          : "Upload failed. Please try again.")
       Toast.show({
         type: "error",
         text1: (msg as string).toUpperCase(),
       })
     }
-  }, [selectedPeerGroup, selectedFile, retailerId, uploadFileAsync, showBanner])
+  }, [selectedPeerGroup, selectedFile, retailerId, uploadFileAsync, navigation])
 
   const hasValidSelectedFile = !!selectedPeerGroup && selectedFile?.group === selectedPeerGroup
 
