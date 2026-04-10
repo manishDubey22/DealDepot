@@ -6,14 +6,14 @@ import { commonStyles } from "@/theme/styles"
 export const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    backgroundColor: commonStyles.colors.backgroundQuinary,
+    backgroundColor: commonStyles.colors.primaryLight,
     borderRadius: commonStyles.borderRadius.medium,
     flex: 1,
     marginHorizontal: spacing.xxs,
     padding: spacing.sm,
   },
   label: {
-    color: commonStyles.colors.textSecondary,
+    color: commonStyles.colors.text,
     fontFamily: commonStyles.fontFamily.regular,
     fontSize: commonStyles.fontSize.small,
     marginBottom: spacing.xxs,

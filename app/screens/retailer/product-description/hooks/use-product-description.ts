@@ -15,7 +15,7 @@ import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { STORAGE_KEY } from "@/lib/constants"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { loadNormalizedPeerGroup } from "@/utils/peer-group"
-import { loadString, saveString } from "@/utils/storage"
+import { saveString } from "@/utils/storage"
 
 import {
   CONSOLE_MESSAGES,
@@ -50,9 +50,10 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
 
   // Load subscription and peer group from storage
   useEffect(() => {
-    const premiumUser = loadString(STORAGE_KEYS.PREMIUM_USER)
+    // const premiumUser = loadString(STORAGE_KEYS.PREMIUM_USER)
     const peerGroupValue = loadNormalizedPeerGroup()
-    setIsSubscribed(premiumUser === "true")
+    // setIsSubscribed(premiumUser === "true")
+    setIsSubscribed(true)
     setPeerGroup(peerGroupValue)
     setSelectedPeerGroup(peerGroupValue)
   }, [])

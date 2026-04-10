@@ -153,7 +153,7 @@ export const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   sectionPeerGroupPrice: {
-    backgroundColor: commonStyles.colors.primaryLight,
+    backgroundColor: commonStyles.colors.primary,
     borderRadius: commonStyles.borderRadius.medium,
     marginBottom: spacing.lg,
     padding: spacing.lg,
