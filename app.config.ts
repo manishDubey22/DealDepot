@@ -16,11 +16,14 @@ import "tsx/cjs"
  */
 module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
   const existingPlugins = config.plugins ?? []
+  const isProductionProfile = process.env.EAS_BUILD_PROFILE === "production"
 
   return {
     ...config,
     userInterfaceStyle: "light",
     updates: {
+      enabled: isProductionProfile,
+      checkAutomatically: "ON_LOAD",
       fallbackToCacheTimeout: 0,
     },
     runtimeVersion: {
