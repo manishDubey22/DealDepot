@@ -56,6 +56,7 @@ import {
   captureScreenViewed,
   initAnalytics,
 } from "./services/analytics/posthog"
+import { initSentry, registerSentryNavigation } from "./services/monitoring/sentry"
 import { store } from "./store"
 // import { ThemeProvider } from "./theme/context"
 import { customFontsToLoad } from "./theme/typography"
@@ -100,6 +101,7 @@ export function App() {
   useEffect(() => {
     initAnalytics()
     captureAnalyticsEvent("app_opened", { source: "app_bootstrap" })
+    initSentry()
   }, [])
 
   // Show notifications when app is in foreground (e.g. "Download Complete")
@@ -168,6 +170,7 @@ export function App() {
                   <NavigationContainer
                     ref={navigationRef}
                     onReady={() => {
+                      registerSentryNavigation(navigationRef)
                       const currentRoute = navigationRef.getCurrentRoute()
                       const routeName = currentRoute?.name ?? "unknown"
                       routeNameRef.current = routeName

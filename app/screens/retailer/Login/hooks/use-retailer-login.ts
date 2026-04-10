@@ -15,6 +15,7 @@ import { useRole } from "@/context/RoleContext"
 import { STORAGE_KEY } from "@/lib/constants"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { captureAnalyticsEvent, identifyAnalyticsUser } from "@/services/analytics/posthog"
+import { captureSentryException } from "@/services/monitoring/sentry"
 import { loginSchema } from "@/utils/schema/login-schema"
 import { save, saveString } from "@/utils/storage"
 
@@ -138,6 +139,10 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
         }
       } catch (error: any) {
         console.error(CONSOLE_MESSAGES.LOGIN_REQUEST_FAILED, error)
+        captureSentryException(error, {
+          surface: "retailer_login",
+          action: "submit_login",
+        })
 
         // Handle different types of errors
         if (error?.status === "NETWORK_ERROR" || error?.message?.includes("Network")) {

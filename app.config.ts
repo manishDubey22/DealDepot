@@ -49,6 +49,14 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
     plugins: [
       ...existingPlugins,
       [
+        "@sentry/react-native",
+        {
+          organization: process.env.SENTRY_ORG,
+          project: process.env.SENTRY_PROJECT,
+          url: process.env.SENTRY_URL || "https://sentry.io/",
+        },
+      ],
+      [
         "expo-camera",
         {
           cameraPermission:
