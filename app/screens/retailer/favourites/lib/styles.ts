@@ -48,7 +48,6 @@ export const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingBottom: responsiveHeight(3),
     paddingTop: 0,
   },
   emptyContainer: {

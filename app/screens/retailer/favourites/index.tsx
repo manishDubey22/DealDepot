@@ -40,13 +40,13 @@ export default function Favorites({
     peerGroupsList,
     refreshing,
     onRefresh,
-    canChangePeerGroup,
+    // canChangePeerGroup,
     selectPeerGroup,
     onItemPress,
     handleUnlike,
     onSubscribePress,
     unlikeLoadingIds,
-    isPeerGroupButtonDisabled,
+    // isPeerGroupButtonDisabled,
   } = useFavourites(navigation, route)
 
   if (isLoading) {
@@ -131,7 +131,7 @@ export default function Favorites({
                   {UI_TEXT.CURRENT_PEER_GROUP} {currentPeerGroup || "—"}
                 </Text>
               </View>
-              <Pressable
+              {/* <Pressable
                 style={[
                   styles.changeButton,
                   isPeerGroupButtonDisabled ? styles.changeButtonDisabled : null,
@@ -149,7 +149,7 @@ export default function Favorites({
                   style={styles.changeButtonIcon}
                   resizeMode="contain"
                 />
-              </Pressable>
+              </Pressable> */}
             </View>
 
             <FlatList

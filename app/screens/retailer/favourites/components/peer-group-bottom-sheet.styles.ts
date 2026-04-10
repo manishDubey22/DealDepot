@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     paddingHorizontal: 16,
-    paddingTop: 12,
+    // paddingTop: 12,
   },
   optionRow: {
     borderBottomColor: colors.palette.grey300,
