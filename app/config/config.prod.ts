@@ -7,4 +7,7 @@
  */
 export default {
   API_URL: "https://api.rss2json.com/v1",
+  POSTHOG_API_KEY: process.env.EXPO_PUBLIC_POSTHOG_API_KEY || "",
+  POSTHOG_HOST: process.env.EXPO_PUBLIC_POSTHOG_HOST || "https://app.posthog.com",
+  POSTHOG_ENABLED: process.env.EXPO_PUBLIC_POSTHOG_ENABLED !== "false",
 }

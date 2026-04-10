@@ -19,12 +19,12 @@ if (__DEV__) {
 import "./utils/gestureHandler"
 
 import type { ReactNode } from "react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Linking, StyleSheet, View } from "react-native"
 import { useFonts } from "expo-font"
 import * as Notifications from "expo-notifications"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-import { NavigationContainer } from "@react-navigation/native"
+import { createNavigationContainerRef, NavigationContainer } from "@react-navigation/native"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { SafeAreaProvider } from "react-native-safe-area-context"
@@ -44,12 +44,18 @@ import { queryClient } from "@/lib/react-query/queryClient"
 import { checkForAppUpdate } from "@/services/updateService"
 
 // import { AuthProvider } from "./context/AuthContext" // @demo remove-current-line
+import { AnalyticsProvider } from "./context/AnalyticsContext"
 import { RetailerAuthProvider } from "./context/RetailerAuthContext"
 import { RoleProvider } from "./context/RoleContext"
 import { initI18n } from "./i18n"
 import { STORAGE_KEY } from "./lib/constants"
 import { AppNavigator } from "./navigators/AppNavigator"
 import { useNavigationPersistence } from "./navigators/navigationUtilities"
+import {
+  captureAnalyticsEvent,
+  captureScreenViewed,
+  initAnalytics,
+} from "./services/analytics/posthog"
 import { store } from "./store"
 // import { ThemeProvider } from "./theme/context"
 import { customFontsToLoad } from "./theme/typography"
@@ -84,9 +90,16 @@ import * as storage from "./utils/storage"
  */
 export function App() {
   useInAppUpdates()
+  const navigationRef = useRef(createNavigationContainerRef()).current
+  const routeNameRef = useRef("")
 
   useEffect(() => {
     checkForAppUpdate()
+  }, [])
+
+  useEffect(() => {
+    initAnalytics()
+    captureAnalyticsEvent("app_opened", { source: "app_bootstrap" })
   }, [])
 
   // Show notifications when app is in foreground (e.g. "Download Complete")
@@ -151,17 +164,35 @@ export function App() {
           <Provider store={store}>
             <QueryClientProvider client={queryClient}>
               <RetailerAuthProvider>
-                <NavigationContainer>
-                  <RoleProvider>
-                    <KeyboardProviderWrapper>
-                      {/* <VersionProvider> */}
-                      <View style={styles.mainContainer}>
-                        <AppNavigator />
-                      </View>
-                      {/* </VersionProvider> */}
-                    </KeyboardProviderWrapper>
-                  </RoleProvider>
-                </NavigationContainer>
+                <AnalyticsProvider>
+                  <NavigationContainer
+                    ref={navigationRef}
+                    onReady={() => {
+                      const currentRoute = navigationRef.getCurrentRoute()
+                      const routeName = currentRoute?.name ?? "unknown"
+                      routeNameRef.current = routeName
+                      captureScreenViewed(routeName, { entry: "on_ready" })
+                    }}
+                    onStateChange={() => {
+                      const currentRoute = navigationRef.getCurrentRoute()
+                      const nextRouteName = currentRoute?.name ?? "unknown"
+                      if (routeNameRef.current !== nextRouteName) {
+                        captureScreenViewed(nextRouteName, { entry: "on_state_change" })
+                        routeNameRef.current = nextRouteName
+                      }
+                    }}
+                  >
+                    <RoleProvider>
+                      <KeyboardProviderWrapper>
+                        {/* <VersionProvider> */}
+                        <View style={styles.mainContainer}>
+                          <AppNavigator />
+                        </View>
+                        {/* </VersionProvider> */}
+                      </KeyboardProviderWrapper>
+                    </RoleProvider>
+                  </NavigationContainer>
+                </AnalyticsProvider>
               </RetailerAuthProvider>
             </QueryClientProvider>
           </Provider>

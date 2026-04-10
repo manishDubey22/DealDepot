@@ -14,6 +14,7 @@ import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { useRole } from "@/context/RoleContext"
 import { STORAGE_KEY } from "@/lib/constants"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
+import { captureAnalyticsEvent, identifyAnalyticsUser } from "@/services/analytics/posthog"
 import { loginSchema } from "@/utils/schema/login-schema"
 import { save, saveString } from "@/utils/storage"
 
@@ -118,6 +119,14 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
             refreshToken: result?.refreshToken,
           }
           setUserAuth(payload)
+          identifyAnalyticsUser(result?.retailer_id, {
+            email: data.email,
+            name: "retailer_user",
+            role: USER_ROLE.RETAILER,
+          })
+          captureAnalyticsEvent("login_success", {
+            role: USER_ROLE.RETAILER,
+          })
           navigation.navigate(RetailerRoutes.TAB_CONTAINER)
           reset()
         } else {
