@@ -15,7 +15,9 @@ import { styles } from "./quantity-modal.styles"
 
 interface QuantityModalProps {
   visible: boolean
+  productName: string
   wholesalerName: string
+  userPeerGroup: string
   unitPrice: number | string
   onClose: () => void
   onConfirm: (quantity: number) => Promise<void>
@@ -23,7 +25,9 @@ interface QuantityModalProps {
 
 export function QuantityModal({
   visible,
+  productName,
   wholesalerName,
+  userPeerGroup,
   unitPrice,
   onClose,
   onConfirm,
@@ -117,7 +121,9 @@ export function QuantityModal({
             <TouchableWithoutFeedback onPress={() => {}}>
               <View style={styles.card}>
                 <Text style={styles.title}>Enter Quantity</Text>
+                <Text style={styles.productName}>{productName}</Text>
                 <Text style={styles.wholesalerName}>{wholesalerName}</Text>
+                <Text style={styles.peerGroupText}>Peer Group: {userPeerGroup || "N/A"}</Text>
                 <View style={styles.divider} />
 
                 <View style={styles.quantityInputContainer}>

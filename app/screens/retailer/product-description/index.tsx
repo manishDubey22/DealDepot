@@ -32,6 +32,7 @@ export default function ProductDescription() {
     isError,
     error,
     cartItems,
+    peerGroup,
     selectedPeerGroup,
     isSubscribed,
     showPeerGroupModal,
@@ -99,11 +100,11 @@ export default function ProductDescription() {
   )
 
   // Get price for peer group
-  const getPeerGroupPrice = (wholesaler: any) => {
-    if (!adminPrice || !uiSelectedPeerGroup) return wholesaler.price
-    const latestEntry = getLatestPeerGroupEntry(uiSelectedPeerGroup)
-    return latestEntry?.price || wholesaler.price
-  }
+  // const getPeerGroupPrice = (wholesaler: any) => {
+  //   if (!adminPrice || !uiSelectedPeerGroup) return wholesaler.price
+  //   const latestEntry = getLatestPeerGroupEntry(uiSelectedPeerGroup)
+  //   return latestEntry?.price || wholesaler.price
+  // }
 
   // Get peer group price for display
   const peerGroupPrice = useMemo(() => {
@@ -153,7 +154,8 @@ export default function ProductDescription() {
     const cartItem = getCartItem(wholesaler.wholesaler_id)
     const isInCart = !!cartItem
     const showBlur = !isSubscribed && index >= 2
-    const unitPrice = getPeerGroupPrice(wholesaler)
+    // const unitPrice = getPeerGroupPrice(wholesaler)
+    const unitPrice = wholesaler.price
     const displayUnitPrice =
       (unitPrice === 0 || unitPrice > 0) && !isNaN(unitPrice) ? unitPrice : "--"
     const casePrice = wholesaler.casePrice ?? "--"
@@ -271,13 +273,14 @@ export default function ProductDescription() {
       <SortBottomSheet ref={sortBottomSheetRef} onSelect={handleSortSelect} />
       <QuantityModal
         visible={!!selectedWholesaler}
+        productName={productData.product_desc}
         wholesalerName={selectedWholesaler?.name ?? ""}
+        userPeerGroup={peerGroup || "N/A"}
         unitPrice={
           selectedWholesaler
-            ? typeof getPeerGroupPrice(selectedWholesaler) === "number" &&
-              !isNaN(getPeerGroupPrice(selectedWholesaler))
-              ? getPeerGroupPrice(selectedWholesaler)
-              : selectedWholesaler.price
+            ? Number(selectedWholesaler.price) > 0 && !isNaN(Number(selectedWholesaler.price))
+              ? selectedWholesaler.price
+              : 0
             : 0
         }
         onClose={() => setSelectedWholesaler(null)}

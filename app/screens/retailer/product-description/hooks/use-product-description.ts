@@ -12,7 +12,6 @@ import {
 } from "@/api/retailer/product/query-options"
 import type { WholesalerData } from "@/api/retailer/product/types"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
-import { STORAGE_KEY } from "@/lib/constants"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { loadNormalizedPeerGroup } from "@/utils/peer-group"
 import { saveString } from "@/utils/storage"
@@ -420,7 +419,6 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
   // Peer group select
   const handlePeerGroupSelect = useCallback((peerGroupValue: string) => {
     setSelectedPeerGroup(peerGroupValue)
-    saveString(STORAGE_KEY.PEER_GROUP, peerGroupValue)
     setShowPeerGroupModal(false)
   }, [])
 

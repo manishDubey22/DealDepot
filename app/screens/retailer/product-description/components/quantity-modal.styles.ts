@@ -68,8 +68,22 @@ export const styles = StyleSheet.create({
   keyboardAvoid: {
     flex: 1,
   },
+  peerGroupText: {
+    color: colors.palette.neutral550,
+    fontFamily: commonStyles.fontFamily.regular,
+    fontSize: commonStyles.fontSize.small,
+    marginBottom: spacing.sm,
+    textAlign: "center",
+  },
   pricingSection: {
     marginBottom: spacing.lg,
+  },
+  productName: {
+    color: colors.customColors.BLACK,
+    fontFamily: commonStyles.fontFamily.regular,
+    fontSize: commonStyles.fontSize.small,
+    marginBottom: spacing.xs,
+    textAlign: "center",
   },
   quantityInput: {
     color: colors.customColors.BLACK,
