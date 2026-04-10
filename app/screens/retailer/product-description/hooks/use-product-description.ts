@@ -114,8 +114,11 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
         (error as any)?.response?.data?.message ||
         (error as any)?.message ||
         ERROR_MESSAGES.PRODUCT_FETCH_ERROR
+      const normalized = String(errorMessage).toUpperCase()
+      const isProductNotFound =
+        (error as any)?.response?.status === 404 || normalized.includes("PRODUCT NOT FOUND")
       Toast.show({
-        text1: UI_TEXT.SOMETHING_WENT_WRONG,
+        text1: isProductNotFound ? UI_TEXT.PRODUCT_NOT_FOUND : UI_TEXT.SOMETHING_WENT_WRONG,
         text2: errorMessage.toUpperCase(),
         type: "error",
       })

@@ -31,6 +31,7 @@ export default function ProductDescription() {
     isFavorite,
     isLoading,
     isError,
+    error,
     cartItems,
     selectedPeerGroup,
     isSubscribed,
@@ -190,10 +191,18 @@ export default function ProductDescription() {
 
   // Error or empty state
   if (isError || !productData) {
+    const backendMessage = (error as any)?.response?.data?.message
+    const isProductNotFound =
+      typeof backendMessage === "string" &&
+      backendMessage.toUpperCase().includes("PRODUCT NOT FOUND")
     return (
       <View style={styles.emptyContainer}>
         <Text style={styles.emptyText}>
-          {isError ? UI_TEXT.SOMETHING_WENT_WRONG : UI_TEXT.FREE_TRIAL_OVER}
+          {isError
+            ? isProductNotFound
+              ? UI_TEXT.PRODUCT_NOT_FOUND
+              : UI_TEXT.SOMETHING_WENT_WRONG
+            : UI_TEXT.FREE_TRIAL_OVER}
         </Text>
       </View>
     )
