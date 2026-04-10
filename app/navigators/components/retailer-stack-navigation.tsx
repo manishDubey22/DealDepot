@@ -1,6 +1,5 @@
 import { Image, ImageSourcePropType, StyleSheet, TouchableOpacity } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { useNavigation } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { HeaderComponent } from "@/components/common-components"
@@ -79,7 +78,6 @@ const TabBarIcon = ({ icon, focused }: { icon: ImageSourcePropType; focused: boo
 }
 
 const BottomTabNavigator = () => {
-  const navigation = useNavigation()
   return (
     <Tab.Navigator
       screenOptions={{
@@ -175,7 +173,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen
         name={RetailerRoutes.PROFILE}
         component={Profile}
-        options={{
+        options={({ navigation }) => ({
           headerShown: true,
           headerStyle: {
             backgroundColor: colors.palette.neutral100,
@@ -192,14 +190,84 @@ const BottomTabNavigator = () => {
           headerTitleAlign: "center",
           // -----------Need to be navigate ---- navigation.navigate(Constant.ScreenName.EDIT_PROFILE)
           headerRight: () => (
-            <TouchableOpacity
-              onPress={() => (navigation as any).navigate(RetailerRoutes.EDIT_PROFILE)}
-            >
+            <TouchableOpacity onPress={() => navigation.navigate(RetailerRoutes.EDIT_PROFILE)}>
               <TabBarIcon icon={Icon.EDIT} focused={false} />
             </TouchableOpacity>
           ),
           headerTintColor: "#FFF",
           tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.PROFILE} focused={focused} />,
+        })}
+      />
+      <Tab.Screen
+        name={RetailerRoutes.PRODUCT_DESCRIPTION}
+        component={ProductDescription}
+        options={{
+          headerShown: false,
+          tabBarButton: () => null,
+          tabBarItemStyle: { display: "none" },
+        }}
+      />
+      <Tab.Screen
+        name={RetailerRoutes.PRICEHISTORY}
+        component={PriceHistory}
+        options={{
+          headerShown: false,
+          tabBarButton: () => null,
+          tabBarItemStyle: { display: "none" },
+        }}
+      />
+      <Tab.Screen
+        name={RetailerRoutes.FAVOURITES}
+        component={Favourites}
+        options={{
+          headerShown: false,
+          tabBarButton: () => null,
+          tabBarItemStyle: { display: "none" },
+        }}
+      />
+      <Tab.Screen
+        name={RetailerRoutes.UPLOAD_FILE}
+        component={UploadFiles}
+        options={{
+          headerShown: false,
+          tabBarButton: () => null,
+          tabBarItemStyle: { display: "none" },
+        }}
+      />
+      <Tab.Screen
+        name={RetailerRoutes.EDIT_PROFILE}
+        component={EditProfile}
+        options={{
+          headerShown: true,
+          tabBarButton: () => null,
+          tabBarItemStyle: { display: "none" },
+          headerTitleStyle: {
+            display: "none",
+          },
+          headerStyle: {
+            height: 80,
+            elevation: 5,
+            shadowColor: colors.palette.grey400,
+          },
+          header: () => <HeaderComponent value="Edit Profile" />,
+        }}
+      />
+      <Tab.Screen
+        name={RetailerRoutes.PREVIEW_PDF}
+        component={PreviewPDF}
+        options={{
+          headerShown: true,
+          tabBarButton: () => null,
+          tabBarItemStyle: { display: "none" },
+          headerTitleStyle: {
+            display: "none",
+          },
+          headerStyle: {
+            height: 80,
+            elevation: 5,
+            shadowColor: "rgba(0, 0, 0, 0.25)",
+          },
+          header: () => <HeaderComponent value="Preview PDF" />,
         }}
       />
     </Tab.Navigator>
@@ -315,13 +383,6 @@ export const RetailerStackNavigation = ({
         }}
       />
       <Stack.Screen
-        name={RetailerRoutes.PRODUCT_DESCRIPTION}
-        component={ProductDescription}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
         name={RetailerRoutes.SALES_GRAPH}
         component={SalesGraph}
         options={{
@@ -337,60 +398,6 @@ export const RetailerStackNavigation = ({
             shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Sales Graph" />,
-        }}
-      />
-      <Stack.Screen
-        name={RetailerRoutes.UPLOAD_FILE}
-        component={UploadFiles}
-        options={{
-          headerShown: false,
-          headerTitleStyle: {
-            // @ts-expect-error - display property not in type but works at runtime
-            display: "none",
-          },
-          headerStyle: {
-            // @ts-expect-error - display property not in type but works at runtime
-            height: 80,
-            elevation: 5,
-            shadowColor: colors.palette.grey400,
-          },
-          // header: () => <HeaderComponent value="Upload Files" />,
-        }}
-      />
-      <Stack.Screen
-        name={RetailerRoutes.EDIT_PROFILE}
-        component={EditProfile}
-        options={{
-          headerShown: true,
-          headerTitleStyle: {
-            // @ts-expect-error - display property not in type but works at runtime
-            display: "none",
-          },
-          headerStyle: {
-            // @ts-expect-error - height property not in type but works at runtime
-            height: 80,
-            elevation: 5,
-            shadowColor: colors.palette.grey400,
-          },
-          header: () => <HeaderComponent value="Edit Profile" />,
-        }}
-      />
-      <Stack.Screen
-        name={RetailerRoutes.PREVIEW_PDF}
-        component={PreviewPDF}
-        options={{
-          headerShown: true,
-          headerTitleStyle: {
-            // @ts-expect-error - display property not in type but works at runtime
-            display: "none",
-          },
-          headerStyle: {
-            // @ts-expect-error - height property not in type but works at runtime
-            height: 80,
-            elevation: 5,
-            shadowColor: "rgba(0, 0, 0, 0.25)",
-          },
-          header: () => <HeaderComponent value="Preview PDF" />,
         }}
       />
       {/* <Stack.Screen
@@ -446,20 +453,6 @@ export const RetailerStackNavigation = ({
             shadowColor: colors.palette.grey400,
           },
           header: () => <HeaderComponent value="Subscriptions Plans" />,
-        }}
-      />
-      <Stack.Screen
-        name={RetailerRoutes.FAVOURITES}
-        component={Favourites}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name={RetailerRoutes.PRICEHISTORY}
-        component={PriceHistory}
-        options={{
-          headerShown: false,
         }}
       />
     </Stack.Navigator>
