@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import type { Product } from "@/api/retailer/product/types"
 import SearchField from "@/components/common-components/search-field/search-field"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
-import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 import ModalComponent from "./components/modal-component"
 import { useSearch } from "./hooks/use-search"
@@ -32,6 +32,7 @@ export default function Search({ navigation }: any) {
     isSubCategoryModalVisible,
     isLoading,
     isLoadingTrendingData,
+    isSubCategoryEnabled,
     itemsArray,
     onCategorySelect,
     onRefresh,
@@ -85,7 +86,7 @@ export default function Search({ navigation }: any) {
           </View>
           <View style={styles.priceContainer}>
             <Text style={styles.helperText3}>
-              ${sortedPriceInfo ? sortedPriceInfo[0].price : 20}
+              ${sortedPriceInfo ? sortedPriceInfo[0].price : 0.0}
             </Text>
           </View>
         </View>
@@ -106,10 +107,22 @@ export default function Search({ navigation }: any) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.peerGroupButton}
-          onPress={() => selectedCategory && setSubCategoryModalVisible(true)}
+          style={[
+            styles.peerGroupButton,
+            !isSubCategoryEnabled ? styles.peerGroupButtonDisabled : null,
+          ]}
+          onPress={() => isSubCategoryEnabled && setSubCategoryModalVisible(true)}
+          disabled={!isSubCategoryEnabled}
         >
-          <Text style={styles.peerGroupButtonText}>{selectedSubCategory ?? "Subcategory"}</Text>
+          <Text
+            style={[
+              styles.peerGroupButtonText,
+              !isSubCategoryEnabled ? styles.peerGroupButtonTextDisabled : null,
+            ]}
+          >
+            {selectedSubCategory ??
+              (isSubCategoryEnabled ? "Subcategory" : "Select category first")}
+          </Text>
           <Image source={Icon.LeftBackArrow} resizeMode="contain" style={styles.dropdownArrow} />
         </TouchableOpacity>
       </View>
@@ -120,7 +133,7 @@ export default function Search({ navigation }: any) {
     if (isLoading || isLoadingTrendingData) {
       return (
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={colors.customColors.ACTIVE_GREEN} />
+          <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
         </View>
       )
     }

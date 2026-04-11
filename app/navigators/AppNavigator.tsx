@@ -23,6 +23,7 @@ import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { useRole } from "@/context/RoleContext"
 import { OptionScreen } from "@/screens/common-screens/option-screen"
 import { ThemeProvider } from "@/theme/context"
+import { commonStyles } from "@/theme/styles"
 import { role } from "@/utils/role"
 import { useVersionCheck } from "@/utils/VersionContext"
 
@@ -260,7 +261,7 @@ const MainStack = () => {
     case loading || isRoleLoading:
       componentToRender = (
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color="#00ff00" />
+          <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
         </View>
       )
       break

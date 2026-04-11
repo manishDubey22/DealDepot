@@ -3,10 +3,13 @@ import Toast from "react-native-toast-message"
 
 import type { FavouriteProductItem, PriceEntry } from "@/api/retailer/favourites"
 import { useGetFavouritesQuery } from "@/api/retailer/favourites"
+import { useToggleFavoriteMutation } from "@/api/retailer/product/query-options"
 import { profileQueryOptions } from "@/api/retailer/profile"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
+import { STORAGE_KEY } from "@/lib/constants"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
-import { loadString } from "@/utils/storage"
+import { loadNormalizedPeerGroup } from "@/utils/peer-group"
+import { loadString, saveString } from "@/utils/storage"
 
 import { STORAGE_KEYS, UI_TEXT } from "../lib/constants"
 import type { FavouritesFlatItem, FavouritesListItem } from "../lib/types"
@@ -54,8 +57,15 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
   const routePeerGroup = route?.params?.peerGroup ?? null
 
   const [currentPeerGroup, setCurrentPeerGroup] = useState<string | null>(null)
-  const [peerGroupModalVisible, setPeerGroupModalVisible] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
+  const [optimisticallyRemovedIds, setOptimisticallyRemovedIds] = useState<Record<string, boolean>>(
+    {},
+  )
+  const [unlikeLoadingIds, setUnlikeLoadingIds] = useState<Record<string, boolean>>({})
+  const [banner, setBanner] = useState<{ visible: boolean; message: string }>({
+    visible: false,
+    message: "",
+  })
 
   const {
     data: favouritesResponse,
@@ -64,15 +74,18 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
     error,
     refetch,
   } = useGetFavouritesQuery(retailerId || "")
+  const toggleFavoriteMutation = useToggleFavoriteMutation()
   const { data: peersResponse } = profileQueryOptions.useGetStaticPeerGroupsQuery()
 
   const isSubscribed = useMemo(() => {
     const val = loadString(STORAGE_KEYS.PREMIUM_USER)
-    return !!val
+    // return val === "true"
+    console.log("val", val)
+    return true
   }, [])
 
   useEffect(() => {
-    const saved = loadString(STORAGE_KEYS.PEER_GROUP)
+    const saved = loadNormalizedPeerGroup()
     setCurrentPeerGroup(saved || null)
   }, [])
 
@@ -91,7 +104,11 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
     }
   }, [isError, error])
 
-  const favouritesData = (favouritesResponse as { data?: FavouriteProductItem[] })?.data ?? []
+  const favouritesDataRaw = (favouritesResponse as { data?: FavouriteProductItem[] })?.data ?? []
+  const favouritesData = useMemo(
+    () => favouritesDataRaw.filter((item) => !optimisticallyRemovedIds[item.product_id]),
+    [favouritesDataRaw, optimisticallyRemovedIds],
+  )
   const flatData = useMemo(
     () => buildFlatListData(favouritesData, currentPeerGroup, routePeerGroup),
     [favouritesData, currentPeerGroup, routePeerGroup],
@@ -114,12 +131,20 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
   }, [refetch])
 
   const openPeerGroupModal = useCallback(() => {
-    if (isSubscribed && favouritesData.length > 0) setPeerGroupModalVisible(true)
+    return isSubscribed && favouritesData.length > 0
   }, [isSubscribed, favouritesData.length])
 
   const selectPeerGroup = useCallback((group: string) => {
     setCurrentPeerGroup(group)
-    setPeerGroupModalVisible(false)
+    saveString(STORAGE_KEY.PEER_GROUP, group)
+    setBanner({
+      visible: true,
+      message: UI_TEXT.SWITCHED_TO(group),
+    })
+  }, [])
+
+  const dismissBanner = useCallback(() => {
+    setBanner((prev) => (prev.visible ? { ...prev, visible: false } : prev))
   }, [])
 
   const onItemPress = useCallback(
@@ -136,21 +161,61 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
     navigation.navigate(RetailerRoutes.SUBSCRIPTIONPLAN)
   }, [navigation])
 
+  const handleUnlike = useCallback(
+    async (productId: string) => {
+      if (!retailerId || !productId) return
+
+      setOptimisticallyRemovedIds((prev) => ({ ...prev, [productId]: true }))
+      setUnlikeLoadingIds((prev) => ({ ...prev, [productId]: true }))
+
+      try {
+        await toggleFavoriteMutation.mutateAsync({
+          retailerId,
+          productId,
+        })
+        Toast.show({
+          type: "success",
+          text1: "Item removed from favorites",
+        })
+      } catch {
+        setOptimisticallyRemovedIds((prev) => {
+          const next = { ...prev }
+          delete next[productId]
+          return next
+        })
+        Toast.show({
+          type: "error",
+          text1: "FAILED TO UPDATE FAVORITE",
+        })
+      } finally {
+        setUnlikeLoadingIds((prev) => {
+          const next = { ...prev }
+          delete next[productId]
+          return next
+        })
+      }
+    },
+    [retailerId, toggleFavoriteMutation],
+  )
+
   return {
     flatData,
     isLoading,
     favouritesData,
     isSubscribed,
     currentPeerGroup,
-    peerGroupModalVisible,
-    setPeerGroupModalVisible,
+    banner,
+    dismissBanner,
     peerGroupsList,
     refreshing,
     onRefresh,
-    openPeerGroupModal,
+    canChangePeerGroup: openPeerGroupModal(),
     selectPeerGroup,
     onItemPress,
+    handleUnlike,
     onSubscribePress,
-    isPeerGroupButtonDisabled: !isSubscribed || favouritesData.length === 0,
+    unlikeLoadingIds,
+    // isPeerGroupButtonDisabled: !isSubscribed || favouritesData.length === 0,
+    isPeerGroupButtonDisabled: favouritesData.length === 0,
   }
 }

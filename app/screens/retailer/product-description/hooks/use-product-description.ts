@@ -13,7 +13,8 @@ import {
 import type { WholesalerData } from "@/api/retailer/product/types"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
-import { loadString, saveString } from "@/utils/storage"
+import { loadNormalizedPeerGroup } from "@/utils/peer-group"
+import { saveString } from "@/utils/storage"
 
 import {
   CONSOLE_MESSAGES,
@@ -48,9 +49,10 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
 
   // Load subscription and peer group from storage
   useEffect(() => {
-    const premiumUser = loadString(STORAGE_KEYS.PREMIUM_USER)
-    const peerGroupValue = loadString(STORAGE_KEYS.PEER_GROUP)
-    setIsSubscribed(premiumUser === "true")
+    // const premiumUser = loadString(STORAGE_KEYS.PREMIUM_USER)
+    const peerGroupValue = loadNormalizedPeerGroup()
+    // setIsSubscribed(premiumUser === "true")
+    setIsSubscribed(true)
     setPeerGroup(peerGroupValue)
     setSelectedPeerGroup(peerGroupValue)
   }, [])
@@ -112,8 +114,11 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
         (error as any)?.response?.data?.message ||
         (error as any)?.message ||
         ERROR_MESSAGES.PRODUCT_FETCH_ERROR
+      const normalized = String(errorMessage).toUpperCase()
+      const isProductNotFound =
+        (error as any)?.response?.status === 404 || normalized.includes("PRODUCT NOT FOUND")
       Toast.show({
-        text1: UI_TEXT.SOMETHING_WENT_WRONG,
+        text1: isProductNotFound ? UI_TEXT.PRODUCT_NOT_FOUND : UI_TEXT.SOMETHING_WENT_WRONG,
         text2: errorMessage.toUpperCase(),
         type: "error",
       })
@@ -121,12 +126,16 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
     }
   }, [isError, error])
 
-  // Get fileId helper
-  const getFileId = useCallback((): string | null => {
-    const storedFileId = loadString(STORAGE_KEYS.FILE_ID)
-    if (storedFileId) return storedFileId
-    return productResponse?.data?.wholesalerData?.[0]?.fileId || null
-  }, [productResponse?.data?.wholesalerData])
+  // Get fileId helper (prefer the current wholesaler to avoid cross-wholesaler mismatch)
+  const getFileId = useCallback(
+    (wholesaler?: WholesalerData | null): string | null => {
+      if (wholesaler?.fileId) return wholesaler.fileId
+      if (selectedWholesaler?.fileId) return selectedWholesaler.fileId
+      if (wholesalerData?.[0]?.fileId) return wholesalerData[0].fileId
+      return productResponse?.data?.wholesalerData?.[0]?.fileId || null
+    },
+    [selectedWholesaler, wholesalerData, productResponse?.data?.wholesalerData],
+  )
 
   // Get cart item for wholesaler
   const getCartItem = useCallback(
@@ -177,7 +186,7 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
       const cartItem = getCartItem(wholesaler)
       const currentQuantity = cartItem?.items || 0
       const newQuantity = currentQuantity + 1
-      const fileId = getFileId()
+      const fileId = getFileId(wholesaler)
 
       if (!fileId) {
         Toast.show({
@@ -223,7 +232,7 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
       const cartItem = getCartItem(wholesaler)
       const currentQuantity = cartItem?.items || 0
       const newQuantity = currentQuantity - 1
-      const fileId = getFileId()
+      const fileId = getFileId(wholesaler)
 
       if (!fileId) {
         Toast.show({
@@ -280,7 +289,7 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
       debounce(async (wholesaler: WholesalerData, quantity: number) => {
         if (!retailerId) return
 
-        const fileId = getFileId()
+        const fileId = getFileId(wholesaler)
         if (!fileId) {
           Toast.show({
             type: "error",
@@ -344,7 +353,7 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
         return
       }
 
-      const fileId = getFileId()
+      const fileId = getFileId(selectedWholesaler)
       if (!fileId) {
         Toast.show({
           type: "error",
@@ -410,7 +419,6 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
   // Peer group select
   const handlePeerGroupSelect = useCallback((peerGroupValue: string) => {
     setSelectedPeerGroup(peerGroupValue)
-    saveString(STORAGE_KEYS.PEER_GROUP, peerGroupValue)
     setShowPeerGroupModal(false)
   }, [])
 
@@ -420,6 +428,7 @@ export function useProductDescription(navigation: any): UseProductDescriptionRet
     navigation.navigate(RetailerRoutes.PRICEHISTORY, {
       adminPrices: productResponse.data.adminPrice,
       selectedGroup: selectedPeerGroup,
+      productId: productResponse.data.product_id,
     })
   }, [navigation, productResponse?.data?.adminPrice, selectedPeerGroup])
 

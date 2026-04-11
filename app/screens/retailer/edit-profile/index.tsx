@@ -10,7 +10,7 @@ import { Controller } from "react-hook-form"
 import Toast from "react-native-toast-message"
 
 import { Avatar, ButtonField, InputFieldContianer } from "@/components/common-components"
-import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 import { useEditProfile } from "./hooks/use-edit-profile"
 import { UI_TEXT } from "./lib/constants"
@@ -32,7 +32,7 @@ export default function EditProfile({ navigation }: { navigation: any }) {
   if (isProfileLoading) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color={colors.customColors.GREEN} />
+        <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
       </View>
     )
   }

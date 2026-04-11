@@ -1,6 +1,6 @@
 import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native"
 
-import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 import { SimpleLineChart } from "./components/simple-line-chart"
 import { useSalesGraph } from "./hooks/use-sales-graph"
@@ -15,7 +15,7 @@ export default function SalesGraph() {
     return (
       <View style={styles.mainContainer}>
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={colors.customColors.GREEN} />
+          <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
           <Text style={styles.emptyText}>{UI_TEXT.LOADING}</Text>
         </View>
       </View>

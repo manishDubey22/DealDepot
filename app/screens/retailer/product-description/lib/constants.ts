@@ -8,6 +8,7 @@ export const UI_TEXT = {
   ADD: "Add",
   SHOW_PRICE_HISTORY: "Show price history",
   SOMETHING_WENT_WRONG: "Something Went Wrong",
+  PRODUCT_NOT_FOUND: "Product not found",
   FREE_TRIAL_OVER: "Please go back, your free trial is over",
   ADDED_TO_FAVORITE: "ADDED TO FAVORITE",
   REMOVED_FROM_FAVORITE: "REMOVE TO FAVORITE",
@@ -26,7 +27,6 @@ export const ERROR_MESSAGES = {
 
 export const STORAGE_KEYS = {
   PREMIUM_USER: "premuimUser",
-  PEER_GROUP: "peergroup",
   FILE_ID: "fileId",
 } as const
 

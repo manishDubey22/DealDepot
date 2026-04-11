@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   successIcon: {
-    color: colors.customColors.GREEN,
+    color: commonStyles.colors.primaryColor,
     fontSize: 64,
     marginBottom: spacing.md,
   },

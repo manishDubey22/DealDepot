@@ -18,7 +18,7 @@ const getButtonIcon = (buttonLabel: string) => {
     case "Favorites":
       return Icon.FAVORITE
     case "Upload MADR Peer Group File":
-      return Icon.FILE_UPLOAD
+      return Icon.FILE_PDF
     default:
       return null
   }

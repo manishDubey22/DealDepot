@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   closeButton: {
-    backgroundColor: colors.customColors.GREEN,
+    backgroundColor: commonStyles.colors.primaryColor,
     borderRadius: 5,
     padding: 10,
   },

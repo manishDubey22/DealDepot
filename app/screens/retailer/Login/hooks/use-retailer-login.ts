@@ -12,9 +12,12 @@ import { Toast } from "react-native-toast-message/lib/src/Toast"
 import { authMutationOptions } from "@/api/retailer/auth"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { useRole } from "@/context/RoleContext"
+import { STORAGE_KEY } from "@/lib/constants"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
+import { captureAnalyticsEvent, identifyAnalyticsUser } from "@/services/analytics/posthog"
+import { captureSentryException } from "@/services/monitoring/sentry"
 import { loginSchema } from "@/utils/schema/login-schema"
-import { save } from "@/utils/storage"
+import { save, saveString } from "@/utils/storage"
 
 import {
   CONSOLE_MESSAGES,
@@ -69,8 +72,8 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
   } = useForm<IFormInput>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
-      email: "7z47vigy9y@elatter.com",
-      password: "Java@123",
+      email: "",
+      password: "",
     },
   })
 
@@ -88,7 +91,7 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
           // save(STORAGE_KEYS.PREMIUM_USER, isSubscribed)
           console.log("isSubscribed =>", isSubscribed)
           save(STORAGE_KEYS.PREMIUM_USER, JSON.stringify(true))
-          save(STORAGE_KEYS.PEER_GROUP, peerGroup)
+          saveString(STORAGE_KEY.PEER_GROUP, peerGroup)
           save(STORAGE_KEYS.LOGIN_TIME, new Date().getTime())
 
           Toast.show({
@@ -97,7 +100,7 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
           })
           const result = response?.data?.data
           save(STORAGE_KEYS.PREMIUM_USER, JSON.stringify(true))
-          save(STORAGE_KEYS.PEER_GROUP, peerGroup)
+          saveString(STORAGE_KEY.PEER_GROUP, peerGroup)
           save(STORAGE_KEYS.LOGIN_TIME, new Date().getTime())
           save(STORAGE_KEYS.USER_ID, result?.retailer_id)
           save(STORAGE_KEYS.ACCESS_TOKEN, result?.accessToken)
@@ -117,6 +120,14 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
             refreshToken: result?.refreshToken,
           }
           setUserAuth(payload)
+          identifyAnalyticsUser(result?.retailer_id, {
+            email: data.email,
+            name: "retailer_user",
+            role: USER_ROLE.RETAILER,
+          })
+          captureAnalyticsEvent("login_success", {
+            role: USER_ROLE.RETAILER,
+          })
           navigation.navigate(RetailerRoutes.TAB_CONTAINER)
           reset()
         } else {
@@ -128,6 +139,10 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
         }
       } catch (error: any) {
         console.error(CONSOLE_MESSAGES.LOGIN_REQUEST_FAILED, error)
+        captureSentryException(error, {
+          surface: "retailer_login",
+          action: "submit_login",
+        })
 
         // Handle different types of errors
         if (error?.status === "NETWORK_ERROR" || error?.message?.includes("Network")) {

@@ -3,6 +3,7 @@ import { LineChart } from "react-native-chart-kit"
 import { responsiveHeight } from "react-native-responsive-dimensions"
 
 import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 import { CHART_CONFIG } from "../lib/constants"
 import { styles } from "../lib/styles"
@@ -31,7 +32,7 @@ export const SimpleLineChart: React.FC<SimpleLineChartProps> = ({
     datasets: [
       {
         data: data.map((point) => point.price),
-        color: (_opacity = 1) => colors.customColors.GREEN,
+        color: (_opacity = 1) => commonStyles.colors.primaryColor,
         strokeWidth: 3,
       },
     ],
@@ -40,10 +41,10 @@ export const SimpleLineChart: React.FC<SimpleLineChartProps> = ({
   // Chart configuration matching API doc requirements
   const chartConfig = {
     backgroundColor: colors.palette.neutral100,
-    backgroundGradientFrom: colors.customColors.GREEN,
+    backgroundGradientFrom: commonStyles.colors.primaryColor,
     backgroundGradientTo: colors.palette.neutral100,
     decimalPlaces: CHART_CONFIG.DECIMAL_PLACES,
-    color: (_opacity = 1) => colors.customColors.GREEN,
+    color: (_opacity = 1) => commonStyles.colors.primaryColor,
     labelColor: (_opacity = 1) => colors.palette.grey600,
     strokeWidth: 3,
     barPercentage: 0.5,
@@ -51,8 +52,8 @@ export const SimpleLineChart: React.FC<SimpleLineChartProps> = ({
     propsForDots: {
       r: CHART_CONFIG.DOT_RADIUS,
       strokeWidth: "2",
-      stroke: colors.customColors.GREEN,
-      fill: colors.customColors.GREEN,
+      stroke: commonStyles.colors.primaryColor,
+      fill: commonStyles.colors.primaryColor,
     },
     propsForBackgroundLines: {
       strokeDasharray: "4,4",

@@ -1,54 +1,59 @@
+import { useRef } from "react"
 import {
   ActivityIndicator,
   FlatList,
   Image,
-  Modal,
+  Pressable,
   RefreshControl,
-  StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { SafeAreaView } from "react-native-safe-area-context"
 import Toast from "react-native-toast-message"
 
-import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
+import { FavouriteItemCard } from "./components/favourite-item-card"
+import { PeerGroupBottomSheet } from "./components/peer-group-bottom-sheet"
 import { useFavourites } from "./hooks/use-favourites"
 import { UI_TEXT } from "./lib/constants"
 import { styles } from "./lib/styles"
 import { isHeader, type FavouritesFlatItem, type FavouritesListItem } from "./lib/types"
-import { Images } from "../../../../assets/Images/wholeSeller"
+import { Icon } from "../../../../assets/icons/wholeSeller"
 
-export default function Favourites({
+export default function Favorites({
   navigation,
   route,
 }: {
   navigation: any
   route?: { params?: { peerGroup?: string } }
 }) {
+  const peerGroupSheetRef = useRef<BottomSheetModal>(null)
   const {
     flatData,
     isLoading,
     isSubscribed,
     currentPeerGroup,
-    peerGroupModalVisible,
-    setPeerGroupModalVisible,
+    banner,
+    dismissBanner,
     peerGroupsList,
     refreshing,
     onRefresh,
-    openPeerGroupModal,
+    // canChangePeerGroup,
     selectPeerGroup,
     onItemPress,
+    handleUnlike,
     onSubscribePress,
-    isPeerGroupButtonDisabled,
+    unlikeLoadingIds,
+    // isPeerGroupButtonDisabled,
   } = useFavourites(navigation, route)
 
   if (isLoading) {
     return (
       <View style={styles.mainContainer}>
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={colors.customColors.GREEN} />
+          <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
         </View>
       </View>
     )
@@ -56,72 +61,97 @@ export default function Favourites({
 
   const renderItem = ({ item }: { item: FavouritesFlatItem }) => {
     if (isHeader(item)) {
+      const categoryTitle = item.title.replace(UI_TEXT.CATEGORY_PREFIX, "")
       return (
         <View style={styles.categoryHeader}>
-          <Text style={styles.categoryHeaderText}>{item.title}</Text>
+          <Text style={styles.categoryHeaderText}>
+            {UI_TEXT.CATEGORY_PREFIX}
+            <Text style={styles.categoryHeaderValue}>{categoryTitle}</Text>
+          </Text>
         </View>
       )
     }
     const row = item as FavouritesListItem
     const displayPrice = isSubscribed ? `$${row.latestPrice}` : "$0"
     return (
-      <TouchableOpacity style={styles.cardBox} onPress={() => onItemPress(row)} activeOpacity={0.8}>
-        <View style={styles.cardBoxLeft}>
-          <View style={styles.imageContainer}>
-            <Image
-              source={row.image_url ? { uri: row.image_url } : Images.SoyaMilk}
-              style={styles.image}
-              resizeMode="cover"
-            />
-          </View>
-          <View>
-            <Text style={styles.productDesc} numberOfLines={2}>
-              {row.product_desc}
-            </Text>
-            <Text style={styles.productId}>ID: {row.product_id}</Text>
-          </View>
-        </View>
-        <View style={styles.priceContainer}>
-          <Text style={styles.priceText}>{displayPrice}</Text>
-        </View>
-      </TouchableOpacity>
+      <FavouriteItemCard
+        imageUrl={row.image_url}
+        productName={row.product_desc}
+        productId={row.product_id}
+        price={displayPrice}
+        onPress={() => onItemPress(row)}
+        onUnlikePress={() => handleUnlike(row.product_id)}
+        isUnlikeLoading={!!unlikeLoadingIds[row.product_id]}
+      />
     )
   }
 
   return (
     <View style={styles.mainContainer}>
+      <SafeAreaView edges={["top"]}>
+        <View style={styles.pageHeader}>
+          <Pressable style={styles.pageHeaderAction} onPress={() => navigation.goBack()}>
+            <Image source={Icon.LeftBackArrow} style={styles.pageHeaderIcon} resizeMode="contain" />
+          </Pressable>
+          <Text style={styles.pageHeaderTitle}>Favorites</Text>
+          <Pressable style={styles.pageHeaderAction} onPress={onRefresh}>
+            <Text style={styles.pageHeaderRefresh}>↻</Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
+
       <SafeAreaView edges={["bottom"]} style={styles.container}>
+        {banner.visible ? (
+          <View style={styles.successBanner}>
+            <View style={styles.successBannerLeft}>
+              <Text style={styles.successBannerText}>✓</Text>
+              <Text style={styles.successBannerText}>{banner.message}</Text>
+            </View>
+            <Pressable onPress={dismissBanner} hitSlop={10}>
+              <Image source={Icon.CLOSE} style={styles.successCloseIcon} resizeMode="contain" />
+            </Pressable>
+          </View>
+        ) : null}
+
         {flatData.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>{UI_TEXT.NO_FAVOURITES}</Text>
-            {!isSubscribed && (
-              <TouchableOpacity style={styles.subscribeButton} onPress={onSubscribePress}>
+            {!isSubscribed ? (
+              <Pressable style={styles.subscribeButton} onPress={onSubscribePress}>
                 <Text style={styles.subscribeButtonText}>{UI_TEXT.SUBSCRIBE_CTA}</Text>
-              </TouchableOpacity>
-            )}
+              </Pressable>
+            ) : null}
           </View>
         ) : (
           <>
-            <TouchableOpacity
-              style={[
-                styles.peerGroupButton,
-                isPeerGroupButtonDisabled && styles.peerGroupButtonDisabled,
-              ]}
-              onPress={openPeerGroupModal}
-              disabled={isPeerGroupButtonDisabled}
-            >
-              <Text style={styles.peerGroupButtonText}>
-                {UI_TEXT.CURRENT_PEER_GROUP} : {currentPeerGroup || "—"}
-              </Text>
-            </TouchableOpacity>
-            {isSubscribed && flatData.length > 0 && (
-              <Text style={styles.hintText}>{UI_TEXT.SELECT_PEER_GROUP_HINT}</Text>
-            )}
-            {!isSubscribed && (
-              <TouchableOpacity style={styles.subscribeButton} onPress={onSubscribePress}>
-                <Text style={styles.subscribeButtonText}>{UI_TEXT.SUBSCRIBE_CTA}</Text>
-              </TouchableOpacity>
-            )}
+            <View style={styles.peerGroupCard}>
+              <View>
+                <Text style={styles.peerGroupTitle}>{UI_TEXT.PEER_GROUP}</Text>
+                <Text style={styles.peerGroupCurrentText}>
+                  {UI_TEXT.CURRENT_PEER_GROUP} {currentPeerGroup || "—"}
+                </Text>
+              </View>
+              {/* <Pressable
+                style={[
+                  styles.changeButton,
+                  isPeerGroupButtonDisabled ? styles.changeButtonDisabled : null,
+                ]}
+                onPress={() => {
+                  if (canChangePeerGroup) {
+                    peerGroupSheetRef.current?.present()
+                  }
+                }}
+                disabled={isPeerGroupButtonDisabled}
+              >
+                <Text style={styles.changeButtonText}>{UI_TEXT.CHANGE}</Text>
+                <Image
+                  source={Icon.DOWN_ARROW_1}
+                  style={styles.changeButtonIcon}
+                  resizeMode="contain"
+                />
+              </Pressable> */}
+            </View>
+
             <FlatList
               data={flatData}
               keyExtractor={(item, index) =>
@@ -134,7 +164,7 @@ export default function Favourites({
                 <RefreshControl
                   refreshing={refreshing}
                   onRefresh={onRefresh}
-                  colors={[colors.customColors.GREEN]}
+                  colors={[commonStyles.colors.primaryColor]}
                 />
               }
               showsVerticalScrollIndicator={false}
@@ -142,33 +172,12 @@ export default function Favourites({
           </>
         )}
       </SafeAreaView>
-
-      <Modal
-        visible={peerGroupModalVisible}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setPeerGroupModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <TouchableOpacity
-            style={StyleSheet.absoluteFill}
-            activeOpacity={1}
-            onPress={() => setPeerGroupModalVisible(false)}
-          />
-          <View style={styles.modalContent} onStartShouldSetResponder={() => true}>
-            <Text style={styles.modalTitle}>{UI_TEXT.CURRENT_PEER_GROUP}</Text>
-            {peerGroupsList.map((group) => (
-              <TouchableOpacity
-                key={group}
-                style={styles.modalOption}
-                onPress={() => selectPeerGroup(group)}
-              >
-                <Text style={styles.modalOptionText}>{group}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-      </Modal>
+      <PeerGroupBottomSheet
+        ref={peerGroupSheetRef}
+        peerGroups={peerGroupsList}
+        selectedPeerGroup={currentPeerGroup}
+        onSelect={selectPeerGroup}
+      />
 
       <Toast />
     </View>

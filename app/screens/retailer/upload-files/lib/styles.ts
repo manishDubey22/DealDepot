@@ -6,8 +6,8 @@ import { commonStyles } from "@/theme/styles"
 
 const sectionSpacing = 24
 const cardSpacing = 14
-const themeGreen = colors.customColors.GREEN
-const lightGreenBg = colors.palette.green50
+const themeGreen = commonStyles.colors.primaryColor
+const lightGreenBg = commonStyles.colors.primaryLight
 
 export const styles = StyleSheet.create({
   bannerCheckIcon: {
@@ -102,14 +102,25 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: responsiveWidth(5),
   },
+  noPeerGroupCard: {
+    backgroundColor: colors.palette.grey100,
+    borderColor: commonStyles.borderColor.quinary,
+    borderRadius: commonStyles.borderRadius.large,
+    borderWidth: 1,
+    marginBottom: cardSpacing,
+    padding: 16,
+  },
+  noPeerGroupText: {
+    color: commonStyles.colors.textSecondary,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: 14,
+    textAlign: "center",
+  },
   peerGroupCard: {
-    alignItems: "flex-start",
     backgroundColor: commonStyles.colors.background,
     borderColor: commonStyles.borderColor.quinary,
     borderRadius: commonStyles.borderRadius.large,
     borderWidth: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
     marginBottom: cardSpacing,
     padding: 16,
   },
@@ -117,8 +128,10 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
   },
-  peerGroupCardMain: {
-    flex: 1,
+  peerGroupCardHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   peerGroupName: {
     color: colors.palette.charcoal500,
@@ -203,6 +216,12 @@ export const styles = StyleSheet.create({
     fontSize: 19,
     fontWeight: "600",
     textAlign: "center",
+  },
+  uploadActionLabel: {
+    color: themeGreen,
+    fontFamily: commonStyles.fontFamily.bold,
+    fontSize: 15,
+    fontWeight: "600",
   },
   uploadButton: {
     alignItems: "center",

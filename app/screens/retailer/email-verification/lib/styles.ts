@@ -7,6 +7,7 @@ import {
 } from "react-native-responsive-dimensions"
 
 import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 export const styles = StyleSheet.create({
   helperText2: {
@@ -31,7 +32,7 @@ export const styles = StyleSheet.create({
     borderWidth: 0.5,
     fontSize: responsiveFontSize(2),
     height: responsiveScreenHeight(7),
-    shadowColor: colors.customColors.GREEN,
+    shadowColor: commonStyles.colors.primaryLight,
     shadowOffset: {
       width: 7,
       height: 4,

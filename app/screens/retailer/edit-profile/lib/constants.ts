@@ -10,7 +10,3 @@ export const UI_TEXT = {
   UPDATE: "Update",
   POSITION_BARCODE: "Position barcode/QR code within the frame",
 } as const
-
-export const STORAGE_KEYS = {
-  PEER_GROUP: "peergroup",
-} as const

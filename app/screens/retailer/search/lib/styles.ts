@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: 0,
-    paddingTop: 12,
+    paddingTop: responsiveHeight(0.2),
   },
   dropdownArrow: {
     height: 10,
@@ -88,7 +88,7 @@ export const styles = StyleSheet.create({
     fontSize: 13,
   },
   helperText3: {
-    color: colors.customColors.GREEN,
+    color: commonStyles.colors.primaryColor,
     fontSize: 16,
     fontWeight: "700",
   },
@@ -101,7 +101,7 @@ export const styles = StyleSheet.create({
     width: 64,
   },
   latestTrendsHeading: {
-    color: colors.customColors.GREEN,
+    color: commonStyles.colors.primaryColor,
     fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: responsiveFontSize(3),
     marginVertical: 10,
@@ -130,7 +130,7 @@ export const styles = StyleSheet.create({
   },
   peerGroupButton: {
     alignItems: "center",
-    backgroundColor: commonStyles.colors.backgroundSecondary,
+    backgroundColor: commonStyles.colors.primaryLight,
     borderColor: commonStyles.colors.border,
     borderRadius: commonStyles.borderRadius.large,
     borderWidth: 1,
@@ -141,14 +141,21 @@ export const styles = StyleSheet.create({
     paddingHorizontal: responsiveWidth(4),
     paddingVertical: 12,
   },
+  peerGroupButtonDisabled: {
+    opacity: 0.5,
+  },
   peerGroupButtonText: {
     color: colors.palette.neutral700,
     fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: 14,
     fontWeight: "500",
   },
+  peerGroupButtonTextDisabled: {
+    color: colors.palette.neutral500,
+  },
   priceContainer: {
     alignItems: "flex-end",
+    display: "flex",
     justifyContent: "center",
     minWidth: 56,
   },

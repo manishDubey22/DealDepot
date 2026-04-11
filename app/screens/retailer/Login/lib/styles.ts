@@ -3,6 +3,7 @@ import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimen
 
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
+import { commonStyles } from "@/theme/styles"
 
 export const styles = StyleSheet.create({
   backToOptionScreen: {
@@ -13,7 +14,7 @@ export const styles = StyleSheet.create({
     // paddingTop: responsiveHeight(2),
   },
   createAccountLink: {
-    color: colors.customColors.GREEN,
+    color: commonStyles.colors.primaryColor,
     fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: 16,
     fontWeight: "500",
@@ -26,7 +27,7 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   helperText2: {
-    color: colors.customColors.GREEN,
+    color: commonStyles.colors.primaryColor,
     fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: 16,
     fontWeight: "500",
@@ -80,7 +81,7 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
   textColor: {
-    color: colors.customColors.GREEN,
+    color: commonStyles.colors.primaryColor,
     fontFamily: CommonStyles.fontFamily.fontFamily,
     fontSize: 16,
   },

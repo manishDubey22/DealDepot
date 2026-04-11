@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { AppState, AppStateStatus, BackHandler, Linking } from "react-native"
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
+import Toast from "react-native-toast-message"
 
+import { getProduct } from "@/api/retailer/product/api"
+import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
 
 import { BARCODE_TYPES, CONSOLE_MESSAGES, PRODUCT_ID_LENGTH, UI_TEXT } from "../lib/constants"
@@ -46,6 +49,8 @@ export interface UseScannerReturnWithHandler extends UseScannerReturn {
 
 export function useScanner() {
   const navigation = useNavigation()
+  const { userAuth } = useRetailerAuth()
+  const retailerId = userAuth?.userId || ""
   const [permission, requestPermission] = useCameraPermissionsSafe()
   const [cameraError, setCameraError] = useState<string | null>(() =>
     cameraModuleAvailable ? null : UI_TEXT.CAMERA_MODULE_NOT_LINKED,
@@ -74,7 +79,7 @@ export function useScanner() {
   }, [])
 
   const handleCodeScanned = useCallback(
-    (result: BarcodeScanningResultLike) => {
+    async (result: BarcodeScanningResultLike) => {
       if (hasNavigatedRef.current || !isFocusedRef.current) {
         return
       }
@@ -119,7 +124,55 @@ export function useScanner() {
         return
       }
 
+      if (!retailerId) {
+        Toast.show({
+          type: "error",
+          text1: UI_TEXT.CAMERA_ERROR,
+          text2: "Retailer session not found",
+        })
+        return
+      }
+
       hasNavigatedRef.current = true
+
+      try {
+        const productResponse = await getProduct({
+          retailerId,
+          productId: scannedCode.productId,
+        })
+        const payload = productResponse?.data
+        const hasProduct = Boolean(payload?.status !== false && payload?.data)
+
+        if (!hasProduct) {
+          hasNavigatedRef.current = false
+          Toast.show({
+            type: "error",
+            text1: "Product not found",
+            text2: UI_TEXT.PRODUCT_NOT_FOUND,
+          })
+          return
+        }
+      } catch (error: any) {
+        const statusCode = error?.response?.status
+        const message = error?.response?.data?.message
+        hasNavigatedRef.current = false
+
+        if (statusCode === 404 || (typeof message === "string" && message.includes("NOT FOUND"))) {
+          Toast.show({
+            type: "error",
+            text1: "Product not found",
+            text2: UI_TEXT.PRODUCT_NOT_FOUND,
+          })
+          return
+        }
+
+        Toast.show({
+          type: "error",
+          text1: UI_TEXT.CAMERA_ERROR,
+          text2: "Unable to fetch scanned product",
+        })
+        return
+      }
 
       console.log(CONSOLE_MESSAGES.NAVIGATING_TO_PRODUCT)
       // @ts-expect-error - navigation type doesn't include all RetailerRoutes
@@ -127,7 +180,7 @@ export function useScanner() {
         singleProductId: scannedCode.productId,
       })
     },
-    [extractProductId, navigation],
+    [extractProductId, navigation, retailerId],
   )
 
   const handleRequestPermission = useCallback(async () => {

@@ -5,9 +5,9 @@ import Toast from "react-native-toast-message"
 
 import { authQueryOptions } from "@/api/retailer/auth"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
-import { loadString } from "@/utils/storage"
+import { loadNormalizedPeerGroup } from "@/utils/peer-group"
 
-import { BUTTONS, MADRCHECKER_URL, STORAGE_KEYS, UI_TEXT } from "../lib/constants"
+import { BUTTONS, MADRCHECKER_URL, UI_TEXT } from "../lib/constants"
 import type { UseHomeOptionListReturn } from "../lib/types"
 
 export function useHomeOptionList(): UseHomeOptionListReturn {
@@ -19,8 +19,8 @@ export function useHomeOptionList(): UseHomeOptionListReturn {
 
   useEffect(() => {
     const getPeerGroupDetails = () => {
-      const key = loadString(STORAGE_KEYS.PEER_GROUP)
-      setPeerGroup(key)
+      const key = loadNormalizedPeerGroup()
+      setPeerGroup(key || null)
     }
 
     getPeerGroupDetails()

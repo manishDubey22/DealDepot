@@ -85,5 +85,10 @@ export const toggleFavorite = (params: ToggleFavoriteParams) => {
 
 export const postUploadRetailerFile = (params: UploadRetailerFileParams) => {
   const url = `${getApiUrl()}/${UPLOAD_RETAILER_FILE_ENDPOINT(params.retailerId, params.peer_group)}`
-  return api.post<UploadRetailerFileResponse>(url, params.formData)
+  return api.post<UploadRetailerFileResponse>(url, params.formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    timeout: 60000,
+  })
 }

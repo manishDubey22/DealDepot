@@ -6,6 +6,7 @@ import { orderQueryOptions } from "@/api/retailer/order"
 import type { CartItem } from "@/api/retailer/order"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
+import { loadNormalizedPeerGroup } from "@/utils/peer-group"
 import { loadString } from "@/utils/storage"
 
 import { CONSOLE_MESSAGES, ERROR_MESSAGES, STORAGE_KEYS, UI_TEXT } from "../lib/constants"
@@ -33,8 +34,8 @@ export function useOrder(navigation: any): UseOrderReturn {
 
   // Load peer group from storage
   useEffect(() => {
-    const key = loadString(STORAGE_KEYS.PEER_GROUP)
-    setPeerGroup(key)
+    const key = loadNormalizedPeerGroup()
+    setPeerGroup(key || null)
   }, [])
 
   // Refetch cart on screen focus

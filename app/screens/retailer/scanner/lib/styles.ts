@@ -2,6 +2,7 @@ import { StyleSheet, Dimensions } from "react-native"
 
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
+import { commonStyles } from "@/theme/styles"
 
 const { width, height } = Dimensions.get("window")
 
@@ -54,7 +55,7 @@ export const styles = StyleSheet.create({
   },
   frame: {
     backgroundColor: colors.transparent,
-    borderColor: colors.customColors.GREEN,
+    borderColor: commonStyles.colors.primaryColor,
     borderRadius: 16,
     borderWidth: 3,
     height: FRAME_SIZE,
@@ -167,7 +168,7 @@ export const modalStyles = StyleSheet.create({
     justifyContent: "center",
   },
   submitButton: {
-    backgroundColor: colors.customColors.GREEN,
+    backgroundColor: commonStyles.colors.primaryColor,
   },
   submitButtonText: {
     color: colors.palette.neutral100,

@@ -18,7 +18,7 @@ export const getCart = (params: GetCartParams) => {
 
 export const updateCartItem = (params: UpdateCartItemRequest) => {
   const url = `${getApiUrl()}/${ORDER_ENDPOINTS.CART(params.retailerId)}`
-  return api.post<UpdateCartItemResponse>(url, { data: params.data })
+  return api.post<UpdateCartItemResponse>(url, params.data)
 }
 
 export const placeOrder = (params: PlaceOrderParams) => {

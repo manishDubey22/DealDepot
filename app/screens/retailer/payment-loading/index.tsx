@@ -1,6 +1,6 @@
 import { View, Text, ActivityIndicator } from "react-native"
 
-import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 import { usePaymentLoading } from "./hooks/use-payment-loading"
 import { UI_TEXT } from "./lib/constants"
@@ -12,7 +12,7 @@ export default function PaymentLoading(props: PaymentLoadingScreenProps) {
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color={colors.customColors.GREEN} />
+      <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
       <Text style={styles.loadingText}>{UI_TEXT.LOADING}</Text>
       <Text style={styles.verifyingText}>{UI_TEXT.VERIFYING}</Text>
     </View>

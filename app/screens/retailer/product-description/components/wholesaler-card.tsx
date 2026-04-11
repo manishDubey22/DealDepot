@@ -24,7 +24,7 @@ export function WholesalerCard({
   wholesalerName,
   updatedDate,
   unitPrice,
-  casePrice,
+  // casePrice,
   onPress,
   onAddToCart,
   disabled,
@@ -60,7 +60,7 @@ export function WholesalerCard({
 
       <View style={styles.priceBoxesRow}>
         <PriceBox label="Unit Price" value={unitPrice !== undefined ? unitPrice : "--"} />
-        <PriceBox label="Case Price" value={casePrice !== undefined ? casePrice : "--"} />
+        {/* <PriceBox label="Case Price" value={casePrice !== undefined ? casePrice : "--"} /> */}
       </View>
 
       {isInCart ? (

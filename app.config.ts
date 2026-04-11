@@ -16,10 +16,14 @@ import "tsx/cjs"
  */
 module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
   const existingPlugins = config.plugins ?? []
+  const isProductionProfile = process.env.EAS_BUILD_PROFILE === "production"
 
   return {
     ...config,
+    userInterfaceStyle: "light",
     updates: {
+      enabled: isProductionProfile,
+      checkAutomatically: "ON_LOAD",
       fallbackToCacheTimeout: 0,
     },
     runtimeVersion: {
@@ -44,6 +48,14 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
     },
     plugins: [
       ...existingPlugins,
+      [
+        "@sentry/react-native",
+        {
+          organization: process.env.SENTRY_ORG,
+          project: process.env.SENTRY_PROJECT,
+          url: process.env.SENTRY_URL || "https://sentry.io/",
+        },
+      ],
       [
         "expo-camera",
         {

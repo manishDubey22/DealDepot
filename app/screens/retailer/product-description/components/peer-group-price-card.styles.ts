@@ -5,7 +5,7 @@ import { commonStyles } from "@/theme/styles"
 
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: commonStyles.colors.background,
+    backgroundColor: commonStyles.colors.primaryLight,
     borderRadius: 16,
     flexDirection: "row",
     justifyContent: "space-between",

@@ -9,6 +9,7 @@ import {
 } from "react"
 
 import { STORAGE_KEY } from "@/lib/constants"
+import { setSentryUser } from "@/services/monitoring/sentry"
 import { load, save, remove } from "@/utils/storage"
 
 export interface UserAuth {
@@ -85,6 +86,14 @@ export const RetailerAuthProvider: FC<PropsWithChildren<RetailerAuthProviderProp
       remove(STORAGE_KEY.USER_INFO)
     }
   }, [userAuth, userRole])
+
+  useEffect(() => {
+    if (userAuth?.userId) {
+      setSentryUser({ id: userAuth.userId })
+      return
+    }
+    setSentryUser(null)
+  }, [userAuth?.userId])
 
   const setUserAuth = useCallback((auth: UserAuth | null) => {
     setUserAuthState(auth)

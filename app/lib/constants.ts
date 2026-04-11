@@ -6,6 +6,8 @@ export const API_RETAILER_VERSION = "retailer"
 export const API_USER_VERSION = "user"
 
 export const STORAGE_KEY = {
+  PEER_GROUP: "peergroup",
+  PREMIUM_USER: "premuimUser",
   USER_ROLE: "userRole",
   USER_INFO: "userInfo",
   NAVIGATION_STATE: "NAVIGATION_STATE",

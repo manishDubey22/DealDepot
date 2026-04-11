@@ -12,6 +12,7 @@ export const UI_TEXT = {
     "Camera module not linked. Please rebuild the native app:\n\n1. Run: npx expo prebuild --clean\n2. Then: npx expo run:android (or npx expo run:ios)",
   SCANNING: "Scanning...",
   POSITION_BARCODE: "Position barcode/QR code within the frame",
+  PRODUCT_NOT_FOUND: "Scanned product is not available in our database",
 } as const
 
 export const BARCODE_TYPES = {

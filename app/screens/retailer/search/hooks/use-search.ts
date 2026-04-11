@@ -7,7 +7,8 @@ import { productQueryOptions } from "@/api/retailer/product"
 import type { Product } from "@/api/retailer/product/types"
 import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { STORAGE_KEY } from "@/lib/constants"
-import { loadString, save } from "@/utils/storage"
+import { loadNormalizedPeerGroup } from "@/utils/peer-group"
+import { save } from "@/utils/storage"
 
 export function useSearch() {
   const { userAuth, userRole } = useRetailerAuth()
@@ -29,8 +30,9 @@ export function useSearch() {
   const [isSubCategoryModalVisible, setSubCategoryModalVisible] = useState(false)
   const [shouldTrendingDataFetch, setShouldTrendingDataFetch] = useState<boolean>(false)
   const [peerGroup, setPeerGroup] = useState("")
-  const [isCategoryAll, setIsCategoryAll] = useState<string>("Category")
+  const [isCategoryAll, setIsCategoryAll] = useState<string>("Select Category")
   const [refreshing, setRefreshing] = useState<boolean>(false)
+  const isSubCategoryEnabled = !!selectedCategory
 
   const {
     data: filteredData,
@@ -99,7 +101,7 @@ export function useSearch() {
     setShouldTrendingDataFetch(true)
     setSelectedCategory(null)
     setSelectedSubCategory(null)
-    setIsCategoryAll("All")
+    setIsCategoryAll("Select Category")
   }, [refetchTrendingData])
 
   const onCategorySelect = useCallback(
@@ -107,11 +109,13 @@ export function useSearch() {
       if (category === "All") {
         handleShowAll()
       } else {
+        // Reset stale subcategory whenever category changes.
+        setSelectedSubCategory((prev) => (prev && selectedCategory !== category ? null : prev))
         setSelectedCategory(category)
         setSubCategoryModalVisible(true)
       }
     },
-    [handleShowAll],
+    [handleShowAll, selectedCategory],
   )
 
   const onSubCategorySelect = useCallback((subcategory: string) => {
@@ -122,8 +126,7 @@ export function useSearch() {
     setRefreshing(true)
     refetchTrendingData()
       .then(() => {
-        const key = loadString("peergroup")
-        setPeerGroup(key || "")
+        setPeerGroup(loadNormalizedPeerGroup())
         setRefreshing(false)
       })
       .catch((refreshError) => {
@@ -203,8 +206,12 @@ export function useSearch() {
   }, [query, isStartSearch, refetch, peerGroup])
 
   useEffect(() => {
-    const key = loadString("peergroup")
-    setPeerGroup(key || "")
+    const fetchPeer = async () => {
+      const peerGroupValue = loadNormalizedPeerGroup()
+      setPeerGroup(peerGroupValue)
+      return peerGroupValue
+    }
+    fetchPeer()
   }, [])
 
   useEffect(() => {
@@ -277,6 +284,7 @@ export function useSearch() {
     isSubCategoryModalVisible,
     isLoading,
     isLoadingTrendingData,
+    isSubCategoryEnabled,
     itemsArray,
     onCategorySelect,
     onRefresh,

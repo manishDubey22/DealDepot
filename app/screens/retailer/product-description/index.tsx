@@ -5,10 +5,9 @@ import { useNavigation } from "@react-navigation/native"
 import Toast from "react-native-toast-message"
 
 import type { CartItem } from "@/api/retailer/order"
-import { productQueryOptions } from "@/api/retailer/product"
 import { WholesalerData } from "@/api/retailer/product/types"
 import { HeaderComponent } from "@/components/common-components/header/header"
-import { colors } from "@/theme/colors"
+import { commonStyles } from "@/theme/styles"
 
 import { PeerGroupModal } from "./components/peer-group-modal"
 import { PeerGroupPriceCard } from "./components/peer-group-price-card"
@@ -31,7 +30,9 @@ export default function ProductDescription() {
     isFavorite,
     isLoading,
     isError,
+    error,
     cartItems,
+    peerGroup,
     selectedPeerGroup,
     isSubscribed,
     showPeerGroupModal,
@@ -51,25 +52,23 @@ export default function ProductDescription() {
   const sortBottomSheetRef =
     useRef<ComponentRef<typeof import("@gorhom/bottom-sheet").BottomSheetModal>>(null)
 
-  // Get peer groups for selector
-  const { data: staticPeersData } = productQueryOptions.useStaticPeersQuery()
-  const peerGroups = staticPeersData?.data || []
+  const peerGroups = useMemo(() => {
+    if (!adminPrice || typeof adminPrice !== "object") return []
+    return Object.keys(adminPrice).filter((group) => Array.isArray(adminPrice[group]))
+  }, [adminPrice])
 
   // Local UI state for peer group selection (defaults to first peer group when available)
   const [uiSelectedPeerGroup, setUiSelectedPeerGroup] = useState<string | null>(null)
 
-  // Default to first peer group when peer groups load, or sync with stored value from hook
+  // Default to user peer group when present in adminPrice, else fallback to first available group.
   useEffect(() => {
     if (peerGroups.length === 0) return
     setUiSelectedPeerGroup((prev) => {
-      const storedInList =
+      const userGroupInList =
         selectedPeerGroup && peerGroups.includes(selectedPeerGroup) ? selectedPeerGroup : null
       const firstGroup = peerGroups[0]
-      // Keep current if it's still in the list
       if (prev && peerGroups.includes(prev)) return prev
-      // Prefer stored value from hook if it's in the list
-      if (storedInList) return storedInList
-      // Default to first peer group so PeerGroupPriceCard shows
+      if (userGroupInList) return userGroupInList
       return firstGroup
     })
   }, [peerGroups, selectedPeerGroup])
@@ -90,30 +89,33 @@ export default function ProductDescription() {
     )
   }
 
+  const getLatestPeerGroupEntry = useCallback(
+    (group: string) => {
+      if (!adminPrice || !group) return null
+      const entries = adminPrice[group]
+      if (!Array.isArray(entries) || entries.length === 0) return null
+      return [...entries].sort((a, b) => new Date(b.Date).getTime() - new Date(a.Date).getTime())[0]
+    },
+    [adminPrice],
+  )
+
   // Get price for peer group
-  const getPeerGroupPrice = (wholesaler: any) => {
-    if (!adminPrice || !uiSelectedPeerGroup) return wholesaler.price
-    const priceInfo = adminPrice[uiSelectedPeerGroup]
-    if (!priceInfo || priceInfo.length === 0) return wholesaler.price
-    const sortedPriceInfo = [...priceInfo].sort(
-      (a, b) => new Date(b.Date).getTime() - new Date(a.Date).getTime(),
-    )
-    return sortedPriceInfo[0]?.price || wholesaler.price
-  }
+  // const getPeerGroupPrice = (wholesaler: any) => {
+  //   if (!adminPrice || !uiSelectedPeerGroup) return wholesaler.price
+  //   const latestEntry = getLatestPeerGroupEntry(uiSelectedPeerGroup)
+  //   return latestEntry?.price || wholesaler.price
+  // }
 
   // Get peer group price for display
   const peerGroupPrice = useMemo(() => {
-    if (!adminPrice || !uiSelectedPeerGroup) return null
-    const priceInfo = adminPrice[uiSelectedPeerGroup]
-    if (!priceInfo || priceInfo.length === 0) return null
-    const sortedPriceInfo = [...priceInfo].sort(
-      (a, b) => new Date(b.Date).getTime() - new Date(a.Date).getTime(),
-    )
+    if (!uiSelectedPeerGroup) return null
+    const latestEntry = getLatestPeerGroupEntry(uiSelectedPeerGroup)
+    if (!latestEntry) return null
     return {
-      price: sortedPriceInfo[0]?.price || 0,
-      date: sortedPriceInfo[0]?.Date,
+      price: latestEntry.price || 0,
+      date: latestEntry.Date,
     }
-  }, [adminPrice, uiSelectedPeerGroup])
+  }, [getLatestPeerGroupEntry, uiSelectedPeerGroup])
 
   // Handle add to cart - opens modal
   const handleAddToCartWithModal = useCallback(
@@ -152,7 +154,8 @@ export default function ProductDescription() {
     const cartItem = getCartItem(wholesaler.wholesaler_id)
     const isInCart = !!cartItem
     const showBlur = !isSubscribed && index >= 2
-    const unitPrice = getPeerGroupPrice(wholesaler)
+    // const unitPrice = getPeerGroupPrice(wholesaler)
+    const unitPrice = wholesaler.price
     const displayUnitPrice =
       (unitPrice === 0 || unitPrice > 0) && !isNaN(unitPrice) ? unitPrice : "--"
     const casePrice = wholesaler.casePrice ?? "--"
@@ -183,17 +186,25 @@ export default function ProductDescription() {
   if (isLoading) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color={colors.customColors.GREEN} />
+        <ActivityIndicator size="large" color={commonStyles.colors.primaryColor} />
       </View>
     )
   }
 
   // Error or empty state
   if (isError || !productData) {
+    const backendMessage = (error as any)?.response?.data?.message
+    const isProductNotFound =
+      typeof backendMessage === "string" &&
+      backendMessage.toUpperCase().includes("PRODUCT NOT FOUND")
     return (
       <View style={styles.emptyContainer}>
         <Text style={styles.emptyText}>
-          {isError ? UI_TEXT.SOMETHING_WENT_WRONG : UI_TEXT.FREE_TRIAL_OVER}
+          {isError
+            ? isProductNotFound
+              ? UI_TEXT.PRODUCT_NOT_FOUND
+              : UI_TEXT.SOMETHING_WENT_WRONG
+            : UI_TEXT.FREE_TRIAL_OVER}
         </Text>
       </View>
     )
@@ -262,13 +273,14 @@ export default function ProductDescription() {
       <SortBottomSheet ref={sortBottomSheetRef} onSelect={handleSortSelect} />
       <QuantityModal
         visible={!!selectedWholesaler}
+        productName={productData.product_desc}
         wholesalerName={selectedWholesaler?.name ?? ""}
+        userPeerGroup={peerGroup || "N/A"}
         unitPrice={
           selectedWholesaler
-            ? typeof getPeerGroupPrice(selectedWholesaler) === "number" &&
-              !isNaN(getPeerGroupPrice(selectedWholesaler))
-              ? getPeerGroupPrice(selectedWholesaler)
-              : selectedWholesaler.price
+            ? Number(selectedWholesaler.price) > 0 && !isNaN(Number(selectedWholesaler.price))
+              ? selectedWholesaler.price
+              : 0
             : 0
         }
         onClose={() => setSelectedWholesaler(null)}
