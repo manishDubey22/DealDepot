@@ -72,8 +72,8 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
   } = useForm<IFormInput>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
-      email: "7z47vigy9y@elatter.com",
-      password: "Java@123",
+      email: "",
+      password: "",
     },
   })
 

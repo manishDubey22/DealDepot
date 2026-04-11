@@ -10,13 +10,13 @@ import { role } from "@/utils/role"
 
 import { useOptionScreen } from "./hooks/use-option-screen"
 import {
-  COMING_SOON,
+  // COMING_SOON,
   CONTACT_TEXT,
   INSTRUCTION,
   RETAILER_BUTTON,
   SUBTITLE,
   TITLE,
-  WHOLESALER_BUTTON,
+  // WHOLESALER_BUTTON,
 } from "./lib/constants"
 import { styles } from "./lib/styles"
 
@@ -51,14 +51,14 @@ export const OptionScreen: React.FC<OptionScreenProps> = (): React.JSX.Element =
           value={RETAILER_BUTTON}
           variant="active"
         />
-        <ButtonField
+        {/* <ButtonField
           btnDisable={true}
           icon={<Image source={Icon.HOME} style={styles.icon} />}
           textAlign="left"
           value={WHOLESALER_BUTTON}
           variant="disabled"
         />
-        <Text style={styles.comingSoonText}>{COMING_SOON}</Text>
+        <Text style={styles.comingSoonText}>{COMING_SOON}</Text> */}
       </View>
 
       {/* Contact Text */}
