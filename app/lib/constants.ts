@@ -13,4 +13,4 @@ export const STORAGE_KEY = {
   NAVIGATION_STATE: "NAVIGATION_STATE",
 } as const
 
-export const APP_NAME = "Deal Depot"
+export const APP_NAME = "MADR Checker"
