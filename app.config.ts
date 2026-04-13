@@ -1,5 +1,7 @@
 import { ExpoConfig, ConfigContext } from "@expo/config"
 
+import { commonStyles } from "@/theme/styles"
+
 /**
  * Use tsx/cjs here so we can use TypeScript for our Config Plugins
  * and not have to compile them to JavaScript.
@@ -20,6 +22,11 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
 
   return {
     ...config,
+    splash: {
+      ...config.splash,
+      backgroundColor: commonStyles.colors.primary,
+      resizeMode: "contain" as const,
+    },
     userInterfaceStyle: "light",
     updates: {
       enabled: isProductionProfile,

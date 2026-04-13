@@ -10,6 +10,10 @@
     "runtimeVersion": {
       "policy": "appVersion"
     },
+    "splash": {
+      "backgroundColor": "#AEDC81",
+      "resizeMode": "contain"
+    },
     "experiments": {
       "newArchEnabled": true
     },

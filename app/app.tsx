@@ -23,6 +23,7 @@ import { useEffect, useRef, useState } from "react"
 import { Linking, StyleSheet, View } from "react-native"
 import { useFonts } from "expo-font"
 import * as Notifications from "expo-notifications"
+import * as SplashScreen from "expo-splash-screen"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { createNavigationContainerRef, NavigationContainer } from "@react-navigation/native"
 import { QueryClientProvider } from "@tanstack/react-query"
@@ -39,6 +40,7 @@ try {
   KeyboardProviderWrapper = ({ children }: { children: ReactNode }) => children
 }
 
+import { CustomSplashScreen } from "@/components/CustomSplashScreen"
 import { useInAppUpdates } from "@/hooks/useInAppUpdate"
 import { queryClient } from "@/lib/react-query/queryClient"
 import { checkForAppUpdate } from "@/services/updateService"
@@ -143,14 +145,20 @@ export function App() {
       .then(() => loadDateFnsLocale())
   }, [])
 
+  const isAppReady =
+    isNavigationStateRestored && isI18nInitialized && (areFontsLoaded || Boolean(fontLoadError))
+
+  useEffect(() => {
+    if (!isAppReady) return
+    void SplashScreen.hideAsync().catch(() => {
+      /* ignore if already hidden or unavailable */
+    })
+  }, [isAppReady])
+
   // Before we show the app, we have to wait for our state to be ready.
-  // In the meantime, don't render anything. This will be the background
-  // color set in native by rootView's background color.
-  // In iOS: application:didFinishLaunchingWithOptions:
-  // In Android: https://stackoverflow.com/a/45838109/204044
-  // You can replace with your own loading component if you wish.
-  if (!isNavigationStateRestored || !isI18nInitialized || (!areFontsLoaded && !fontLoadError)) {
-    return null
+  // Show a branded splash instead of a blank screen while bootstrapping.
+  if (!isAppReady) {
+    return <CustomSplashScreen />
   }
 
   // const linking = {
