@@ -99,6 +99,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   image: {
+    borderRadius: commonStyles.borderRadius.large,
     height: 65,
     width: 65,
   },

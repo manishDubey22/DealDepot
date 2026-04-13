@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   logo: {
-    borderRadius: 15,
+    borderRadius: commonStyles.borderRadius.large,
     height: 65,
     width: 65,
   },
