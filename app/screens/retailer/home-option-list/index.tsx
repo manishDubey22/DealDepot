@@ -2,6 +2,7 @@ import { View, TouchableOpacity, Text, Image, Modal } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 // import { SafeAreaView } from "react-native-safe-area-context"
 
+import { AppLogo } from "@/components/common-components"
 import { Screen } from "@/components/Screen"
 
 import { useHomeOptionList } from "./hooks/use-home-option-list"
@@ -37,9 +38,7 @@ const HomeOptionList = () => {
           >
             {/* Icon Container */}
             <View style={styles.logoContainer}>
-              <View style={styles.iconWrapper}>
-                <Image source={Icon.LOGO} style={styles.image} />
-              </View>
+              <AppLogo imageStyle={styles.image} wrapperStyle={styles.iconWrapper} />
             </View>
             <Text style={styles.guide}>{UI_TEXT.GUIDE_TITLE}</Text>
             <Text style={styles.subtitle}>{UI_TEXT.SUBTITLE_TEXT}</Text>

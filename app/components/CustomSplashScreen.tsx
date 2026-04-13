@@ -1,10 +1,10 @@
-import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native"
-
-import { Icon } from "@assets/icons/wholeSeller"
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native"
 
 import { APP_NAME } from "@/lib/constants"
 import { colors } from "@/theme/colors"
 import { commonStyles } from "@/theme/styles"
+
+import { AppLogo } from "./common-components"
 
 /**
  * Lightweight splash shown during JS bootstrap (fonts, i18n, nav restore).
@@ -13,7 +13,7 @@ import { commonStyles } from "@/theme/styles"
 export function CustomSplashScreen() {
   return (
     <View style={styles.container} testID="custom-splash-screen">
-      <Image source={Icon.LOGO} style={styles.logo} accessibilityIgnoresInvertColors />
+      <AppLogo imageStyle={styles.logo} />
       <Text style={styles.title}>{APP_NAME}</Text>
       <ActivityIndicator
         size="large"
