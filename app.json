@@ -32,7 +32,7 @@
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.manish.mern.dealdepot"
+      "package": "com.madrchecker.app"
     },
     "ios": {
       "newArchEnabled": false
