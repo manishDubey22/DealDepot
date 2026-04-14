@@ -20,6 +20,11 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
 
   return {
     ...config,
+    splash: {
+      ...config.splash,
+      backgroundColor: "#AEDC81",
+      resizeMode: "contain" as const,
+    },
     userInterfaceStyle: "light",
     updates: {
       enabled: isProductionProfile,

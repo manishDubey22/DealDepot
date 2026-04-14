@@ -35,7 +35,10 @@
       "ios": { "simulator": false }
     },
     "production": {
-      "channel": "production"
+      "channel": "production",
+      "env": {
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true"
+      }
     }
   },
   "submit": {

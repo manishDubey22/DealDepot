@@ -12,3 +12,5 @@ export const STORAGE_KEY = {
   USER_INFO: "userInfo",
   NAVIGATION_STATE: "NAVIGATION_STATE",
 } as const
+
+export const APP_NAME = "MADR Checker"

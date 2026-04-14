@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-import { AppState, AppStateStatus, BackHandler, Linking } from "react-native"
+import { BackHandler, Linking } from "react-native"
+import { useCameraPermissions } from "expo-camera"
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import Toast from "react-native-toast-message"
 
@@ -8,59 +9,51 @@ import { useRetailerAuth } from "@/context/RetailerAuthContext"
 import { RetailerRoutes } from "@/navigators/retailer/routes"
 
 import { BARCODE_TYPES, CONSOLE_MESSAGES, PRODUCT_ID_LENGTH, UI_TEXT } from "../lib/constants"
-import type { ScannedCode, UseScannerReturn } from "../lib/types"
+import type {
+  ScannedCode,
+  PermissionState,
+  PermissionTuple,
+  BarcodeScanningResultLike,
+} from "../lib/types"
 
-type PermissionTuple = [
-  { granted: boolean; canAskAgain: boolean } | null,
-  () => Promise<{ granted: boolean }>,
-  () => Promise<{ granted: boolean }>,
-]
-
-function useCameraPermissionsStub(): PermissionTuple {
-  const [perm] = useState(() => ({ granted: false, canAskAgain: true }))
-  return [perm, async () => ({ granted: false }), async () => ({ granted: false })]
-}
-
-let useCameraPermissionsSafe: () => PermissionTuple
-let cameraModuleAvailable: boolean
-
-try {
-  const expoCamera = require("expo-camera")
-  if (typeof expoCamera?.useCameraPermissions === "function") {
-    useCameraPermissionsSafe = expoCamera.useCameraPermissions
-    cameraModuleAvailable = true
-  } else {
-    cameraModuleAvailable = false
-    useCameraPermissionsSafe = useCameraPermissionsStub
-  }
-} catch {
-  cameraModuleAvailable = false
-  useCameraPermissionsSafe = useCameraPermissionsStub
-}
-
-export interface BarcodeScanningResultLike {
-  type?: string
-  data?: string
-}
-
-export interface UseScannerReturnWithHandler extends UseScannerReturn {
-  handleCodeScanned: (result: BarcodeScanningResultLike) => void
+const normalizePermission = (
+  permission: Partial<PermissionState> | null | undefined,
+): PermissionState => {
+  const granted = Boolean(permission?.granted)
+  const canAskAgain = permission?.canAskAgain ?? true
+  const status =
+    permission?.status ?? (granted ? "granted" : canAskAgain === false ? "denied" : "undetermined")
+  return { granted, canAskAgain, status }
 }
 
 export function useScanner() {
   const navigation = useNavigation()
   const { userAuth } = useRetailerAuth()
   const retailerId = userAuth?.userId || ""
-  const [permission, requestPermission] = useCameraPermissionsSafe()
-  const [cameraError, setCameraError] = useState<string | null>(() =>
-    cameraModuleAvailable ? null : UI_TEXT.CAMERA_MODULE_NOT_LINKED,
-  )
-  const [appState, setAppState] = useState<AppStateStatus>(AppState.currentState)
+  const [permissionFromHook, requestPermission, getPermission] =
+    useCameraPermissions() as PermissionTuple
+  const [permission, setPermission] = useState<PermissionState | null>(permissionFromHook)
+  const [cameraError, setCameraError] = useState<string | null>(null)
+  const [isPermissionCheckComplete, setIsPermissionCheckComplete] = useState(false)
   const isFocusedRef = useRef(false)
   const hasNavigatedRef = useRef(false)
+  const isRequestingPermissionRef = useRef(false)
+  const permissionRef = useRef<PermissionState | null>(permission)
 
   const hasPermission = permission?.granted ?? false
+  const canAskAgain = permission?.canAskAgain ?? true
+  const shouldShowPermissionUI = permission?.status === "denied"
   const isCameraActive = true
+
+  useEffect(() => {
+    if (permissionFromHook) {
+      setPermission(normalizePermission(permissionFromHook))
+    }
+  }, [permissionFromHook])
+
+  useEffect(() => {
+    permissionRef.current = permission
+  }, [permission])
 
   const extractProductId = useCallback((type: string, value: string): string => {
     const codeType = (type || "qr").toLowerCase()
@@ -184,9 +177,23 @@ export function useScanner() {
   )
 
   const handleRequestPermission = useCallback(async () => {
-    if (!cameraModuleAvailable) return
+    if (isRequestingPermissionRef.current) return
+    const current = permissionRef.current
+    if (current && current.canAskAgain === false) {
+      await Linking.openSettings()
+      setIsPermissionCheckComplete(true)
+      return
+    }
+    isRequestingPermissionRef.current = true
     setCameraError(null)
-    await requestPermission()
+    try {
+      const result = normalizePermission(await requestPermission())
+      setPermission(result)
+      console.log("Permission status:", result.status, "granted:", result.granted)
+    } finally {
+      setIsPermissionCheckComplete(true)
+      isRequestingPermissionRef.current = false
+    }
   }, [requestPermission])
 
   const handleOpenSettings = useCallback(async () => {
@@ -198,11 +205,10 @@ export function useScanner() {
   }, [])
 
   const handleRetry = useCallback(() => {
-    if (!cameraModuleAvailable) return
     setCameraError(null)
     hasNavigatedRef.current = false
-    requestPermission()
-  }, [requestPermission])
+    void handleRequestPermission()
+  }, [handleRequestPermission])
 
   const handleBackPress = useCallback(() => {
     hasNavigatedRef.current = false
@@ -210,17 +216,6 @@ export function useScanner() {
     navigation.navigate(RetailerRoutes.OPTIONS)
     return true
   }, [navigation])
-
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState: AppStateStatus) => {
-      console.log(CONSOLE_MESSAGES.APP_STATE_CHANGED, nextAppState)
-      setAppState(nextAppState)
-      if (nextAppState === "background" || nextAppState === "inactive") {
-        hasNavigatedRef.current = false
-      }
-    })
-    return () => subscription.remove()
-  }, [])
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener("hardwareBackPress", handleBackPress)
@@ -231,19 +226,39 @@ export function useScanner() {
     useCallback(() => {
       isFocusedRef.current = true
       hasNavigatedRef.current = false
-      if (appState === "active") {
-        console.log(CONSOLE_MESSAGES.CAMERA_ACTIVATED)
+      setIsPermissionCheckComplete(false)
+
+      const syncPermissionOnFocus = async () => {
+        const freshPermission = normalizePermission(await getPermission())
+        setPermission(freshPermission)
+
+        if (freshPermission.granted) {
+          setIsPermissionCheckComplete(true)
+          return
+        }
+
+        // After "Don't allow", never auto-open the system dialog again — only in-app actions.
+        if (freshPermission.status === "denied") {
+          setIsPermissionCheckComplete(true)
+          return
+        }
+
+        // undetermined (incl. Android "Only this time" reset): prompt once on entering Scan.
+        await handleRequestPermission()
       }
+      void syncPermissionOnFocus()
+
       return () => {
         isFocusedRef.current = false
-        console.log(CONSOLE_MESSAGES.CAMERA_DEACTIVATED)
       }
-    }, [appState]),
+    }, [getPermission, handleRequestPermission]),
   )
 
   return {
     hasPermission,
-    isCameraActive: isCameraActive && hasPermission && appState === "active",
+    canAskAgain,
+    shouldShowPermissionUI,
+    isCameraActive: isCameraActive && hasPermission && isPermissionCheckComplete,
     isInitialized: true,
     cameraError,
     device: null,

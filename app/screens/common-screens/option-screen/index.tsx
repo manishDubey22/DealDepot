@@ -4,7 +4,7 @@ import { Image, View } from "react-native"
 
 import { Icon } from "@assets/icons/wholeSeller"
 
-import { ButtonField } from "@/components/common-components"
+import { AppLogo, ButtonField } from "@/components/common-components"
 import { Text } from "@/components/Text"
 import { role } from "@/utils/role"
 
@@ -30,9 +30,7 @@ export const OptionScreen: React.FC<OptionScreenProps> = (): React.JSX.Element =
     <View style={styles.content}>
       {/* Icon Container */}
       <View style={styles.iconContainer}>
-        <View style={styles.iconWrapper}>
-          <Image source={Icon.LOGO} style={styles.image} />
-        </View>
+        <AppLogo imageStyle={styles.image} wrapperStyle={styles.iconWrapper} />
       </View>
 
       {/* Title and Subtitle */}

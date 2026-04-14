@@ -1,5 +1,8 @@
 {
   "expo": {
+    "name": "MADR Checker",
+    "slug": "madr-checker",
+    "icon": "./assets/icons/wholeSeller/Logo.jpg",
     "jsEngine": "hermes",
     "userInterfaceStyle": "light",
     "updates": {
@@ -10,11 +13,20 @@
     "runtimeVersion": {
       "policy": "appVersion"
     },
+    "splash": {
+      "image": "./assets/icons/wholeSeller/Logo.jpg",
+      "backgroundColor": "#AEDC81",
+      "resizeMode": "contain"
+    },
     "experiments": {
       "newArchEnabled": true
     },
     "android": {
       "newArchEnabled": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons/wholeSeller/Logo.jpg",
+        "backgroundColor": "#FFFFFF"
+      },
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.CAMERA",

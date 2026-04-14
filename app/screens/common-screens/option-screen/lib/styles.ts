@@ -3,6 +3,7 @@ import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimen
 
 import { colors } from "@/theme/colors"
 import { CommonStyles } from "@/theme/common-styles"
+import { commonStyles } from "@/theme/styles"
 
 export const styles = StyleSheet.create({
   buttonsContainer: {
@@ -53,6 +54,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   image: {
+    borderRadius: commonStyles.borderRadius.large,
     height: 65,
     width: 65,
   },
