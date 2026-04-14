@@ -1,6 +1,6 @@
-import type { ComponentType } from "react"
 import { useRef, useState } from "react"
 import { View, Text } from "react-native"
+import { CameraView } from "expo-camera"
 
 import { ErrorState } from "./components/error-state"
 import { PermissionUI } from "./components/permission-ui"
@@ -10,24 +10,13 @@ import { styles } from "./lib/styles"
 
 const BARCODE_TYPES_EXPO = ["qr", "ean13", "code128"] as const
 
-let CameraView: ComponentType<{
-  style?: unknown
-  facing?: "back" | "front"
-  barcodeScannerSettings?: { barcodeTypes: readonly string[] }
-  onBarcodeScanned?: (result: { type?: string; data?: string }) => void
-  onMountError?: (event: { message: string }) => void
-}> | null = null
-try {
-  CameraView = require("expo-camera").CameraView
-} catch {
-  // Native module not linked (e.g. Expo Go); show error from useScanner instead
-}
-
 export default function Scanner() {
   const lastScannedRef = useRef<string | null>(null)
   const [mountError, setMountError] = useState<string | null>(null)
   const {
     hasPermission,
+    canAskAgain,
+    shouldShowPermissionUI,
     isCameraActive,
     cameraError,
     handleRequestPermission,
@@ -54,18 +43,23 @@ export default function Scanner() {
     return <ErrorState error={displayError} onRetry={onRetry} />
   }
 
-  if (!hasPermission) {
+  if (shouldShowPermissionUI) {
     return (
       <PermissionUI
+        canAskAgain={canAskAgain}
         onRequestPermission={handleRequestPermission}
         onOpenSettings={handleOpenSettings}
       />
     )
   }
 
+  if (!hasPermission) {
+    return <View style={styles.container} />
+  }
+
   return (
     <View style={styles.container}>
-      {isCameraActive && CameraView && (
+      {isCameraActive && (
         <CameraView
           style={styles.camera}
           facing="back"

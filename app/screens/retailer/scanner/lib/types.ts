@@ -1,7 +1,7 @@
-import type { AppStateStatus } from "react-native"
-
 export interface UseScannerReturn {
   hasPermission: boolean
+  canAskAgain: boolean
+  shouldShowPermissionUI: boolean
   isCameraActive: boolean
   isInitialized: boolean
   cameraError: string | null
@@ -18,6 +18,7 @@ export interface ScannedCode {
 }
 
 export interface PermissionUIProps {
+  canAskAgain: boolean
   onRequestPermission: () => Promise<void>
   onOpenSettings: () => Promise<void>
 }
@@ -25,4 +26,25 @@ export interface PermissionUIProps {
 export interface ErrorStateProps {
   error: string
   onRetry: () => void
+}
+
+export interface PermissionState {
+  granted: boolean
+  canAskAgain: boolean
+  status?: string
+}
+
+export type PermissionTuple = [
+  PermissionState | null,
+  () => Promise<PermissionState>,
+  () => Promise<PermissionState>,
+]
+
+export interface BarcodeScanningResultLike {
+  type?: string
+  data?: string
+}
+
+export interface UseScannerReturnWithHandler extends UseScannerReturn {
+  handleCodeScanned: (result: BarcodeScanningResultLike) => void
 }

@@ -1,9 +1,8 @@
 export const UI_TEXT = {
   SCANNER_TITLE: "Scanner",
   CAMERA_PERMISSION_REQUIRED: "Camera Permission Required",
-  CAMERA_PERMISSION_MESSAGE:
-    "We need access to your camera to scan barcodes and QR codes. Please enable camera permission in settings.",
-  REQUEST_PERMISSION: "Request Permission",
+  CAMERA_PERMISSION_MESSAGE: "Camera permission is required to scan products",
+  REQUEST_PERMISSION: "Require Permission",
   OPEN_SETTINGS: "Open Settings",
   TRY_AGAIN: "Try Again",
   CAMERA_ERROR: "Camera Error",
