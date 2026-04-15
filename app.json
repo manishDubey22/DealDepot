@@ -39,8 +39,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "16861625-888c-4a03-9fd2-99bcd4dc444b"
+        "projectId": "6e01e053-a911-4d09-ae74-85a366f92b46"
       }
-    }
+    },
+    "owner": "madr.checker"
   }
 }
