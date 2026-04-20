@@ -81,6 +81,35 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
     setIsShowPassword((prev) => !prev)
   }, [])
 
+  const getFriendlyLoginErrorMessage = useCallback((error: any): string => {
+    const backendMessage =
+      error?.response?.data?.message || error?.error?.data?.message || error?.data?.message || ""
+    const normalizedBackend = String(backendMessage).trim().toUpperCase()
+
+    if (normalizedBackend === "USER ARE NOT FOUND") {
+      return "User not found. Please check your credentials and try again."
+    }
+
+    if (normalizedBackend === "PASSWORD INVALID" || normalizedBackend === "INCORRECT PASSWORD") {
+      return "Incorrect password. Please try again."
+    }
+
+    if (normalizedBackend) {
+      return backendMessage
+    }
+
+    const rawErrorMessage = String(error?.message || "").trim()
+    const isTechnicalMessage =
+      rawErrorMessage.includes("Request failed with status code") ||
+      rawErrorMessage.includes("Network Error")
+
+    if (rawErrorMessage && !isTechnicalMessage) {
+      return rawErrorMessage
+    }
+
+    return "Something went wrong. Please try again."
+  }, [])
+
   const onSubmit = useCallback(
     async (data: IFormInput) => {
       try {
@@ -143,26 +172,14 @@ export function useRetailerLogin(navigation: any): UseRetailerLoginReturn {
           surface: "retailer_login",
           action: "submit_login",
         })
-
-        // Handle different types of errors
-        if (error?.status === "NETWORK_ERROR" || error?.message?.includes("Network")) {
-          Toast.show({
-            type: "error",
-            text1: ERROR_MESSAGES.NETWORK_ERROR,
-            text2: ERROR_MESSAGES.NETWORK_ERROR_DESCRIPTION,
-          })
-        } else {
-          const errorMessage =
-            error?.error?.data?.message || error?.message || ERROR_MESSAGES.LOGIN_FAILED_GENERIC
-          Toast.show({
-            type: "error",
-            text1: errorMessage.toUpperCase(),
-            text2: ERROR_MESSAGES.PLEASE_TRY_AGAIN,
-          })
-        }
+        const errorMessage = getFriendlyLoginErrorMessage(error)
+        Toast.show({
+          type: "error",
+          text1: errorMessage,
+        })
       }
     },
-    [handleLoginPress, setUserAuth, navigation, reset],
+    [handleLoginPress, setUserAuth, navigation, reset, getFriendlyLoginErrorMessage],
   )
 
   const handleNavigateToResetPassword = useCallback(() => {
