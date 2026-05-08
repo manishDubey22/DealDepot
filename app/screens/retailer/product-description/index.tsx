@@ -110,10 +110,9 @@ export default function ProductDescription() {
   const peerGroupPrice = useMemo(() => {
     if (!uiSelectedPeerGroup) return null
     const latestEntry = getLatestPeerGroupEntry(uiSelectedPeerGroup)
-    if (!latestEntry) return null
     return {
-      price: latestEntry.price || 0,
-      date: latestEntry.Date,
+      price: latestEntry?.price ?? null,
+      date: latestEntry?.Date ?? undefined,
     }
   }, [getLatestPeerGroupEntry, uiSelectedPeerGroup])
 
@@ -238,11 +237,11 @@ export default function ProductDescription() {
                 onSelect={handleUiPeerGroupSelect}
               />
             </View>
-            {peerGroupPrice && uiSelectedPeerGroup && (
+            {uiSelectedPeerGroup && (
               <PeerGroupPriceCard
                 peerGroupName={uiSelectedPeerGroup}
-                price={peerGroupPrice.price}
-                updatedDate={peerGroupPrice.date}
+                price={peerGroupPrice?.price}
+                updatedDate={peerGroupPrice?.date}
               />
             )}
           </View>
