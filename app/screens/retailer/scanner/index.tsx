@@ -1,6 +1,7 @@
-import { useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import { View, Text } from "react-native"
 import { CameraView } from "expo-camera"
+import { useFocusEffect } from "@react-navigation/native"
 
 import { ErrorState } from "./components/error-state"
 import { PermissionUI } from "./components/permission-ui"
@@ -24,6 +25,16 @@ export default function Scanner() {
     handleRetry,
     handleCodeScanned,
   } = useScanner()
+
+  useFocusEffect(
+    useCallback(() => {
+      lastScannedRef.current = null
+
+      return () => {
+        lastScannedRef.current = null
+      }
+    }, []),
+  )
 
   const onBarcodeScanned = (result: { type?: string; data?: string }) => {
     const data = result?.data ?? ""
