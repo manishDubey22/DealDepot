@@ -116,44 +116,48 @@ export default function ResetPassword({ role, navigation }: ResetPasswordScreenP
                 <Text style={styles.stepTitle}>{UI_TEXT.STEP_PASSWORD_TITLE}</Text>
                 <Text style={styles.stepSubtitle}>{UI_TEXT.STEP_PASSWORD_SUBTITLE}</Text>
                 <View style={styles.containerInput}>
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <InputFieldContianer
-                        title={UI_TEXT.NEW_PASSWORD_TITLE}
-                        placeholder={UI_TEXT.NEW_PASSWORD_PLACEHOLDER}
-                        textContainerStyle={styles.textInputMargin}
-                        secureTextEntry={isShowPassword}
-                        showIcon={value?.length > 0}
-                        onTogglePassword={handleTogglePassword}
-                        value={value}
-                        onChangeText={(text) => onChange(text?.trimEnd())}
-                      />
+                  <View style={styles.passwordFieldSpacing}>
+                    <Controller
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <InputFieldContianer
+                          title={UI_TEXT.NEW_PASSWORD_TITLE}
+                          placeholder={UI_TEXT.NEW_PASSWORD_PLACEHOLDER}
+                          textContainerStyle={styles.textInputMargin}
+                          secureTextEntry={isShowPassword}
+                          showIcon={value?.length > 0}
+                          onTogglePassword={handleTogglePassword}
+                          value={value}
+                          onChangeText={(text) => onChange(text?.trimEnd())}
+                        />
+                      )}
+                      name={FORM_FIELDS.NEW_PASSWORD}
+                    />
+                    {errors.newPassword?.message && (
+                      <Text style={styles.validationError}>{errors.newPassword?.message}</Text>
                     )}
-                    name={FORM_FIELDS.NEW_PASSWORD}
-                  />
-                  {errors.newPassword?.message && (
-                    <Text style={styles.validationError}>{errors.newPassword?.message}</Text>
-                  )}
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <InputFieldContianer
-                        title={UI_TEXT.CONFIRM_PASSWORD_TITLE}
-                        placeholder={UI_TEXT.CONFIRM_PASSWORD_PLACEHOLDER}
-                        textContainerStyle={styles.textInputMargin}
-                        secureTextEntry={isShowPassword}
-                        showIcon={value?.length > 0}
-                        onTogglePassword={handleTogglePassword}
-                        value={value}
-                        onChangeText={(text) => onChange(text?.trimEnd())}
-                      />
+                  </View>
+                  <View style={styles.passwordFieldSpacing}>
+                    <Controller
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <InputFieldContianer
+                          title={UI_TEXT.CONFIRM_PASSWORD_TITLE}
+                          placeholder={UI_TEXT.CONFIRM_PASSWORD_PLACEHOLDER}
+                          textContainerStyle={styles.textInputMargin}
+                          secureTextEntry={isShowPassword}
+                          showIcon={value?.length > 0}
+                          onTogglePassword={handleTogglePassword}
+                          value={value}
+                          onChangeText={(text) => onChange(text?.trimEnd())}
+                        />
+                      )}
+                      name={FORM_FIELDS.CONFIRM_PASSWORD}
+                    />
+                    {errors.confirmPassword?.message && (
+                      <Text style={styles.validationError}>{errors.confirmPassword?.message}</Text>
                     )}
-                    name={FORM_FIELDS.CONFIRM_PASSWORD}
-                  />
-                  {errors.confirmPassword?.message && (
-                    <Text style={styles.validationError}>{errors.confirmPassword?.message}</Text>
-                  )}
+                  </View>
                 </View>
                 <ButtonField
                   value={UI_TEXT.COMPLETE_BUTTON}

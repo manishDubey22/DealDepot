@@ -22,6 +22,7 @@ export const styles = StyleSheet.create({
   },
   containerInput: {
     marginBottom: responsiveHeight(4),
+    marginTop: responsiveHeight(1.5),
   },
   helperText2: {
     color: commonStyles.colors.primaryColor,
@@ -77,6 +78,9 @@ export const styles = StyleSheet.create({
     marginTop: responsiveHeight(0.5),
     textAlign: "center",
   },
+  passwordFieldSpacing: {
+    marginBottom: responsiveHeight(1.5),
+  },
   safeAreaView: {
     flex: 1,
     width: "100%",
@@ -97,8 +101,7 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
   textInputMargin: {
-    height: 56,
-    // marginTop: responsiveHeight(5),
+    minHeight: 56,
   },
   validationError: {
     color: colors.customColors.PASTEL_RED,
