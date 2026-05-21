@@ -33,6 +33,7 @@
     "build:android:prod": "eas build --profile production --platform android --local"
   },
   "dependencies": {
+    "axios": "^1.13.5",
     "@expo-google-fonts/space-grotesk": "^0.4.0",
     "@expo/metro-runtime": "~6.1.2",
     "@gorhom/bottom-sheet": "^5.2.8",
