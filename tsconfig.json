@@ -5,7 +5,6 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "jsx": "react-native",
-    "customConditions": ["react-native"],
     "module": "esnext",
     "moduleResolution": "bundler",
     "strict": true,
