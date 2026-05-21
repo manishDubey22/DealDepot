@@ -280,70 +280,71 @@ export const RetailerStackNavigation = ({
   role: string | null
   authToken: string | unknown | undefined
 }) => {
-  const initialRouteName = role && authToken ? RetailerRoutes.TAB_CONTAINER : RetailerRoutes.LOGIN
+  const isAuthenticated = !!(role && authToken)
 
   return (
-    <Stack.Navigator initialRouteName={initialRouteName}>
-      {/* <Stack.Navigator initialRouteName={RetailerRoutes.CART}> */}
-      <Stack.Screen
-        name={RetailerRoutes.OPTION}
-        component={OptionScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name={RetailerRoutes.LOGIN}
-        component={Login}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name={RetailerRoutes.CREATE_NEW_ACCOUNT}
-        component={CreateNewAccount}
-        options={{
-          headerShown: true,
-          headerTitleStyle: {
-            // @ts-expect-error - display property not in type but works at runtime
-            display: "none",
-          },
-          headerStyle: {
-            backgroundColor: commonStyles.colors.secondaryColor,
-            // @ts-expect-error - height property not in type but works at runtime
-            height: 80,
-            elevation: 5,
-            shadowColor: colors.palette.grey400,
-          },
-          header: () => <HeaderComponent value="Create Account" />,
-        }}
-      />
-      <Stack.Screen
-        name={RetailerRoutes.EMAIL_VERIFICATION}
-        component={EmailVerification}
-        options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: colors.customColors.WHITE,
-            // height: 100,
-          },
-          headerTitleStyle: {
-            color: colors.palette.charcoal500,
-            fontFamily: CommonStyles.fontFamily.fontFamily,
-            fontSize: 20,
-          },
-          headerTitle: "Verify",
-          headerTitleAlign: "center",
-          headerTintColor: colors.palette.neutral100,
-        }}
-      />
-      <Stack.Screen
-        name={RetailerRoutes.TAB_CONTAINER}
-        component={BottomTabNavigator}
-        options={{
-          headerShown: false,
-        }}
-      />
+    <Stack.Navigator>
+      {isAuthenticated ? (
+        // Authenticated screens — React Navigation auto-navigates here when isAuthenticated becomes true
+        <>
+          <Stack.Screen
+            name={RetailerRoutes.TAB_CONTAINER}
+            component={BottomTabNavigator}
+            options={{ headerShown: false }}
+          />
+        </>
+      ) : (
+        // Unauthenticated screens — React Navigation auto-navigates here when isAuthenticated becomes false
+        <>
+          <Stack.Screen
+            name={RetailerRoutes.LOGIN}
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name={RetailerRoutes.OPTION}
+            component={OptionScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name={RetailerRoutes.CREATE_NEW_ACCOUNT}
+            component={CreateNewAccount}
+            options={{
+              headerShown: true,
+              headerTitleStyle: {
+                // @ts-expect-error - display property not in type but works at runtime
+                display: "none",
+              },
+              headerStyle: {
+                backgroundColor: commonStyles.colors.secondaryColor,
+                // @ts-expect-error - height property not in type but works at runtime
+                height: 80,
+                elevation: 5,
+                shadowColor: colors.palette.grey400,
+              },
+              header: () => <HeaderComponent value="Create Account" />,
+            }}
+          />
+          <Stack.Screen
+            name={RetailerRoutes.EMAIL_VERIFICATION}
+            component={EmailVerification}
+            options={{
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: colors.customColors.WHITE,
+              },
+              headerTitleStyle: {
+                color: colors.palette.charcoal500,
+                fontFamily: CommonStyles.fontFamily.fontFamily,
+                fontSize: 20,
+              },
+              headerTitle: "Verify",
+              headerTitleAlign: "center",
+              headerTintColor: colors.palette.neutral100,
+            }}
+          />
+        </>
+      )}
       <Stack.Screen
         name={RetailerRoutes.RESET_PASSWORD}
         options={{

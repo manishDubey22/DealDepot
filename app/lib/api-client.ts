@@ -1,6 +1,7 @@
 import Axios, { AxiosError, InternalAxiosRequestConfig } from "axios"
 
-import { load, remove, save } from "@/utils/storage"
+import { authEventHandlers } from "@/context/RetailerAuthContext"
+import { load, save } from "@/utils/storage"
 
 import { getApiUrl } from "./api-config"
 import { getToken, getRefreshToken } from "./authStorage"
@@ -77,37 +78,35 @@ api.interceptors.response.use(
           throw new Error("No refresh token available")
         }
 
-        // Call refresh endpoint
-        const refreshResponse = await Axios.put(
-          `${getApiUrl()}/v1/refresh`,
-          { refreshToken: userInfo.refreshToken },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          },
-        )
+        // Backend reads refresh token from "refreshtoken" header on GET /v1/refresh
+        const refreshResponse = await Axios.get(`${getApiUrl()}/v1/refresh`, {
+          headers: { refreshtoken: userInfo.refreshToken },
+        })
 
         if (refreshResponse?.data?.data) {
-          // Update tokens in storage
-          const updatedUserInfo = {
-            ...userInfo,
-            authToken: refreshResponse.data.data.accessToken,
-            refreshToken: refreshResponse.data.data.refreshToken,
-          }
-          save(STORAGE_KEY.USER_INFO, updatedUserInfo)
+          const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+            refreshResponse.data.data
 
-          // Update Authorization header and retry original request
+          // Update tokens in storage
+          save(STORAGE_KEY.USER_INFO, {
+            ...userInfo,
+            authToken: newAccessToken,
+            refreshToken: newRefreshToken,
+          })
+
+          // Sync new tokens into React context state
+          authEventHandlers.updateTokens?.(newAccessToken, newRefreshToken)
+
+          // Retry original request with new token
           originalRequest.headers = originalRequest.headers || {}
-          originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.data.accessToken}`
-          originalRequest.headers.refreshToken = refreshResponse.data.data.refreshToken
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
+          originalRequest.headers.refreshToken = newRefreshToken
 
           return api(originalRequest)
         }
       } catch (refreshError) {
-        // Refresh failed - clear storage
-        remove(STORAGE_KEY.USER_INFO)
-        // Pass error to React Query consumers (they can handle navigation)
+        // Refresh failed — clear auth in context (which also removes from storage)
+        authEventHandlers.clearAuth?.()
         return Promise.reject(refreshError)
       }
     }

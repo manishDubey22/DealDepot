@@ -18,6 +18,30 @@ export interface UserAuth {
   refreshToken: string
 }
 
+/** Module-level callbacks registered by the provider so api-client can drive auth state. */
+export const authEventHandlers: {
+  clearAuth: (() => void) | null
+  updateTokens: ((accessToken: string, refreshToken: string) => void) | null
+} = {
+  clearAuth: null,
+  updateTokens: null,
+}
+
+function isJwtExpired(token: string): boolean {
+  try {
+    const payloadBase64 = token.split(".")[1]
+    if (!payloadBase64) return true
+    const base64 = payloadBase64.replace(/-/g, "+").replace(/_/g, "/")
+    // atob is available globally in React Native (Hermes) since RN 0.64
+    const decoded = atob(base64)
+    const payload = JSON.parse(decoded) as { exp?: number }
+    if (typeof payload.exp !== "number") return false
+    return Date.now() / 1000 >= payload.exp
+  } catch {
+    return true
+  }
+}
+
 export interface RetailerAuthContextType {
   userAuth: UserAuth | null
   userRole: string | null
@@ -48,6 +72,11 @@ function loadStoredUserInfo(): {
     const accessToken = stored.authToken ?? stored.accessToken
     const userId = stored.userId ?? stored.retailer_id
     if (!accessToken || !userId) return { userAuth: null, userRole: stored.role ?? null }
+
+    // Treat an expired access token the same as no token — navigate to Login
+    if (isJwtExpired(accessToken)) {
+      return { userAuth: null, userRole: stored.role ?? null }
+    }
 
     if (!stored.refreshToken) {
       console.warn("[RetailerAuth] userInfo missing refreshToken; session restored without it.")
@@ -108,6 +137,18 @@ export const RetailerAuthProvider: FC<PropsWithChildren<RetailerAuthProviderProp
     setUserRoleState(null)
     remove(STORAGE_KEY.USER_INFO)
   }, [])
+
+  // Register global callbacks so api-client can drive auth state without importing React hooks
+  useEffect(() => {
+    authEventHandlers.clearAuth = clearAuth
+    authEventHandlers.updateTokens = (accessToken: string, refreshToken: string) => {
+      setUserAuthState((prev) => (prev ? { ...prev, accessToken, refreshToken } : null))
+    }
+    return () => {
+      authEventHandlers.clearAuth = null
+      authEventHandlers.updateTokens = null
+    }
+  }, [clearAuth])
 
   const value: RetailerAuthContextType = {
     userAuth,
