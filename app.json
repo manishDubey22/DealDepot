@@ -4,7 +4,7 @@
     "slug": "madr-checker",
     "icon": "./assets/icons/wholeSeller/Logo.jpg",
     "jsEngine": "hermes",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "userInterfaceStyle": "light",
     "updates": {
       "enabled": true,
