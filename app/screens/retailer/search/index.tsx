@@ -1,3 +1,4 @@
+import { useRef, useCallback } from "react"
 import {
   View,
   Text,
@@ -7,6 +8,7 @@ import {
   FlatList,
   RefreshControl,
 } from "react-native"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import type { Product } from "@/api/retailer/product/types"
@@ -14,13 +16,16 @@ import SearchField from "@/components/common-components/search-field/search-fiel
 import { RetailerRoutes } from "@/navigators/retailer/routes"
 import { commonStyles } from "@/theme/styles"
 
-import ModalComponent from "./components/modal-component"
+import { SelectionBottomSheet } from "./components/selection-bottom-sheet"
 import { useSearch } from "./hooks/use-search"
 import { styles } from "./lib/styles"
 import { Icon } from "../../../../assets/icons/wholeSeller"
 import { Images } from "../../../../assets/Images/wholeSeller"
 
 export default function Search({ navigation }: any) {
+  const categorySheetRef = useRef<BottomSheetModal>(null)
+  const subcategorySheetRef = useRef<BottomSheetModal>(null)
+
   const {
     categoryDescArray,
     debouncedSearch,
@@ -28,8 +33,6 @@ export default function Search({ navigation }: any) {
     handleClearSearch,
     handleSearch,
     isCategoryAll,
-    isCategoryModalVisible,
-    isSubCategoryModalVisible,
     isLoading,
     isLoadingTrendingData,
     isSubCategoryEnabled,
@@ -42,15 +45,32 @@ export default function Search({ navigation }: any) {
     refreshing,
     selectedCategory,
     selectedSubCategory,
-    setCategoryModalVisible,
     setQuery,
-    setSubCategoryModalVisible,
     subCategoryDescArray,
     trendingArray,
   } = useSearch()
 
   const listData = (itemsArray?.length ?? 0) > 0 ? itemsArray : (trendingArray ?? [])
   const showCategoryHeader = isLoading || !(itemsArray?.length ?? 0) || !query
+
+  const handleCategorySelect = useCallback(
+    (category: string) => {
+      onCategorySelect(category)
+      categorySheetRef.current?.dismiss()
+      if (category !== "All") {
+        subcategorySheetRef.current?.present()
+      }
+    },
+    [onCategorySelect],
+  )
+
+  const handleSubcategorySelect = useCallback(
+    (subcategory: string) => {
+      onSubCategorySelect(subcategory)
+      subcategorySheetRef.current?.dismiss()
+    },
+    [onSubCategorySelect],
+  )
 
   const renderCardItem = (modifyValue: Product) => {
     const priceInfo = modifyValue?.adminPrice && modifyValue?.adminPrice[peerGroup]
@@ -100,7 +120,7 @@ export default function Search({ navigation }: any) {
       <View style={styles.categoryContainer}>
         <TouchableOpacity
           style={styles.peerGroupButton}
-          onPress={() => setCategoryModalVisible(true)}
+          onPress={() => categorySheetRef.current?.present()}
         >
           <Text style={styles.peerGroupButtonText}>{selectedCategory ?? isCategoryAll}</Text>
           <Image source={Icon.LeftBackArrow} resizeMode="contain" style={styles.dropdownArrow} />
@@ -111,7 +131,7 @@ export default function Search({ navigation }: any) {
             styles.peerGroupButton,
             !isSubCategoryEnabled ? styles.peerGroupButtonDisabled : null,
           ]}
-          onPress={() => isSubCategoryEnabled && setSubCategoryModalVisible(true)}
+          onPress={() => isSubCategoryEnabled && subcategorySheetRef.current?.present()}
           disabled={!isSubCategoryEnabled}
         >
           <Text
@@ -175,18 +195,20 @@ export default function Search({ navigation }: any) {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       />
 
-      <ModalComponent
-        visible={isCategoryModalVisible}
+      <SelectionBottomSheet
+        ref={categorySheetRef}
+        title="Select Category"
         items={categoryDescArray}
-        onSelect={onCategorySelect}
-        onClose={() => setCategoryModalVisible(false)}
+        selectedValue={selectedCategory}
+        onSelect={handleCategorySelect}
       />
 
-      <ModalComponent
-        visible={isSubCategoryModalVisible}
+      <SelectionBottomSheet
+        ref={subcategorySheetRef}
+        title="Select Subcategory"
         items={subCategoryDescArray}
-        onSelect={onSubCategorySelect}
-        onClose={() => setSubCategoryModalVisible(false)}
+        selectedValue={selectedSubCategory}
+        onSelect={handleSubcategorySelect}
       />
     </View>
   )

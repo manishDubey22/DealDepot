@@ -26,8 +26,6 @@ export function useSearch() {
   const [isStartSearch, setIsStartSearch] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null)
-  const [isCategoryModalVisible, setCategoryModalVisible] = useState(false)
-  const [isSubCategoryModalVisible, setSubCategoryModalVisible] = useState(false)
   const [shouldTrendingDataFetch, setShouldTrendingDataFetch] = useState<boolean>(false)
   const [peerGroup, setPeerGroup] = useState("")
   const [isCategoryAll, setIsCategoryAll] = useState<string>("Select Category")
@@ -112,7 +110,6 @@ export function useSearch() {
         // Reset stale subcategory whenever category changes.
         setSelectedSubCategory((prev) => (prev && selectedCategory !== category ? null : prev))
         setSelectedCategory(category)
-        setSubCategoryModalVisible(true)
       }
     },
     [handleShowAll, selectedCategory],
@@ -280,8 +277,6 @@ export function useSearch() {
     handleClearSearch,
     handleSearch,
     isCategoryAll,
-    isCategoryModalVisible,
-    isSubCategoryModalVisible,
     isLoading,
     isLoadingTrendingData,
     isSubCategoryEnabled,
@@ -294,9 +289,7 @@ export function useSearch() {
     refreshing,
     selectedCategory,
     selectedSubCategory,
-    setCategoryModalVisible,
     setQuery,
-    setSubCategoryModalVisible,
     subCategoryDescArray,
     trendingArray,
   }
