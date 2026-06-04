@@ -88,7 +88,7 @@ export function useSearch() {
       retailerId: userDetails?.userId || "",
     },
     {
-      enabled: isStartSearch && !!query && !!userDetails?.userId,
+      enabled: isStartSearch && query.trim().length >= 2 && !!userDetails?.userId,
     },
   )
 
@@ -138,16 +138,27 @@ export function useSearch() {
     }, [onRefresh]),
   )
 
+  const MIN_SEARCH_LENGTH = 2
+
   const debouncedSearch = useCallback(
     debounce((nextQuery: string) => {
-      if (nextQuery && nextQuery.trim().length > 0) {
+      if (nextQuery && nextQuery.trim().length >= MIN_SEARCH_LENGTH) {
         setIsStartSearch(true)
       }
     }, 1000),
     [],
   )
 
+  // Cancel any in-flight search immediately when the query drops below the minimum length
+  useEffect(() => {
+    if (query.trim().length < MIN_SEARCH_LENGTH && isStartSearch) {
+      setIsStartSearch(false)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query])
+
   const handleSearch = useCallback((searchQuery: string) => {
+    if (searchQuery.trim().length < MIN_SEARCH_LENGTH) return
     setQuery(searchQuery)
     setIsStartSearch(true)
   }, [])

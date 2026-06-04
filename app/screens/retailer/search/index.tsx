@@ -177,7 +177,7 @@ export default function Search({ navigation }: any) {
         <SearchField
           setQuery={setQuery}
           query={query}
-          handleOnSearchIcon={() => query && handleSearch(query)}
+          handleOnSearchIcon={() => query && query.trim().length >= 2 && handleSearch(query)}
           isLoading={isLoading}
           handleDelete={handleClearSearch}
           debouncedSearch={debouncedSearch}
