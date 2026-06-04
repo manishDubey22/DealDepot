@@ -1,11 +1,16 @@
+import { useCallback, useMemo, useRef } from "react"
 import {
   ActivityIndicator,
-  ScrollView,
-  Text,
-  View,
+  Image,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native"
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet"
+import type { BottomSheetBackdropProps } from "@gorhom/bottom-sheet"
 import { Controller } from "react-hook-form"
 import Toast from "react-native-toast-message"
 
@@ -15,8 +20,11 @@ import { commonStyles } from "@/theme/styles"
 import { useEditProfile } from "./hooks/use-edit-profile"
 import { UI_TEXT } from "./lib/constants"
 import { styles } from "./lib/styles"
+import { Icon } from "../../../../assets/icons/wholeSeller"
 
 export default function EditProfile({ navigation }: { navigation: any }) {
+  const peerGroupSheetRef = useRef<BottomSheetModal>(null)
+
   const {
     control,
     handleSubmit,
@@ -24,10 +32,19 @@ export default function EditProfile({ navigation }: { navigation: any }) {
     btnDisable,
     isLoading,
     profileData,
-    dropdownArray,
+    peerGroups,
     onSubmit,
     isProfileLoading,
   } = useEditProfile(navigation)
+
+  const snapPoints = useMemo(() => ["45%"], [])
+
+  const renderBackdrop = useCallback(
+    (props: BottomSheetBackdropProps) => (
+      <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} opacity={0.5} />
+    ),
+    [],
+  )
 
   if (isProfileLoading) {
     return (
@@ -62,7 +79,6 @@ export default function EditProfile({ navigation }: { navigation: any }) {
                       <InputFieldContianer
                         title={UI_TEXT.RETAILER_NAME}
                         placeholder={UI_TEXT.RETAILER_NAME}
-                        // textContainerStyle={styles.fieldCard}
                         titleStyle={styles.titleText}
                         value={value}
                         onChangeText={onChange}
@@ -82,7 +98,6 @@ export default function EditProfile({ navigation }: { navigation: any }) {
                       <InputFieldContianer
                         title={UI_TEXT.STORE_NAME}
                         placeholder={UI_TEXT.STORE_NAME}
-                        // textContainerStyle={styles.fieldCard}
                         titleStyle={styles.titleText}
                         value={value}
                         onChangeText={onChange}
@@ -102,7 +117,6 @@ export default function EditProfile({ navigation }: { navigation: any }) {
                       <InputFieldContianer
                         title={UI_TEXT.PHONE}
                         placeholder={UI_TEXT.PHONE}
-                        // textContainerStyle={styles.fieldCard}
                         titleStyle={styles.titleText}
                         value={value}
                         onChangeText={onChange}
@@ -122,7 +136,6 @@ export default function EditProfile({ navigation }: { navigation: any }) {
                       <InputFieldContianer
                         title={UI_TEXT.LOCATION}
                         placeholder={UI_TEXT.LOCATION}
-                        // textContainerStyle={styles.fieldCard}
                         titleStyle={styles.titleText}
                         value={value}
                         onChangeText={onChange}
@@ -142,7 +155,6 @@ export default function EditProfile({ navigation }: { navigation: any }) {
                       <InputFieldContianer
                         title={UI_TEXT.CITY}
                         placeholder={UI_TEXT.CITY}
-                        // textContainerStyle={styles.fieldCard}
                         titleStyle={styles.titleText}
                         value={value}
                         onChangeText={onChange}
@@ -162,7 +174,6 @@ export default function EditProfile({ navigation }: { navigation: any }) {
                       <InputFieldContianer
                         title={UI_TEXT.ZIP_CODE}
                         placeholder={UI_TEXT.ZIP_CODE}
-                        // textContainerStyle={styles.fieldCard}
                         titleStyle={styles.titleText}
                         value={value}
                         onChangeText={onChange}
@@ -175,19 +186,67 @@ export default function EditProfile({ navigation }: { navigation: any }) {
                   )}
                 </View>
 
+                {/* Peer Group — tappable selector that opens a BottomSheet */}
                 <View style={styles.fieldContainer}>
                   <Controller
                     control={control}
                     render={({ field: { onChange, value } }) => (
-                      <InputFieldContianer
-                        title={UI_TEXT.PEER_GROUP}
-                        placeholder={UI_TEXT.PEER_GROUP}
-                        titleStyle={styles.titleText}
-                        dropdownData={dropdownArray}
-                        defaultOption={dropdownArray.find((item) => item.value === value)}
-                        setSelectedValue={onChange}
-                        onChangeText={onChange}
-                      />
+                      <>
+                        <Text style={[styles.titleText, styles.peerGroupTitleText]}>
+                          {UI_TEXT.PEER_GROUP}
+                        </Text>
+                        <TouchableOpacity
+                          style={styles.peerGroupSelector}
+                          onPress={() => peerGroupSheetRef.current?.present()}
+                          activeOpacity={0.7}
+                        >
+                          <Text
+                            style={[
+                              styles.peerGroupSelectorText,
+                              !value && styles.peerGroupSelectorPlaceholder,
+                            ]}
+                          >
+                            {value || UI_TEXT.PEER_GROUP}
+                          </Text>
+                          <Image
+                            source={Icon.LeftBackArrow}
+                            resizeMode="contain"
+                            style={styles.peerGroupChevron}
+                          />
+                        </TouchableOpacity>
+
+                        <BottomSheetModal
+                          ref={peerGroupSheetRef}
+                          snapPoints={snapPoints}
+                          enablePanDownToClose
+                          backdropComponent={renderBackdrop}
+                        >
+                          <BottomSheetView style={styles.sheetContent}>
+                            <Text style={styles.sheetTitle}>{UI_TEXT.PEER_GROUP}</Text>
+                            {peerGroups.map((group) => (
+                              <TouchableOpacity
+                                key={group}
+                                style={styles.sheetOptionRow}
+                                onPress={() => {
+                                  onChange(group)
+                                  peerGroupSheetRef.current?.dismiss()
+                                }}
+                                activeOpacity={0.7}
+                              >
+                                <Text
+                                  style={[
+                                    styles.sheetOptionText,
+                                    value === group && styles.sheetOptionTextSelected,
+                                  ]}
+                                >
+                                  {group}
+                                </Text>
+                                {value === group && <Text style={styles.sheetCheckmark}>✓</Text>}
+                              </TouchableOpacity>
+                            ))}
+                          </BottomSheetView>
+                        </BottomSheetModal>
+                      </>
                     )}
                     name="peerGroup"
                   />
