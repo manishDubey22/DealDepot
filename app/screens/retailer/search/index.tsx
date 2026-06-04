@@ -57,7 +57,7 @@ export default function Search({ navigation }: any) {
     (category: string) => {
       onCategorySelect(category)
       categorySheetRef.current?.dismiss()
-      if (category !== "All") {
+      if (category !== "All (trending)") {
         subcategorySheetRef.current?.present()
       }
     },

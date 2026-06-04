@@ -93,6 +93,10 @@ export function useSearch() {
   )
 
   const handleShowAll = useCallback(() => {
+    // Restore trending items immediately — don't wait for the refetch to resolve
+    if (trendingArray.length > 0) {
+      setItemsArray(trendingArray)
+    }
     refetchTrendingData()
     setIsStartSearch(false)
     setQuery("")
@@ -100,11 +104,11 @@ export function useSearch() {
     setSelectedCategory(null)
     setSelectedSubCategory(null)
     setIsCategoryAll("Select Category")
-  }, [refetchTrendingData])
+  }, [refetchTrendingData, trendingArray])
 
   const onCategorySelect = useCallback(
     (category: string) => {
-      if (category === "All") {
+      if (category === "All (trending)") {
         handleShowAll()
       } else {
         // Reset stale subcategory whenever category changes.
@@ -172,11 +176,14 @@ export function useSearch() {
     setSelectedSubCategory(null)
   }, [refetchTrendingData])
 
-  const categoryDescArray = categoryListData?.data ? ["All", ...categoryListData.data] : []
+  const categoryDescArray = categoryListData?.data
+    ? ["All (trending)", ...categoryListData.data]
+    : []
   const subCategoryDescArray = subCategoryListData?.data
 
   useEffect(() => {
-    if (isSucces && filteredData?.data) {
+    // Only apply filtered results when a category+subcategory is actively selected
+    if (isSucces && filteredData?.data && selectedCategory && selectedSubCategory) {
       setItemsArray(filteredData.data)
     }
   }, [isSucces, filteredData, query, selectedCategory, selectedSubCategory])
