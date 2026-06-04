@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
+import { useFocusEffect } from "@react-navigation/native"
 import Toast from "react-native-toast-message"
 
 import type { FavouriteProductItem, PriceEntry } from "@/api/retailer/favourites"
@@ -83,6 +84,12 @@ export function useFavourites(navigation: any, route?: { params?: { peerGroup?: 
     console.log("val", val)
     return true
   }, [])
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch()
+    }, [refetch]),
+  )
 
   useEffect(() => {
     const saved = loadNormalizedPeerGroup()
