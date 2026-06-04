@@ -9,6 +9,7 @@ export interface ITextContainerProps {
   onChangeText?: (text: string) => void
   onTogglePassword?: () => void
   dropdownData?: Array<{ key: string; value: string }>
+  defaultOption?: { key: string; value: string }
   setSelectedValue?: React.Dispatch<React.SetStateAction<string>>
   titleStyle?: StyleProp<TextStyle>
 }

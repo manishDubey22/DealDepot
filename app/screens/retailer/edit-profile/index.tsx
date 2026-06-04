@@ -178,13 +178,13 @@ export default function EditProfile({ navigation }: { navigation: any }) {
                 <View style={styles.fieldContainer}>
                   <Controller
                     control={control}
-                    render={({ field: { onChange } }) => (
+                    render={({ field: { onChange, value } }) => (
                       <InputFieldContianer
                         title={UI_TEXT.PEER_GROUP}
                         placeholder={UI_TEXT.PEER_GROUP}
-                        // textContainerStyle={styles.fieldCard}
                         titleStyle={styles.titleText}
                         dropdownData={dropdownArray}
+                        defaultOption={dropdownArray.find((item) => item.value === value)}
                         setSelectedValue={onChange}
                         onChangeText={onChange}
                       />
