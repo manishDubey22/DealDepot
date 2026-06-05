@@ -34,34 +34,6 @@ import { commonStyles } from "@/theme/styles"
 import { Icon } from "../../../assets/icons/wholeSeller"
 import { RetailerRoutes } from "../retailer/routes"
 
-// ----------Components-----------------
-
-// import Home from '../../screens/retailer/Home';
-// import CreateNewAccount from '../../screens/retailer/CreateNewAccount';
-// import EmailVerification from '../../screens/retailer/EmailVerification';
-// import ResetPassword from '../../screens/retailer/ResetPassword';
-// import Profile from '../../screens/retailer/Profile';
-// import Order from '../../screens/retailer/Order';
-// import SaveOrder from '../../screens/retailer/SaveOrder';
-// import ProductDescription from '../../screens/retailer/ProductDescription';
-// import SalesGraph from '../../screens/retailer/SalesGraph';
-// import UploadFile from '../../screens/retailer/Upload Files';
-// import EditProfile from '../../screens/retailer/EditProfile';
-
-// import {WithoutImageHeader, HeaderComponent} from '../../components/CommonComponents/header';
-
-// import Scanner from '../../screens/retailer/Scanner';
-// import CustomPDF from '../../screens/retailer/SaveOrder/component/customPDF';
-// import RenderPDF from '../../screens/retailer/SaveOrder/component/renderPDF';
-// import {useCustomBackHandler} from './useCustomBackHandler';
-// import FailureScreen from '../../components/PaymentScreens/FailureScreen';
-// import SuccessScreen from '../../components/PaymentScreens/SuccessScreen';
-// import LoadingScreen from '../../components/PaymentScreens/LoadingScreen';
-// import SubscriptionPlans from '../../components/PaymentScreens/SubscriptionPlans';
-// import Options from '../../screens/retailer/optionList/Options';
-// import Favourites from '../../screens/retailer/favouriteItems';
-// import PriceHistory from '../../screens/retailer/PriceHistory';
-
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
 
@@ -77,9 +49,13 @@ const TabBarIcon = ({ icon, focused }: { icon: ImageSourcePropType; focused: boo
   )
 }
 
+// Only the five persistent tabs belong here. All "detail" screens (ProductDescription,
+// Favourites, EditProfile, PreviewPDF, etc.) live in the Stack so that goBack()
+// returns to whichever tab launched them.
 const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
+      backBehavior="firstRoute"
       screenOptions={{
         tabBarHideOnKeyboard: true,
         tabBarActiveTintColor: commonStyles.colors.primaryColor,
@@ -95,13 +71,11 @@ const BottomTabNavigator = () => {
           },
           tabBarLabel: "Home",
           tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.HOME} focused={focused} />,
-
           headerStyle: {
             height: 80,
             elevation: 5,
             shadowColor: colors.palette.grey400,
           },
-          // header: () => <HeaderComponent value="Home" />,
         }}
       />
       <Tab.Screen
@@ -125,7 +99,6 @@ const BottomTabNavigator = () => {
           tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.SEARCH_ICON} focused={focused} />,
         }}
       />
-
       <Tab.Screen
         name={RetailerRoutes.CART}
         component={Order}
@@ -188,7 +161,6 @@ const BottomTabNavigator = () => {
             paddingRight: 10,
           },
           headerTitleAlign: "center",
-          // -----------Need to be navigate ---- navigation.navigate(Constant.ScreenName.EDIT_PROFILE)
           headerRight: () => (
             <TouchableOpacity onPress={() => navigation.navigate(RetailerRoutes.EDIT_PROFILE)}>
               <TabBarIcon icon={Icon.EDIT} focused={false} />
@@ -198,81 +170,10 @@ const BottomTabNavigator = () => {
           tabBarIcon: ({ focused }) => <TabBarIcon icon={Icon.PROFILE} focused={focused} />,
         })}
       />
-      <Tab.Screen
-        name={RetailerRoutes.PRODUCT_DESCRIPTION}
-        component={ProductDescription}
-        options={{
-          headerShown: false,
-          tabBarButton: () => null,
-          tabBarItemStyle: { display: "none" },
-        }}
-      />
-      <Tab.Screen
-        name={RetailerRoutes.PRICEHISTORY}
-        component={PriceHistory}
-        options={{
-          headerShown: false,
-          tabBarButton: () => null,
-          tabBarItemStyle: { display: "none" },
-        }}
-      />
-      <Tab.Screen
-        name={RetailerRoutes.FAVOURITES}
-        component={Favourites}
-        options={{
-          headerShown: false,
-          tabBarButton: () => null,
-          tabBarItemStyle: { display: "none" },
-        }}
-      />
-      <Tab.Screen
-        name={RetailerRoutes.UPLOAD_FILE}
-        component={UploadFiles}
-        options={{
-          headerShown: false,
-          tabBarButton: () => null,
-          tabBarItemStyle: { display: "none" },
-        }}
-      />
-      <Tab.Screen
-        name={RetailerRoutes.EDIT_PROFILE}
-        component={EditProfile}
-        options={{
-          headerShown: true,
-          tabBarButton: () => null,
-          tabBarItemStyle: { display: "none" },
-          headerTitleStyle: {
-            display: "none",
-          },
-          headerStyle: {
-            height: 80,
-            elevation: 5,
-            shadowColor: colors.palette.grey400,
-          },
-          header: () => <HeaderComponent value="Edit Profile" />,
-        }}
-      />
-      <Tab.Screen
-        name={RetailerRoutes.PREVIEW_PDF}
-        component={PreviewPDF}
-        options={{
-          headerShown: true,
-          tabBarButton: () => null,
-          tabBarItemStyle: { display: "none" },
-          headerTitleStyle: {
-            display: "none",
-          },
-          headerStyle: {
-            height: 80,
-            elevation: 5,
-            shadowColor: "rgba(0, 0, 0, 0.25)",
-          },
-          header: () => <HeaderComponent value="Preview PDF" />,
-        }}
-      />
     </Tab.Navigator>
   )
 }
+
 export const RetailerStackNavigation = ({
   role,
   authToken,
@@ -285,7 +186,6 @@ export const RetailerStackNavigation = ({
   return (
     <Stack.Navigator>
       {isAuthenticated ? (
-        // Authenticated screens — React Navigation auto-navigates here when isAuthenticated becomes true
         <>
           <Stack.Screen
             name={RetailerRoutes.TAB_CONTAINER}
@@ -294,7 +194,6 @@ export const RetailerStackNavigation = ({
           />
         </>
       ) : (
-        // Unauthenticated screens — React Navigation auto-navigates here when isAuthenticated becomes false
         <>
           <Stack.Screen
             name={RetailerRoutes.LOGIN}
@@ -349,18 +248,6 @@ export const RetailerStackNavigation = ({
         name={RetailerRoutes.RESET_PASSWORD}
         options={{
           headerShown: false,
-          // headerStyle: {
-          //   backgroundColor: colors.customColors.WHITE,
-          //   // height: 100,
-          // },
-          // headerTitleStyle: {
-          //   color: colors.palette.charcoal500,
-          //   fontFamily: CommonStyles.fontFamily.fontFamily,
-          //   fontSize: 20,
-          // },
-          // headerTitle: "Reset Password",
-          // headerTitleAlign: "center",
-          // headerTintColor: colors.palette.neutral100,
         }}
       >
         {({ navigation }) => <ResetPassword role={role} navigation={navigation} />}
@@ -401,42 +288,20 @@ export const RetailerStackNavigation = ({
           header: () => <HeaderComponent value="Sales Graph" />,
         }}
       />
-      {/* <Stack.Screen
-        name={RetailerRoutes.RENDER_PDF}
-        component={RenderPDF}
-        options={{
-          headerShown: true,
-          headerTitleStyle: {
-            display: 'none',
-          },
-          headerStyle: {
-            height: 80,
-            elevation: 5,
-            shadowColor: 'rgba(0, 0, 0, 0.25)',
-          },
-          header: () => <HeaderComponent value="Render PDF" />,
-        }}
-      /> */}
       <Stack.Screen
         name={RetailerRoutes.FAILURE}
         component={PaymentFailure}
-        options={{
-          headerShown: false,
-        }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={RetailerRoutes.SUCCESS}
         component={PaymentSuccess}
-        options={{
-          headerShown: false,
-        }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={RetailerRoutes.LOADING}
         component={PaymentLoading}
-        options={{
-          headerShown: false,
-        }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={RetailerRoutes.SUBSCRIPTIONPLAN}
@@ -456,16 +321,71 @@ export const RetailerStackNavigation = ({
           header: () => <HeaderComponent value="Subscriptions Plans" />,
         }}
       />
+      {/*
+        Detail screens pushed onto the stack from tab screens.
+        goBack() / hardware back pops the stack and returns to the exact
+        tab screen that navigated here — no explicit backTo needed.
+      */}
+      <Stack.Screen
+        name={RetailerRoutes.PRODUCT_DESCRIPTION}
+        component={ProductDescription}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={RetailerRoutes.PRICEHISTORY}
+        component={PriceHistory}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={RetailerRoutes.FAVOURITES}
+        component={Favourites}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={RetailerRoutes.UPLOAD_FILE}
+        component={UploadFiles}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={RetailerRoutes.EDIT_PROFILE}
+        component={EditProfile}
+        options={{
+          headerShown: true,
+          headerTitleStyle: {
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
+          },
+          headerStyle: {
+            // @ts-expect-error - height property not in type but works at runtime
+            height: 80,
+            elevation: 5,
+            shadowColor: colors.palette.grey400,
+          },
+          header: () => <HeaderComponent value="Edit Profile" />,
+        }}
+      />
+      <Stack.Screen
+        name={RetailerRoutes.PREVIEW_PDF}
+        component={PreviewPDF}
+        options={{
+          headerShown: true,
+          headerTitleStyle: {
+            // @ts-expect-error - display property not in type but works at runtime
+            display: "none",
+          },
+          headerStyle: {
+            // @ts-expect-error - height property not in type but works at runtime
+            height: 80,
+            elevation: 5,
+            shadowColor: "rgba(0, 0, 0, 0.25)",
+          },
+          header: () => <HeaderComponent value="Preview PDF" />,
+        }}
+      />
     </Stack.Navigator>
   )
 }
+
 const styles = StyleSheet.create({
-  // gradient: {
-  //   alignItems: "center",
-  //   flex: 1,
-  //   height: "100%",
-  //   justifyContent: "center",
-  //   width: "100%",
-  // },
   tabBarIcon: { height: 25, margin: 20, padding: 10, width: 25 },
 })

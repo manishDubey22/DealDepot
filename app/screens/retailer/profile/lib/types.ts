@@ -24,7 +24,6 @@ export interface UseProfileReturn {
   handleDeleteAccount: () => void
   handleConfirmDelete: () => Promise<void>
   handleCancelDelete: () => void
-  handleBackPress: () => boolean
 }
 
 export interface ProfileFieldProps {
