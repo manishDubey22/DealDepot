@@ -217,10 +217,12 @@ export function useScanner() {
     return true
   }, [navigation])
 
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener("hardwareBackPress", handleBackPress)
-    return () => backHandler.remove()
-  }, [handleBackPress])
+  useFocusEffect(
+    useCallback(() => {
+      const backHandler = BackHandler.addEventListener("hardwareBackPress", handleBackPress)
+      return () => backHandler.remove()
+    }, [handleBackPress]),
+  )
 
   useFocusEffect(
     useCallback(() => {

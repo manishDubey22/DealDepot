@@ -80,6 +80,7 @@ const TabBarIcon = ({ icon, focused }: { icon: ImageSourcePropType; focused: boo
 const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
+      backBehavior="firstRoute"
       screenOptions={{
         tabBarHideOnKeyboard: true,
         tabBarActiveTintColor: commonStyles.colors.primaryColor,
@@ -237,7 +238,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen
         name={RetailerRoutes.EDIT_PROFILE}
         component={EditProfile}
-        options={{
+        options={({ navigation }) => ({
           headerShown: true,
           tabBarButton: () => null,
           tabBarItemStyle: { display: "none" },
@@ -249,13 +250,18 @@ const BottomTabNavigator = () => {
             elevation: 5,
             shadowColor: colors.palette.grey400,
           },
-          header: () => <HeaderComponent value="Edit Profile" />,
-        }}
+          header: () => (
+            <HeaderComponent
+              value="Edit Profile"
+              backTo={() => navigation.navigate(RetailerRoutes.PROFILE)}
+            />
+          ),
+        })}
       />
       <Tab.Screen
         name={RetailerRoutes.PREVIEW_PDF}
         component={PreviewPDF}
-        options={{
+        options={({ navigation }) => ({
           headerShown: true,
           tabBarButton: () => null,
           tabBarItemStyle: { display: "none" },
@@ -267,8 +273,13 @@ const BottomTabNavigator = () => {
             elevation: 5,
             shadowColor: "rgba(0, 0, 0, 0.25)",
           },
-          header: () => <HeaderComponent value="Preview PDF" />,
-        }}
+          header: () => (
+            <HeaderComponent
+              value="Preview PDF"
+              backTo={() => navigation.navigate(RetailerRoutes.SAVE_ORDER)}
+            />
+          ),
+        })}
       />
     </Tab.Navigator>
   )

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react"
-import { BackHandler } from "react-native"
 import Toast from "react-native-toast-message"
 
 import { useDeleteAccountMutation } from "@/api/retailer/auth/account-delete"
@@ -110,16 +109,6 @@ export function useProfile(navigation: any) {
     setShowDeleteModal(false)
   }, [])
 
-  const handleBackPress = useCallback(() => {
-    navigation.navigate(RetailerRoutes.SEARCH)
-    return true
-  }, [navigation])
-
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener("hardwareBackPress", handleBackPress)
-    return () => backHandler.remove()
-  }, [handleBackPress])
-
   return {
     profileData,
     isLoading,
@@ -131,6 +120,5 @@ export function useProfile(navigation: any) {
     handleDeleteAccount,
     handleConfirmDelete,
     handleCancelDelete,
-    handleBackPress,
   }
 }
