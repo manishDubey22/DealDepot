@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { useFocusEffect } from "@react-navigation/native"
 import { useForm } from "react-hook-form"
 import Toast from "react-native-toast-message"
 
@@ -70,16 +71,26 @@ export function useEditProfile(navigation: any) {
 
   const watchedValues = watch()
   const [btnDisable, setBtnDisable] = useState(true)
-  const hasInitializedRef = useRef(false)
 
-  // Only initialize form values ONCE when profileData first loads
+  // Increment on every screen focus so the reset effect re-fires even if profileData didn't change
+  const [focusCount, setFocusCount] = useState(0)
+
+  useFocusEffect(
+    useCallback(() => {
+      setFocusCount((c) => c + 1)
+    }, []),
+  )
+
+  // Reset form to the server-saved values:
+  //   - on initial data load (profileData?.name dep)
+  //   - every time the screen gains focus (focusCount dep) — discards any unsaved changes
   useEffect(() => {
     if (!profileData) return
-    if (hasInitializedRef.current) return
     reset(defaultValues)
-    hasInitializedRef.current = true
+    // defaultValues is always current in this render because focusCount/profileData?.name
+    // changing caused a re-render that recomputed defaultValues before this effect ran.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profileData?.name, reset])
+  }, [focusCount, profileData?.name])
 
   useEffect(() => {
     const hasChange =
@@ -93,9 +104,9 @@ export function useEditProfile(navigation: any) {
     setBtnDisable(!hasChange)
   }, [watchedValues, defaultValues])
 
-  const dropdownArray = useMemo(() => {
+  const peerGroups = useMemo(() => {
     const list = (peersResponse as { data?: string[] })?.data ?? []
-    return list.map((value, index) => ({ key: String(index + 1), value }))
+    return list
   }, [peersResponse])
 
   const onSubmit = useCallback(
@@ -123,9 +134,6 @@ export function useEditProfile(navigation: any) {
             type: "success",
             text1: (message ?? UI_TEXT.UPDATE).toUpperCase(),
           })
-          // Navigate back to Profile screen
-          // EditProfile is a Stack screen opened from Profile (Tab screen)
-          // goBack() returns to the previous screen in the stack (Profile tab)
           setTimeout(() => {
             if (navigation.goBack) {
               navigation.goBack()
@@ -146,7 +154,7 @@ export function useEditProfile(navigation: any) {
     btnDisable,
     isLoading: updateProfileMutation.isPending,
     profileData,
-    dropdownArray,
+    peerGroups,
     onSubmit,
     isProfileLoading: !profileData && !!retailerId,
   }

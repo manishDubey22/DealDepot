@@ -1,5 +1,6 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
+import { FAVOURITES_KEYS } from "@/api/retailer/favourites/constants"
 import { createQueryKeys } from "@/lib/react-query/keys"
 
 import {
@@ -348,17 +349,17 @@ export function useToggleFavoriteMutation() {
 
   return useMutation({
     mutationFn: (params: ToggleFavoriteParams) => toggleFavorite(params),
-    onSuccess: (response, variables) => {
-      // Invalidate product query to refetch favorite status
+    onSuccess: (_response, variables) => {
+      // Invalidate the specific product so its isFavorite flag updates
       queryClient.invalidateQueries({
         queryKey: productDetailsQueryKeys.product({
           retailerId: variables.retailerId,
           productId: variables.productId,
         }).key,
       })
-      // Invalidate favorites list if it exists
+      // Invalidate all favourites queries — key prefix matches ["retailer","favourites","list",...]
       queryClient.invalidateQueries({
-        queryKey: ["favorites"],
+        queryKey: [...FAVOURITES_KEYS],
       })
     },
   })

@@ -16,7 +16,7 @@ export const SEARCH_TEXT_FONT_SIZE = 16
 
 export const IOS_PADDING = 10
 
-export const PLACEHOLDER_TEXT = "Search Text....."
+export const PLACEHOLDER_TEXT = "Search Products..."
 
 export const PLACEHOLDER_TEXT_COLOR = "rgba(0, 0, 0, 0.50)"
 

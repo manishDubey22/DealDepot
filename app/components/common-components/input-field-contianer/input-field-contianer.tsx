@@ -21,6 +21,7 @@ export const InputFieldContianer = ({
   secureTextEntry,
   editable,
   dropdownData,
+  defaultOption,
   setSelectedValue,
   titleStyle,
   ...rest
@@ -40,6 +41,7 @@ export const InputFieldContianer = ({
               }
             }}
             data={dropdownData}
+            defaultOption={defaultOption}
             inputStyles={styles.titleText}
             boxStyles={styles.dropdownBox}
             save={DROPDOWN_SAVE_VALUE}
