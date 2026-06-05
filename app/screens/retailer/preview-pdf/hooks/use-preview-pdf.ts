@@ -4,8 +4,8 @@ import { Alert, Platform } from "react-native"
 import { PermissionsAndroid } from "react-native"
 import * as Notifications from "expo-notifications"
 import * as Print from "expo-print"
+import * as Sharing from "expo-sharing"
 import * as FileSystem from "expo-file-system/legacy"
-import Share from "react-native-share"
 import Toast from "react-native-toast-message"
 
 import type { Order, VendorData, PDFData } from "@/api/retailer/orders/types"
@@ -260,12 +260,24 @@ export function usePreviewPDF(
     }
   }, [])
 
-  // Share PDF (uses saved file path from download)
+  // Share PDF via expo-sharing.
+  //
+  // Why expo-sharing instead of react-native-share:
+  //   On MIUI (Xiaomi/Redmi), Android's implicit FLAG_GRANT_READ_URI_PERMISSION
+  //   set on an Intent.createChooser() is silently blocked — the receiving app
+  //   cannot open the shared file.  expo-sharing explicitly calls
+  //   context.grantUriPermission(pkg, uri, FLAG_GRANT_READ_URI_PERMISSION) for
+  //   every app that could handle the intent, which MIUI does honour.
+  //
+  // Why a stable filename in Print/:
+  //   expo-sharing resolves after the user *selects* an app, but the receiving
+  //   app reads the file asynchronously afterwards.  We must not delete the file
+  //   immediately.  Using a deterministic name (one file per orderId) ensures
+  //   the file stays alive and old prints don't accumulate.
   const sharePDF = useCallback(async () => {
-    if (!pdfPath) {
+    if (!order || !vendorData || !htmlContent) {
       Toast.show({
         text1: ERROR_MESSAGES.NO_PDF,
-        text2: "Download the PDF first, then you can share it.",
         type: "error",
       })
       return
@@ -273,14 +285,27 @@ export function usePreviewPDF(
 
     try {
       console.log(CONSOLE_MESSAGES.SHARING_PDF)
-      const shareUrl =
-        pdfPath.startsWith("file://") || pdfPath.startsWith("content://")
-          ? pdfPath
-          : `file://${pdfPath}`
-      await Share.open({
-        url: shareUrl,
-        type: "application/pdf",
-        title: `Order ${order?.orderId ?? ""}`,
+
+      const isAvailable = await Sharing.isAvailableAsync()
+      if (!isAvailable) {
+        Toast.show({ text1: "Sharing is not available on this device", type: "error" })
+        return
+      }
+
+      // Render HTML → PDF.  expo-print writes to cacheDir/Print/<uuid>.pdf.
+      const { uri: printUri } = await Print.printToFileAsync({ html: htmlContent })
+
+      // Move to a stable name within the same Print/ directory.
+      // expo-sharing's SharingFileProvider (sharing_provider_paths.xml) declares
+      // <cache-path path="." /> which covers cacheDir/Print/ completely.
+      const stableUri = `${FileSystem.cacheDirectory}Print/Order_${order.orderId}.pdf`
+      await FileSystem.deleteAsync(stableUri, { idempotent: true })
+      await FileSystem.moveAsync({ from: printUri, to: stableUri })
+
+      await Sharing.shareAsync(stableUri, {
+        mimeType: "application/pdf",
+        dialogTitle: `Share Order ${order.orderId}`,
+        UTI: "com.adobe.pdf", // iOS only
       })
     } catch (err: any) {
       if (err?.message !== "User did not share") {
@@ -292,7 +317,7 @@ export function usePreviewPDF(
         })
       }
     }
-  }, [pdfPath, order?.orderId])
+  }, [order, vendorData, htmlContent])
 
   // Save PDF to device: Android = SAF (Downloads), iOS = documentDirectory
   const savePDFToDevice = useCallback(async (): Promise<string | null> => {
